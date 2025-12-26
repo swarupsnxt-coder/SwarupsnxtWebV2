@@ -1,0 +1,7 @@
+{
+  "name": "Swarups NXT",
+  "description": "Enterprise SaaS landing page for Hyper-Realistic AI Voice Agents and Digital Employees with Gemini-powered Voice Studio and Chat.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
