@@ -3,43 +3,10 @@ import React from 'react';
 import { Persona, IndustrySector } from './types';
 
 export const COLORS = {
-  BRAND: '#283593', // Refined Navy
-  ACCENT: '#2BB6C6', // Cyan
+  BRAND: '#1e266e', 
+  ACCENT: '#2BB6C6', 
   DARK_BG: '#0f172a'
 };
-
-export const LOGO = (className?: string) => (
-  <div className={`flex items-center gap-3 transition-transform duration-300 hover:scale-[1.02] ${className || ''}`}>
-    <div className="relative w-12 h-10 shrink-0">
-      <svg viewBox="0 0 100 80" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-        {/* Navy Path of the Stylized S */}
-        <path 
-          d="M20 60H65C75 60 85 52 85 40C85 28 75 20 65 20H15V28" 
-          stroke={COLORS.BRAND} 
-          strokeWidth="8" 
-          strokeLinecap="round" 
-          strokeLinejoin="round"
-        />
-        {/* Cyan Path of the Stylized S */}
-        <path 
-          d="M80 52V60H35C25 60 15 52 15 40C15 28 25 20 35 20H80" 
-          stroke={COLORS.ACCENT} 
-          strokeWidth="8" 
-          strokeLinecap="round" 
-          strokeLinejoin="round"
-        />
-      </svg>
-    </div>
-    <div className="flex flex-col leading-none">
-      <span className="text-3xl font-bold tracking-tight" style={{ color: COLORS.BRAND, fontFamily: 'Inter, sans-serif' }}>
-        Swarups
-      </span>
-      <span className="text-lg font-black tracking-widest self-end -mt-1" style={{ color: COLORS.ACCENT, fontFamily: "'Suez One', serif" }}>
-        NXT
-      </span>
-    </div>
-  </div>
-);
 
 export const PERSONAS: Persona[] = [
   { id: 'p1', name: 'Aria', voice: 'Kore', description: 'Empathetic & Calm', industry: 'Healthcare' },
@@ -62,7 +29,7 @@ export const INDUSTRIES: IndustrySector[] = [
   {
     id: 'healthcare',
     title: 'Healthcare',
-    description: 'Patient scheduling and follow-ups with HIPPA-ready protocols.',
+    description: 'Patient scheduling and follow-ups with HIPAA-ready protocols.',
     image: 'https://images.unsplash.com/photo-1504813184591-01552661c8a5?auto=format&fit=crop&q=80&w=800',
     faqs: [
       { question: 'Is it patient-data secure?', answer: 'We use end-to-end encryption compliant with DPDP Act 2023.' }
@@ -76,14 +43,64 @@ export const INDUSTRIES: IndustrySector[] = [
     faqs: [
       { question: 'Can it detect fraud?', answer: 'Our agents flag conversational anomalies in real-time.' }
     ]
+  },
+  {
+    id: 'ecommerce',
+    title: 'E-commerce',
+    description: 'Boost sales with personalized shopping assistants and order tracking bots.',
+    image: 'https://images.unsplash.com/photo-1557821552-17105176677c?auto=format&fit=crop&q=80&w=800',
+    faqs: [
+      { question: 'Can it handle complex order queries?', answer: 'Yes, it integrates with Shopify and other ERPs to provide real-time status.' }
+    ]
+  },
+  {
+    id: 'education',
+    title: 'Education',
+    description: 'Provide 24/7 tutoring and administrative support for students and parents.',
+    image: 'https://images.unsplash.com/photo-1523240715630-9917c134812a?auto=format&fit=crop&q=80&w=800',
+    faqs: [
+      { question: 'Can it explain complex topics?', answer: 'Leveraging Gemini 3, our agents can simplify advanced academic concepts.' }
+    ]
+  },
+  {
+    id: 'logistics',
+    title: 'Logistics',
+    description: 'Optimize supply chain communication and delivery coordination with automated tracking agents.',
+    image: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=800',
+    faqs: [
+      { question: 'Can it coordinate driver schedules?', answer: 'Our agents can handle dispatch notifications and ETA updates via voice or text.' }
+    ]
   }
 ];
 
 export const INTEGRATIONS = [
-  { name: 'Salesforce', logo: 'fa-salesforce' },
+  { name: 'Salesforce', logo: 'fa-cloud' },
   { name: 'HubSpot', logo: 'fa-hubspot' },
   { name: 'Zoho', logo: 'fa-database' },
   { name: 'Shopify', logo: 'fa-shopify' },
   { name: 'Slack', logo: 'fa-slack' },
   { name: 'WhatsApp', logo: 'fa-whatsapp' }
+];
+
+export const FAQS = [
+  {
+    question: "What is sub-200ms latency?",
+    answer: "Most AI agents take 2-5 seconds to respond, which feels robotic. Our proprietary optimization pipeline reduces the time between user input and AI response to under 200 milliseconds, making conversations feel truly human."
+  },
+  {
+    question: "How long does it take to deploy?",
+    answer: "Standard deployments take less than 48 hours. Our '1-Week MVP' protocol handles full integration with your existing CRM and knowledge base."
+  },
+  {
+    question: "Does it support Indian regional languages?",
+    answer: "Yes, our agents are built for the Indian market and understand natural regional phrasing in major Indian languages as well as 'Hinglish'."
+  },
+  {
+    question: "Is my data secure?",
+    answer: "Absolutely. We use enterprise-grade AES-256 encryption and are compliant with the DPDP Act 2023. Your lead data is strictly yours."
+  },
+  {
+    question: "Can I try it before I buy?",
+    answer: "Yes! You can test our live models in the 'NXT Lab' section of this page or schedule a free AI audit for a custom demo."
+  }
 ];

@@ -1,32 +1,28 @@
 
 import { GoogleGenAI, Modality } from "@google/genai";
 
-const API_KEY = process.env.API_KEY || "";
+/**
+ * Safely resolves the API key from the environment.
+ */
+const resolveApiKey = (): string | undefined => {
+  try {
+    return (window as any).process?.env?.API_KEY || (process as any)?.env?.API_KEY;
+  } catch (e) {
+    return undefined;
+  }
+};
 
 /**
- * Encodes Uint8Array to base64
+ * Diagnostic utility to verify API configuration.
+ * Returns a user-friendly error message if configuration is missing or invalid.
  */
-function encode(bytes: Uint8Array) {
-  let binary = '';
-  const len = bytes.byteLength;
-  for (let i = 0; i < len; i++) {
-    binary += String.fromCharCode(bytes[i]);
+export const getConfigurationError = (): string | null => {
+  const apiKey = resolveApiKey();
+  if (!apiKey || apiKey.trim() === "" || apiKey === "undefined") {
+    return "Service Configuration Problem: The Neural Engine API key is missing. Please check your environment settings.";
   }
-  return btoa(binary);
-}
-
-/**
- * Decodes base64 to Uint8Array
- */
-function decode(base64: string) {
-  const binaryString = atob(base64);
-  const len = binaryString.length;
-  const bytes = new Uint8Array(len);
-  for (let i = 0; i < len; i++) {
-    bytes[i] = binaryString.charCodeAt(i);
-  }
-  return bytes;
-}
+  return null;
+};
 
 /**
  * Decodes raw PCM data into an AudioBuffer
@@ -51,38 +47,81 @@ export async function decodeAudioData(
 }
 
 export const generateSpeech = async (text: string, voiceName: string): Promise<string> => {
-  if (!API_KEY) throw new Error("API Key missing");
+  const configError = getConfigurationError();
+  if (configError) throw new Error(configError);
   
-  const ai = new GoogleGenAI({ apiKey: API_KEY });
-  const response = await ai.models.generateContent({
-    model: "gemini-2.5-flash-preview-tts",
-    contents: [{ parts: [{ text }] }],
-    config: {
-      responseModalities: [Modality.AUDIO],
-      speechConfig: {
-        voiceConfig: {
-          prebuiltVoiceConfig: { voiceName },
+  if (!text.trim()) {
+    throw new Error("Input Error: No text provided for neural synthesis.");
+  }
+
+  try {
+    const apiKey = resolveApiKey()!;
+    const ai = new GoogleGenAI({ apiKey });
+    const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash-preview-tts",
+      contents: [{ parts: [{ text }] }],
+      config: {
+        responseModalities: [Modality.AUDIO],
+        speechConfig: {
+          voiceConfig: {
+            prebuiltVoiceConfig: { voiceName },
+          },
         },
       },
-    },
-  });
+    });
 
-  const base64Audio = response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
-  if (!base64Audio) throw new Error("No audio returned");
-  return base64Audio;
+    const candidate = response.candidates?.[0];
+    if (candidate?.finishReason === 'SAFETY') {
+      throw new Error("Safety Protocol: The requested content was flagged by neural filters.");
+    }
+
+    const base64Audio = candidate?.content?.parts?.[0]?.inlineData?.data;
+    if (!base64Audio) {
+      throw new Error("Neural Engine Error: No audio data returned from the service.");
+    }
+    return base64Audio;
+  } catch (error: any) {
+    const msg = error.message || "";
+    if (msg.includes('API key not valid') || msg.includes('403') || msg.includes('API_KEY_INVALID')) {
+      throw new Error("Service Configuration Problem: The provided API key is invalid or has insufficient permissions.");
+    }
+    if (msg.includes('429')) {
+      throw new Error("Quota Exceeded: The Neural Engine is processing too many requests. Please try again later.");
+    }
+    throw new Error(msg || "An unexpected error occurred during neural synthesis.");
+  }
 };
 
 export const chatWithAgent = async (message: string, personaDescription: string) => {
-  if (!API_KEY) throw new Error("API Key missing");
-  
-  const ai = new GoogleGenAI({ apiKey: API_KEY });
-  const chat = ai.chats.create({
-    model: 'gemini-3-flash-preview',
-    config: {
-      systemInstruction: `You are a digital employee at Swarups NXT. Your persona is: ${personaDescription}. Be concise, professional, and helpful.`,
-    },
-  });
+  const configError = getConfigurationError();
+  if (configError) throw new Error(configError);
 
-  const response = await chat.sendMessage({ message });
-  return response.text || "I'm sorry, I couldn't process that.";
+  if (!message.trim()) {
+    throw new Error("Transmission Error: Empty message signal.");
+  }
+  
+  try {
+    const apiKey = resolveApiKey()!;
+    const ai = new GoogleGenAI({ apiKey });
+    const chat = ai.chats.create({
+      model: 'gemini-3-flash-preview',
+      config: {
+        systemInstruction: `You are a digital employee at Swarups NXT. Persona: ${personaDescription}. Be concise and professional.`,
+      },
+    });
+
+    const result = await chat.sendMessage({ message });
+    
+    if (result.candidates?.[0]?.finishReason === 'SAFETY') {
+      return "[NEURAL BLOCK]: Content restricted by safety protocols.";
+    }
+
+    return result.text || "Empty signal received from neural core.";
+  } catch (error: any) {
+    const msg = error.message || "";
+    if (msg.includes('API key not valid') || msg.includes('403') || msg.includes('API_KEY_INVALID')) {
+      throw new Error("Service Configuration Problem: Invalid Neural Link credentials.");
+    }
+    throw new Error(`Neural Link Error: ${msg || "Connection timed out."}`);
+  }
 };

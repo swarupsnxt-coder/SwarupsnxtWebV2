@@ -4,15 +4,15 @@ import { INTEGRATIONS } from '../constants';
 
 const Integrations: React.FC = () => {
   return (
-    <section className="py-20 bg-[#0f172a] border-y border-white/5 overflow-hidden">
+    <section className="py-20 bg-white dark:bg-[#0f172a] border-y border-slate-200 dark:border-white/5 overflow-hidden transition-colors duration-500">
       <div className="container mx-auto px-4 mb-10 text-center">
-        <h3 className="text-sm font-bold uppercase tracking-[0.3em] text-slate-500">Seamlessly Integrated With</h3>
+        <h3 className="text-sm font-bold uppercase tracking-[0.3em] text-slate-400 dark:text-slate-500">Seamlessly Integrated With</h3>
       </div>
       
       <div className="relative flex overflow-x-hidden group">
         <div className="py-4 animate-marquee whitespace-nowrap flex items-center space-x-12">
           {[...INTEGRATIONS, ...INTEGRATIONS].map((int, i) => (
-            <div key={i} className="flex items-center space-x-3 text-slate-400 grayscale hover:grayscale-0 transition-all cursor-pointer hover:text-white">
+            <div key={i} className="flex items-center space-x-3 text-slate-400 dark:text-slate-400 grayscale hover:grayscale-0 transition-all cursor-pointer hover:text-slate-900 dark:hover:text-white">
               <i className={`fa-brands ${int.logo} text-4xl`}></i>
               <span className="text-xl font-bold font-sans uppercase tracking-widest">{int.name}</span>
             </div>

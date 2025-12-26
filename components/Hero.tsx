@@ -1,7 +1,7 @@
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
-const NeuralCanvas: React.FC = () => {
+const NeuralCanvas: React.FC<{ scrollOffset: number }> = ({ scrollOffset }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -10,9 +10,9 @@ const NeuralCanvas: React.FC = () => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    let particles: { x: number; y: number; vx: number; vy: number }[] = [];
-    const particleCount = 60;
-    const connectionDistance = 150;
+    let particles: { x: number; y: number; vx: number; vy: number; size: number }[] = [];
+    const particleCount = 70;
+    const connectionDistance = 160;
 
     const init = () => {
       canvas.width = window.innerWidth;
@@ -22,16 +22,18 @@ const NeuralCanvas: React.FC = () => {
         particles.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
-          vx: (Math.random() - 0.5) * 0.5,
-          vy: (Math.random() - 0.5) * 0.5,
+          vx: (Math.random() - 0.5) * 0.4,
+          vy: (Math.random() - 0.5) * 0.4,
+          size: Math.random() * 2 + 0.5,
         });
       }
     };
 
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = 'rgba(43, 182, 198, 0.2)';
-      ctx.strokeStyle = 'rgba(43, 182, 198, 0.05)';
+      const isDark = document.documentElement.classList.contains('dark');
+      ctx.fillStyle = isDark ? 'rgba(43, 182, 198, 0.3)' : 'rgba(43, 182, 198, 0.5)';
+      ctx.strokeStyle = isDark ? 'rgba(43, 182, 198, 0.08)' : 'rgba(43, 182, 198, 0.12)';
 
       particles.forEach((p, i) => {
         p.x += p.vx;
@@ -40,8 +42,10 @@ const NeuralCanvas: React.FC = () => {
         if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
         if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
 
+        const drawY = p.y + (scrollOffset * 0.15);
+
         ctx.beginPath();
-        ctx.arc(p.x, p.y, 1.5, 0, Math.PI * 2);
+        ctx.arc(p.x, drawY, p.size, 0, Math.PI * 2);
         ctx.fill();
 
         for (let j = i + 1; j < particles.length; j++) {
@@ -49,8 +53,9 @@ const NeuralCanvas: React.FC = () => {
           const dist = Math.hypot(p.x - p2.x, p.y - p2.y);
           if (dist < connectionDistance) {
             ctx.beginPath();
-            ctx.moveTo(p.x, p.y);
-            ctx.lineTo(p2.x, p2.y);
+            ctx.lineWidth = 0.5;
+            ctx.moveTo(p.x, drawY);
+            ctx.lineTo(p2.x, p2.y + (scrollOffset * 0.15));
             ctx.stroke();
           }
         }
@@ -62,69 +67,107 @@ const NeuralCanvas: React.FC = () => {
     draw();
     window.addEventListener('resize', init);
     return () => window.removeEventListener('resize', init);
-  }, []);
+  }, [scrollOffset]);
 
-  return <canvas ref={canvasRef} className="absolute inset-0 z-0 pointer-events-none" />;
+  return (
+    <canvas 
+      ref={canvasRef} 
+      className="absolute inset-0 z-0 pointer-events-none opacity-60 transition-opacity duration-1000" 
+    />
+  );
 };
 
 const Hero: React.FC = () => {
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      window.requestAnimationFrame(() => {
+        setScrollY(window.scrollY);
+      });
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const handleNav = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    e.preventDefault();
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
-    <section id="hero" className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden bg-[#0f172a]">
-      <NeuralCanvas />
+    <section id="hero" className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden bg-slate-50 dark:bg-[#0f172a] transition-colors duration-500">
+      <NeuralCanvas scrollOffset={scrollY} />
       
-      {/* Neural Background Effect - Dynamic Blobs */}
-      <div className="absolute inset-0 z-0 overflow-hidden">
-        <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-[#2BB6C6]/10 rounded-full blur-[120px] blob-animation"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-[600px] h-[600px] bg-[#1e266e]/30 rounded-full blur-[140px] blob-animation" style={{ animationDelay: '-5s' }}></div>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(circle_at_center,transparent_0%,#0f172a_70%)] opacity-60"></div>
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+        <div 
+          className="absolute top-[15%] left-[10%] w-[600px] h-[600px] bg-[#2BB6C6]/10 rounded-full blur-[140px] blob-animation"
+          style={{ transform: `translateY(${scrollY * 0.35}px)`, transition: 'transform 0.1s ease-out' }}
+        ></div>
+        
+        <div 
+          className="absolute bottom-[20%] right-[5%] w-[700px] h-[700px] bg-[#1e266e]/15 dark:bg-[#1e266e]/30 rounded-full blur-[160px] blob-animation"
+          style={{ transform: `translateY(${scrollY * 0.25}px)`, transition: 'transform 0.15s ease-out', animationDelay: '-8s' }}
+        ></div>
+
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,white_90%)] dark:bg-[radial-gradient(circle_at_center,transparent_0%,#0f172a_90%)] opacity-80 dark:opacity-70"></div>
       </div>
 
-      <div className="container mx-auto px-4 relative z-10 text-center">
-        <div className="inline-block px-4 py-1.5 mb-6 glass rounded-full border-white/20 animate-bounce">
-          <span className="text-xs font-bold tracking-[0.2em] text-[#2BB6C6] uppercase">Now in Beta: Gemini 3 Integration</span>
+      <div 
+        className="container mx-auto px-4 relative z-10 text-center"
+        style={{ transform: `translateY(${scrollY * -0.2}px)`, transition: 'transform 0.05s ease-out' }}
+      >
+        <div className="inline-block px-5 py-2 mb-8 glass dark:glass rounded-full border border-slate-200 dark:border-white/20 bg-white/40 dark:bg-white/5 animate-bounce shadow-xl hover:scale-105 transition-transform cursor-default">
+          <span className="text-[10px] font-black tracking-[0.4em] text-[#2BB6C6] uppercase">Protocol Gemini 3-Pro Active</span>
         </div>
         
-        <h1 className="text-5xl md:text-8xl font-bold mb-6 leading-tight">
-          Stop Chatting.<br />
-          <span className="gradient-text">Start Closing.</span>
-        </h1>
+        <div className="float-animation">
+          <h1 className="text-6xl md:text-9xl font-bold mb-8 leading-[0.9] text-slate-900 dark:text-white tracking-tighter">
+            Stop Chatting.<br />
+            <span className="gradient-text italic">Start Closing.</span>
+          </h1>
+        </div>
         
-        <p className="max-w-2xl mx-auto text-lg md:text-xl text-slate-400 mb-10 leading-relaxed">
-          The world's first Hyper-Realistic Digital Employees. 
-          Experience <span className="text-[#2BB6C6] font-bold">sub-200ms latency</span> and <span className="text-[#2BB6C6] font-bold">4x ROI</span> for your enterprise sales and support.
+        <p className="max-w-3xl mx-auto text-xl md:text-2xl text-slate-600 dark:text-slate-400 mb-12 leading-relaxed font-medium px-4">
+          Unleash hyper-realistic <span className="text-[#2BB6C6] underline decoration-wavy underline-offset-8">Digital Employees</span> that handle your entire sales funnel with sub-200ms latency.
         </p>
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <button className="w-full sm:w-auto px-10 py-4 bg-[#2BB6C6] text-[#0f172a] font-bold rounded-xl text-lg hover:scale-105 transition-all shadow-xl shadow-[#2BB6C6]/20">
-            Deploy Your Agent
-          </button>
-          <button className="w-full sm:w-auto px-10 py-4 glass border-white/20 font-bold rounded-xl text-lg hover:bg-white/10 transition-all">
-            Watch Protocol 
-          </button>
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-16">
+          <a 
+            href="#phone-demo"
+            onClick={(e) => handleNav(e, 'phone-demo')}
+            className="w-full sm:w-auto px-12 py-5 bg-[#2BB6C6] text-[#0f172a] font-black rounded-2xl text-xl hover:scale-110 active:scale-95 transition-all shadow-2xl shadow-[#2BB6C6]/40 flex items-center justify-center gap-3 no-underline"
+          >
+            <span>Initialize Agent</span>
+            <i className="fa-solid fa-bolt-lightning text-sm"></i>
+          </a>
+          <a 
+            href="#voice-studio"
+            onClick={(e) => handleNav(e, 'voice-studio')}
+            className="w-full sm:w-auto px-12 py-5 bg-white/60 dark:bg-white/5 border border-slate-300 dark:border-white/10 text-slate-900 dark:text-white font-bold rounded-2xl text-xl hover:bg-white dark:hover:bg-white/10 transition-all backdrop-blur-md shadow-lg flex items-center justify-center gap-3 no-underline"
+          >
+            <span>Watch Protocol</span>
+            <i className="fa-solid fa-play text-sm opacity-50"></i>
+          </a>
         </div>
 
-        <div className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto border-t border-white/10 pt-10">
-          <div className="group cursor-default">
-            <div className="text-3xl font-bold text-white mb-1 group-hover:text-[#2BB6C6] transition-colors">200ms</div>
-            <div className="text-xs uppercase tracking-widest text-slate-500">Latency</div>
+        <div className="flex items-center justify-center gap-8 text-slate-400 dark:text-slate-500 font-bold uppercase tracking-[0.2em] text-[10px]">
+          <div className="flex items-center gap-2">
+            <i className="fa-solid fa-check-circle text-[#2BB6C6]"></i>
+            <span>SOC2 Type II</span>
           </div>
-          <div className="group cursor-default">
-            <div className="text-3xl font-bold text-white mb-1 group-hover:text-[#2BB6C6] transition-colors">400%</div>
-            <div className="text-xs uppercase tracking-widest text-slate-500">ROI Growth</div>
+          <div className="flex items-center gap-2">
+            <i className="fa-solid fa-check-circle text-[#2BB6C6]"></i>
+            <span>HIPAA Ready</span>
           </div>
-          <div className="group cursor-default">
-            <div className="text-3xl font-bold text-white mb-1 group-hover:text-[#2BB6C6] transition-colors">24/7</div>
-            <div className="text-xs uppercase tracking-widest text-slate-500">Autonomy</div>
-          </div>
-          <div className="group cursor-default">
-            <div className="text-3xl font-bold text-white mb-1 group-hover:text-[#2BB6C6] transition-colors">99.9%</div>
-            <div className="text-xs uppercase tracking-widest text-slate-500">Uptime</div>
+          <div className="flex items-center gap-2">
+            <i className="fa-solid fa-check-circle text-[#2BB6C6]"></i>
+            <span>DPDP Compliant</span>
           </div>
         </div>
-      </div>
-
-      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce opacity-50 cursor-pointer" onClick={() => document.getElementById('nxt-lab')?.scrollIntoView({ behavior: 'smooth' })}>
-        <i className="fa-solid fa-chevron-down text-2xl"></i>
       </div>
     </section>
   );

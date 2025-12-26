@@ -1,8 +1,14 @@
 
 import React, { useState, useEffect } from 'react';
 import Logo from './Logo';
+import { Theme } from '../types';
 
-const Navbar: React.FC = () => {
+interface NavbarProps {
+  theme?: Theme;
+  toggleTheme?: () => void;
+}
+
+const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -15,10 +21,10 @@ const Navbar: React.FC = () => {
   }, []);
 
   const navLinks = [
-    { name: 'Solutions', href: '#solutions' },
-    { name: 'Demo', href: '#nxt-lab' },
-    { name: 'Why Us', href: '#how-it-works' },
-    { name: 'ROI', href: '#roi' },
+    { name: 'Industries', href: '#solutions' },
+    { name: 'NXT Lab', href: '#nxt-lab' },
+    { name: 'Process', href: '#how-it-works' },
+    { name: 'FAQ', href: '#faq' },
     { name: 'Contact', href: '#contact' }
   ];
 
@@ -26,9 +32,9 @@ const Navbar: React.FC = () => {
     <>
       <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'py-2' : 'py-6'}`}>
         <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8`}>
-          <div className={`glass rounded-2xl px-6 py-3 flex items-center justify-between shadow-2xl border-white/10`}>
-            <a href="#hero" onClick={() => setIsMobileMenuOpen(false)}>
-              <Logo className="scale-90 sm:scale-100" />
+          <div className={`glass rounded-2xl px-6 py-3 flex items-center justify-between shadow-xl dark:shadow-2xl transition-all duration-500`}>
+            <a href="#hero" className="flex items-center" onClick={() => setIsMobileMenuOpen(false)}>
+              <Logo />
             </a>
             
             <div className="hidden md:flex items-center space-x-8">
@@ -36,19 +42,31 @@ const Navbar: React.FC = () => {
                 <a 
                   key={link.name} 
                   href={link.href} 
-                  className="text-sm font-medium text-slate-300 hover:text-[#2BB6C6] transition-colors"
+                  className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-[#2BB6C6] dark:hover:text-[#2BB6C6] transition-colors"
                 >
                   {link.name}
                 </a>
               ))}
             </div>
 
-            <div className="flex items-center space-x-4">
-              <button className="hidden sm:block text-xs uppercase tracking-widest font-bold bg-[#2BB6C6] text-[#0f172a] px-6 py-2.5 rounded-lg hover:brightness-110 transition-all shadow-lg shadow-[#2BB6C6]/20">
+            <div className="flex items-center space-x-3">
+              <button 
+                onClick={toggleTheme}
+                className="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-400 hover:text-[#2BB6C6] transition-all hover:scale-110 active:scale-95 shadow-sm"
+                aria-label="Toggle Theme"
+              >
+                <i className={`fa-solid ${theme === Theme.DARK ? 'fa-sun' : 'fa-moon'} transition-transform duration-500 ${theme === Theme.DARK ? 'rotate-[360deg]' : 'rotate-0'}`}></i>
+              </button>
+              
+              <button 
+                onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+                className="hidden sm:block text-xs uppercase tracking-widest font-bold bg-[#2BB6C6] text-[#0f172a] px-6 py-2.5 rounded-lg hover:brightness-110 hover:scale-105 transition-all shadow-lg shadow-[#2BB6C6]/20"
+              >
                 Book Demo
               </button>
+              
               <button 
-                className="md:hidden text-2xl text-slate-300 hover:text-[#2BB6C6] transition-colors p-2"
+                className="md:hidden text-2xl text-slate-600 dark:text-slate-300 hover:text-[#2BB6C6] transition-colors p-2 flex items-center justify-center"
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 aria-label="Toggle Menu"
               >
@@ -61,8 +79,8 @@ const Navbar: React.FC = () => {
 
       {/* Mobile Menu Overlay */}
       <div 
-        className={`fixed inset-0 z-[45] bg-[#0f172a]/95 backdrop-blur-lg transition-all duration-500 md:hidden ${
-          isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        className={`fixed inset-0 z-[45] bg-white/95 dark:bg-[#0f172a]/95 backdrop-blur-lg transition-all duration-500 md:hidden ${
+          isMobileMenuOpen ? 'opacity-100 pointer-events-auto translate-y-0' : 'opacity-0 pointer-events-none -translate-y-4'
         }`}
       >
         <div className="flex flex-col items-center justify-center h-full space-y-8 p-4">
@@ -70,15 +88,18 @@ const Navbar: React.FC = () => {
             <a 
               key={link.name} 
               href={link.href} 
-              className="text-2xl font-bold text-white hover:text-[#2BB6C6] transition-colors tracking-widest uppercase"
+              className="text-2xl font-bold text-slate-900 dark:text-white hover:text-[#2BB6C6] transition-colors tracking-widest uppercase"
               onClick={() => setIsMobileMenuOpen(false)}
             >
               {link.name}
             </a>
           ))}
           <button 
-            className="w-full max-w-xs py-4 bg-[#2BB6C6] text-[#0f172a] font-bold rounded-xl text-lg uppercase tracking-widest"
-            onClick={() => setIsMobileMenuOpen(false)}
+            className="w-full max-w-xs py-4 bg-[#2BB6C6] text-[#0f172a] font-bold rounded-xl text-lg uppercase tracking-widest shadow-xl shadow-[#2BB6C6]/20"
+            onClick={() => {
+              setIsMobileMenuOpen(false);
+              document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+            }}
           >
             Book Demo Now
           </button>
