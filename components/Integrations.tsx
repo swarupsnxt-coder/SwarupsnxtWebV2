@@ -1,6 +1,18 @@
-
 import React from 'react';
 import { INTEGRATIONS } from '../constants';
+
+const ZohoIcon = () => (
+  <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="transition-all">
+    <rect x="2" y="2" width="9" height="9" rx="1.5" fill="#E1261C" />
+    <rect x="13" y="2" width="9" height="9" rx="1.5" fill="#49B14F" />
+    <rect x="2" y="13" width="9" height="9" rx="1.5" fill="#008CD1" />
+    <rect x="13" y="13" width="9" height="9" rx="1.5" fill="#F9B113" />
+  </svg>
+);
+
+const SalesforceIcon = () => (
+  <i className="fa-brands fa-salesforce text-4xl text-[#00A1E0]"></i>
+);
 
 const Integrations: React.FC = () => {
   return (
@@ -10,10 +22,18 @@ const Integrations: React.FC = () => {
       </div>
       
       <div className="relative flex overflow-x-hidden group">
-        <div className="py-4 animate-marquee whitespace-nowrap flex items-center space-x-12">
+        <div className="py-4 animate-marquee whitespace-nowrap flex items-center space-x-16">
           {[...INTEGRATIONS, ...INTEGRATIONS].map((int, i) => (
-            <div key={i} className="flex items-center space-x-3 text-slate-400 dark:text-slate-400 grayscale hover:grayscale-0 transition-all cursor-pointer hover:text-slate-900 dark:hover:text-white">
-              <i className={`fa-brands ${int.logo} text-4xl`}></i>
+            <div key={i} className="flex items-center space-x-4 text-slate-400 dark:text-slate-400 grayscale hover:grayscale-0 transition-all duration-500 cursor-pointer hover:text-slate-900 dark:hover:text-white">
+              <div className="w-10 h-10 flex items-center justify-center">
+                {int.logo === 'CUSTOM_ZOHO' ? (
+                  <ZohoIcon />
+                ) : int.name === 'Salesforce' ? (
+                  <SalesforceIcon />
+                ) : (
+                  <i className={`${int.logo} text-4xl`}></i>
+                )}
+              </div>
               <span className="text-xl font-bold font-sans uppercase tracking-widest">{int.name}</span>
             </div>
           ))}
@@ -26,7 +46,7 @@ const Integrations: React.FC = () => {
           100% { transform: translateX(-50%); }
         }
         .animate-marquee {
-          animation: marquee 30s linear infinite;
+          animation: marquee 35s linear infinite;
         }
         .group:hover .animate-marquee {
           animation-play-state: paused;

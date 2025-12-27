@@ -24,7 +24,6 @@ export const getConfigurationError = (): string | null => {
 
 /**
  * Decodes raw 16-bit PCM data into an AudioBuffer.
- * Optimized for the raw PCM stream (S16_LE) returned by the Gemini TTS model.
  */
 export async function decodeAudioData(
   data: Uint8Array,
@@ -32,7 +31,6 @@ export async function decodeAudioData(
   sampleRate: number,
   numChannels: number,
 ): Promise<AudioBuffer> {
-  // Ensure the byte length is even for Int16 conversion
   const evenLength = data.byteLength - (data.byteLength % 2);
   const dataInt16 = new Int16Array(
     data.buffer,
@@ -46,7 +44,6 @@ export async function decodeAudioData(
   for (let channel = 0; channel < numChannels; channel++) {
     const channelData = buffer.getChannelData(channel);
     for (let i = 0; i < frameCount; i++) {
-      // Normalize Int16 range [-32768, 32767] to Float32 range [-1.0, 1.0]
       channelData[i] = dataInt16[i * numChannels + channel] / 32768.0;
     }
   }
@@ -55,7 +52,6 @@ export async function decodeAudioData(
 
 /**
  * Generates speech with robust part extraction. 
- * Optimized to prevent 'OTHER' finish reasons by using shorter, clearer prompts.
  */
 export const generateSpeech = async (text: string, voiceName: string): Promise<string> => {
   const configError = getConfigurationError();
@@ -65,7 +61,6 @@ export const generateSpeech = async (text: string, voiceName: string): Promise<s
     const apiKey = resolveApiKey()!;
     const ai = new GoogleGenAI({ apiKey });
     
-    // The TTS model is highly sensitive to prompt structure.
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash-preview-tts",
       contents: [{ parts: [{ text }] }],
@@ -80,17 +75,10 @@ export const generateSpeech = async (text: string, voiceName: string): Promise<s
     });
 
     if (!response.candidates || response.candidates.length === 0) {
-      throw new Error("Neural Engine Error: The model returned no candidates.");
+      throw new Error("Neural Engine Error.");
     }
 
     const candidate = response.candidates[0];
-    
-    // Safety check
-    if (candidate.finishReason === 'SAFETY') {
-      throw new Error("Content Filter Block: The requested text was flagged by safety protocols.");
-    }
-
-    // Extraction loop for the inlineData part
     let base64Audio: string | undefined;
     const parts = candidate.content?.parts || [];
     
@@ -101,17 +89,7 @@ export const generateSpeech = async (text: string, voiceName: string): Promise<s
       }
     }
 
-    if (!base64Audio) {
-      const reason = candidate.finishReason || "UNKNOWN";
-      const textPart = parts.find(p => p.text)?.text;
-      
-      if (textPart) {
-        throw new Error(`Neural Refusal: ${textPart}`);
-      }
-      
-      throw new Error(`Neural Sync Failure: Audio payload missing from response. Finish Reason: ${reason}.`);
-    }
-
+    if (!base64Audio) throw new Error(`Audio payload missing.`);
     return base64Audio;
   } catch (error: any) {
     console.error("TTS Pipeline Error:", error);
@@ -120,8 +98,8 @@ export const generateSpeech = async (text: string, voiceName: string): Promise<s
 };
 
 /**
- * Standard chat interaction logic with ROI-focused persona.
- * Enforces concise bulleted responses.
+ * Strategic interaction logic for 'Swarup' Assistant.
+ * Implements strict training, knowledge base grounding, and anti-hallucination guardrails.
  */
 export const chatWithAgent = async (message: string, personaDescription: string) => {
   const configError = getConfigurationError();
@@ -130,18 +108,45 @@ export const chatWithAgent = async (message: string, personaDescription: string)
   try {
     const apiKey = resolveApiKey()!;
     const ai = new GoogleGenAI({ apiKey });
+    
+    const systemInstruction = `
+      # MISSION
+      You are "Swarup," the Strategic AI Assistant for Swarups NXT. Your goal is to convert Indian MSME/SMB business owners into leads by demonstrating how AI automation (Voice Agents, Chatbots, CRM) leads to 80% fewer missed calls and a 40% boost in revenue.
+
+      # PERSONA
+      - Style: Confident, direct, ROI-focused, and "Value for Money" oriented.
+      - Language: Professional English. If the user uses "Hinglish," respond in kind to build rapport.
+      - Core Rule: Never say "I don't know." Instead, say "That's a specific implementation detail; let's discuss it in your Free AI Audit."
+
+      # KNOWLEDGE BASE
+      1. Offerings: 
+         - AI Voice Agents: 24/7 automated calling. 
+         - WhatsApp Chatbots: Instant replies on India's most used app.
+         - CRM & n8n Automation: Sync leads directly to Zoho/Google Sheets.
+      2. ROI & Objections:
+         - Cost: Investment that pays for itself in 30 days. Capture 5-10 missed leads to break even.
+         - Tech-savvy: Swarups NXT handles the 1-Week MVP setup. No code required by the user.
+      3. Speed: Idea to live MVP in 7 days (1-Week MVP).
+      4. Multilingual: Supports major Indian languages and Hinglish.
+
+      # CONVERSATIONAL FUNNEL (MUST FOLLOW)
+      Step 1: Acknowledge their pain (missed calls/manual work).
+      Step 2: Provide a specific ROI figure (e.g., "Imagine saving 15 hours a week").
+      Step 3: QUALIFY. Ask: "What is your business type?" and "What's your biggest bottleneck right now?"
+      Step 4: CALL TO ACTION. End high-intent chats with: "Would you like me to schedule a Free AI Audit to map your 40% revenue boost?"
+
+      # ANTI-HALLUCINATION & GUARDRAILS
+      - NO GUESSING: Never invent pricing. Say: "Pricing depends on volume. Let's get your details for a custom MVP blueprint."
+      - NO TECHNICAL STACK ANSWERS: If asked about code, databases, or SEO, say: "Our focus is strictly on AI Automation for maximum ROI. I'll have our founder, Swarup, include technical details in your custom MVP blueprint. Reach us at hello@swarupsnxt.com."
+      - VERIFICATION: Always cite the "1-Week MVP" timeline; never promise 24-hour delivery.
+      - DATA SOURCE: Rely ONLY on this knowledge base. If outside scope (e.g., SEO), refer to the audit.
+    `;
+
     const chat = ai.chats.create({
       model: 'gemini-3-flash-preview',
       config: {
-        systemInstruction: `
-          You are 'Swarup', a Strategic AI Assistant for Swarups NXT.
-          RULES:
-          1. Keep responses EXTREMELY concise.
-          2. Use BULLET POINTS for all lists/features.
-          3. Focus on ROI and business value (80% fewer missed calls, 40% revenue boost).
-          4. If user asks for pricing, explain that it is an investment starting at $1.50/hr that pays for itself in 30 days.
-          5. End high-intent messages with a CTA for a Free AI Audit.
-        `,
+        systemInstruction: systemInstruction,
+        temperature: 0.7, // Balanced for professional but natural Hinglish
       },
     });
 

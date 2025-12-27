@@ -73,12 +73,12 @@ export const INDUSTRIES: IndustrySector[] = [
 ];
 
 export const INTEGRATIONS = [
-  { name: 'Salesforce', logo: 'fa-cloud' },
-  { name: 'HubSpot', logo: 'fa-hubspot' },
-  { name: 'Zoho', logo: 'fa-database' },
-  { name: 'Shopify', logo: 'fa-shopify' },
-  { name: 'Slack', logo: 'fa-slack' },
-  { name: 'WhatsApp', logo: 'fa-whatsapp' }
+  { name: 'Salesforce', logo: 'fa-brands fa-salesforce' },
+  { name: 'HubSpot', logo: 'fa-brands fa-hubspot' },
+  { name: 'Zoho', logo: 'CUSTOM_ZOHO' }, 
+  { name: 'Shopify', logo: 'fa-brands fa-shopify' },
+  { name: 'Slack', logo: 'fa-brands fa-slack' },
+  { name: 'WhatsApp', logo: 'fa-brands fa-whatsapp' }
 ];
 
 export const FAQS = [

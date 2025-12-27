@@ -80,6 +80,20 @@ const StatusNode: React.FC<{ label: string, value: string, icon: string, positio
   );
 };
 
+const HUDIndicator: React.FC<{ label: string, value: string, position: string, delay?: string }> = ({ label, value, position, delay = "0s" }) => (
+  <div className={`absolute ${position} z-20 pointer-events-none animate-fadeIn`} style={{ animationDelay: delay }}>
+    <div className="flex flex-col gap-1 items-start">
+      <div className="flex items-center gap-2">
+        <div className="w-1.5 h-1.5 bg-accent-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(43,182,198,0.8)]"></div>
+        <span className="text-[8px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">{label}</span>
+      </div>
+      <div className="pl-3.5 border-l border-accent-500/30">
+        <span className="text-[10px] font-mono font-bold text-slate-700 dark:text-accent-400">{value}</span>
+      </div>
+    </div>
+  </div>
+);
+
 const NxtLab: React.FC = () => {
   return (
     <section id="nxt-lab" className="py-24 bg-white dark:bg-[#0f172a] relative overflow-hidden transition-colors duration-500 scroll-mt-24">
@@ -90,7 +104,7 @@ const NxtLab: React.FC = () => {
         <div 
           className="absolute inset-0 opacity-[0.01] dark:opacity-[0.03] animate-flicker"
           style={{ 
-            backgroundImage: 'linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03))', 
+            backgroundImage: 'linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(255, 255, 255, 0.03))', 
             backgroundSize: '100% 3px, 3px 100%' 
           }}
         ></div>
@@ -108,8 +122,7 @@ const NxtLab: React.FC = () => {
 
         <div className="grid lg:grid-cols-12 gap-12 items-start relative z-10">
           <StatusNode label="Core Latency" value="184ms" icon="fa-bolt" position="top-40 left-10" />
-          <StatusNode label="Neural Sync" value="99.92%" icon="fa-arrows-rotate" position="bottom-60 left-20" />
-          <StatusNode label="Engine Load" value="14.2 GFLOPs" icon="fa-microchip" position="top-32 right-12" />
+          <StatusNode label="Neural Sync" value="99.92%" icon="fa-arrows-rotate" position="top-48 right-[8%]" />
           <StatusNode label="Vocal Range" value="12Hz - 22kHz" icon="fa-wave-square" position="bottom-48 right-16" />
 
           {/* Voice Studio Column */}
@@ -119,8 +132,16 @@ const NxtLab: React.FC = () => {
           </div>
 
           {/* Phone Demo Column */}
-          <div id="phone-demo" className="lg:col-span-5 flex justify-center h-full scroll-mt-32">
-            <PhoneDemo />
+          <div className="lg:col-span-5 flex justify-center h-full scroll-mt-32 relative group/phone-container">
+            {/* Contextual HUD Elements for Phone */}
+            <HUDIndicator label="Signal Protocol" value="5G-NEURAL" position="-top-4 -left-16" delay="0.5s" />
+            <HUDIndicator label="Secure Link" value="AES-256-GCM" position="top-1/4 -right-20" delay="0.8s" />
+            <HUDIndicator label="Token Flow" value="4.2k/sec" position="bottom-1/4 -left-20" delay="1.1s" />
+            
+            <div id="phone-demo" className="relative rounded-[60px] transition-all duration-500">
+              <div className="absolute -inset-8 bg-accent-500/5 rounded-full blur-3xl group-hover/phone-container:bg-accent-500/10 transition-all duration-700"></div>
+              <PhoneDemo />
+            </div>
           </div>
         </div>
       </div>
