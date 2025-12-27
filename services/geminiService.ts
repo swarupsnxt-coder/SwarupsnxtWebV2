@@ -1,24 +1,28 @@
 import { GoogleGenAI, Modality } from "@google/genai";
 
 /**
- * Safely resolves the API key from the environment.
- * IMPORTANT: Cloudflare Pages variables are only available at BUILD TIME.
- * You must redeploy your site after adding a key in the dashboard.
+ * Direct resolution of the API key from process.env.
+ * Bundlers like Vite/Cloudflare require 'process.env.API_KEY' to be 
+ * referenced literally for static replacement during the build.
  */
 const resolveApiKey = (): string | undefined => {
   try {
-    // Check various common injection points for frontend environments
-    const key = (window as any).process?.env?.API_KEY || 
-                (process?.env?.API_KEY) || 
-                (import.meta as any).env?.VITE_API_KEY;
-
-    if (!key || key === "undefined" || key === "null" || key.trim() === "") {
-      return undefined;
+    // Static reference for replacement engine
+    const key = process.env.API_KEY;
+    if (key && key !== "undefined" && key !== "null" && key.trim() !== "") {
+      return key;
     }
-    return key;
-  } catch (e) {
-    return undefined;
-  }
+  } catch (e) {}
+  
+  // Fallback for shimmed environments
+  try {
+    const winKey = (window as any).process?.env?.API_KEY;
+    if (winKey && winKey !== "undefined" && winKey.trim() !== "") {
+      return winKey;
+    }
+  } catch (e) {}
+
+  return undefined;
 };
 
 /**
@@ -27,7 +31,7 @@ const resolveApiKey = (): string | undefined => {
 export const getConfigurationError = (): string | null => {
   const apiKey = resolveApiKey();
   if (!apiKey) {
-    return "Neural Engine Offline: API_KEY not detected. \n\nTroubleshooting:\n1. Ensure 'API_KEY' is added in Cloudflare Pages Settings > Environment Variables.\n2. You MUST trigger a NEW DEPLOYMENT (Redeploy) for the key to be active.\n3. Verify the variable name is exactly 'API_KEY'.";
+    return "Neural Engine Offline: API_KEY is missing. \n\nTroubleshooting:\n1. Verify variable 'API_KEY' exists in Cloudflare Pages settings.\n2. Ensure it is set for ALL environments (Production & Preview).\n3. You MUST trigger a NEW DEPLOYMENT (Retry Deployment) for changes to take effect.";
   }
   return null;
 };
@@ -68,8 +72,7 @@ export const generateSpeech = async (text: string, voiceName: string): Promise<s
   if (configError) throw new Error(configError);
   
   try {
-    const apiKey = resolveApiKey()!;
-    const ai = new GoogleGenAI({ apiKey });
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash-preview-tts",
@@ -116,46 +119,40 @@ export const chatWithAgent = async (message: string, personaDescription: string)
   if (configError) throw new Error(configError);
 
   try {
-    const apiKey = resolveApiKey()!;
-    const ai = new GoogleGenAI({ apiKey });
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     
     const systemInstruction = `
       # MISSION
       You are "Swarup," the Strategic AI Assistant for Swarups NXT. Convert Indian MSME business owners into leads. 
 
       # STYLE: EXTREMELY CONCISE & BULLETED
-      - Use ONLY bullet points for key information.
-      - Keep responses under 50 words.
-      - Use professional but friendly Hinglish if the user does.
-      - Never send long paragraphs.
+      - Be extremely brief. Maximum 2 sentences.
+      - Use ONLY bullet points for features, ROI, or bottlenecks.
+      - Use professional Hinglish if the user does.
+      - Total response must be under 40 words.
 
-      # KNOWLEDGE BASE
-      - AI Voice Agents: 24/7 calling, 80% fewer missed leads.
-      - ROI: 40% revenue boost, pays for itself in 30 days.
+      # CORE KNOWLEDGE
+      - AI Voice Agents: 24/7 capture, 80% fewer missed leads.
+      - ROI: 40% revenue boost.
       - Setup: 1-Week MVP deployment.
 
       # CONVERSATIONAL FUNNEL
-      1. Acknowledge pain + Bullet points for ROI.
-      2. Ask: "What is your business type?"
-      3. Ask: "What is your biggest bottleneck?"
-      4. CTA: "Free AI Audit?"
-
-      # ANTI-HALLUCINATION
-      - Never guess pricing.
-      - No technical jargon. 
-      - End high-intent chats with the Free Audit CTA.
+      1. One-line acknowledgement.
+      2. 2-3 Bullet points of value.
+      3. Ask for business type or bottleneck.
+      4. CTA: Free AI Audit.
     `;
 
     const chat = ai.chats.create({
       model: 'gemini-3-flash-preview',
       config: {
         systemInstruction: systemInstruction,
-        temperature: 0.5,
+        temperature: 0.4,
       },
     });
 
-    const result = await chat.sendMessage({ message });
-    return result.text || "Connection stable but signal empty.";
+    const result = await chat.sendMessage({ message: message });
+    return result.text || "Neural link stable but response empty.";
   } catch (error: any) {
     console.error("Chat Error:", error);
     throw new Error(`Link Failed: ${error.message || "Neural connection timeout."}`);
