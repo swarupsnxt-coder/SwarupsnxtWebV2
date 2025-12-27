@@ -1,10 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ChatMessage } from '../types';
-import { chatWithAgent } from '../services/geminiService';
 
 const PhoneDemo: React.FC = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([
-    { role: 'model', text: "Namaste! I'm Swarup's AI Assistant.\n\n• 80% fewer missed calls\n• 40% revenue boost\n\nWhat business are you in?" }
+    { role: 'model', text: "Namaste! I'm Swarup's AI Assistant.\n\n• Intelligent lead capture\n• 24/7 automated support\n\nWhat business are you in?" }
   ]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
@@ -75,13 +74,26 @@ const PhoneDemo: React.FC = () => {
     setTypingStatus("Strategizing ROI response...");
 
     try {
-      const reply = await chatWithAgent(trimmedInput);
-      setMessages(prev => [...prev, { role: 'model', text: reply }]);
+      // Routing through Cloudflare Pages API function for secure key handling
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: trimmedInput })
+      });
+
+      if (!response.ok) {
+        throw new Error("Uplink failed. Check API configuration.");
+      }
+
+      const data = await response.json();
+      if (data.error) throw new Error(data.error);
+      
+      setMessages(prev => [...prev, { role: 'model', text: data.reply }]);
     } catch (error: any) {
       console.error("Chat Demo Error:", error);
-      let errorMessage = "Signal interrupted. Please check your connection.";
-      if (error.message === "API_KEY_MISSING") {
-        errorMessage = "[SYSTEM ERROR]\nAPI_KEY not detected in environment. Secure uplink failed.";
+      let errorMessage = "Signal interrupted. Please ensure your API Key is set in Cloudflare Settings.";
+      if (error.message.includes("API")) {
+        errorMessage = "[SYSTEM ERROR]\nSecure uplink failed. Verify API configuration in the dashboard.";
       }
       setMessages(prev => [...prev, { role: 'model', text: errorMessage }]);
     } finally {
