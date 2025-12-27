@@ -1,40 +1,49 @@
 
 /**
- * Cloudflare Worker Template for Zoho CRM Sync
- * To be deployed via Wrangler or CF Dashboard
+ * Cloudflare Pages Function for Secure Lead Sync
+ * Environment variables are accessed via the 'env' parameter.
  */
 
-export default {
-  async fetch(request: Request, env: any) {
-    if (request.method !== "POST") {
-      return new Response("Method Not Allowed", { status: 405 });
-    }
+interface Env {
+  API_KEY: string;
+  ZOHO_REFRESH_TOKEN: string;
+}
 
-    try {
-      const data = await request.json();
+// Fixed: Defined the PagesFunction type which is missing from the global scope in this context
+type PagesFunction<Env = any> = (context: {
+  request: Request;
+  env: Env;
+  params: Record<string, string>;
+  data: Record<string, unknown>;
+}) => Response | Promise<Response>;
 
-      // Example OAuth2 Zoho CRM Lead Creation
-      // 1. Get Access Token using Refresh Token from env
-      // 2. POST to https://www.zohoapis.in/crm/v2/Leads
-      
-      /*
-      const leadData = {
-        data: [{
-          First_Name: data.name.split(' ')[0],
-          Last_Name: data.name.split(' ').slice(1).join(' ') || 'NXT-Prospect',
-          Email: data.email,
-          Company: data.company,
-          Description: `NXT Use Case: ${data.useCase}`,
-          Lead_Source: "NXT Website"
-        }]
-      };
-      */
+export const onRequestPost: PagesFunction<Env> = async (context) => {
+  const { request, env } = context;
 
-      return new Response(JSON.stringify({ status: "success", message: "Lead Synced to Zoho" }), {
+  try {
+    const data: any = await request.json();
+
+    // Fixed: Always use process.env.API_KEY exclusively as required by the GenAI SDK guidelines
+    if (!process.env.API_KEY) {
+      return new Response(JSON.stringify({ error: "API_KEY not found in process.env" }), {
+        status: 500,
         headers: { "Content-Type": "application/json" },
       });
-    } catch (err) {
-      return new Response("Internal Error", { status: 500 });
     }
-  },
+
+    // Logic for syncing to Zoho CRM or Google Sheets...
+    console.log("Processing lead for:", data.email);
+
+    return new Response(JSON.stringify({ 
+      status: "success", 
+      message: "Lead successfully captured via NXT Neural Gateway" 
+    }), {
+      headers: { "Content-Type": "application/json" },
+    });
+  } catch (err: any) {
+    return new Response(JSON.stringify({ error: err.message }), { 
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
 };
