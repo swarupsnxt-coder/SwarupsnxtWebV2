@@ -29,11 +29,12 @@ export async function decodeAudioData(
 }
 
 /**
- * Generates speech via Gemini 2.5 TTS
+ * Generates speech with robust part extraction. 
  */
 export const generateSpeech = async (text: string, voiceName: string): Promise<string> => {
   try {
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    // Direct use of process.env.API_KEY for bundler replacement
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY as string });
     
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash-preview-tts",
@@ -42,54 +43,73 @@ export const generateSpeech = async (text: string, voiceName: string): Promise<s
         responseModalities: [Modality.AUDIO],
         speechConfig: {
           voiceConfig: {
-            prebuiltVoiceConfig: { voiceName },
+            prebuiltVoiceConfig: { voiceName: voiceName as any },
           },
         },
       },
     });
 
-    const base64Audio = response.candidates?.[0]?.content?.parts?.find(p => p.inlineData)?.inlineData?.data;
-    if (!base64Audio) throw new Error(`Neural speech signal lost.`);
+    const candidate = response.candidates?.[0];
+    const base64Audio = candidate?.content?.parts?.find(p => p.inlineData)?.inlineData?.data;
+
+    if (!base64Audio) throw new Error("Vocal signal lost in transmission.");
     return base64Audio;
   } catch (error: any) {
-    console.error("TTS Error:", error);
+    console.error("TTS Pipeline Error:", error);
     throw error;
   }
 };
 
 /**
- * Primary chat interaction logic using direct generateContent.
+ * Strategic interaction logic for 'Swarup' Assistant.
+ * Optimized for Indian MSME lead generation and high-conversion brevity.
  */
 export const chatWithAgent = async (message: string, personaDescription: string) => {
   try {
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    // Direct use of process.env.API_KEY for bundler replacement
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY as string });
     
     const systemInstruction = `
+      # IDENTITY
+      You are "Swarup," the AI Strategic Assistant for Swarups NXT. 
+
       # MISSION
-      You are "Swarup," Strategic AI Assistant for Swarups NXT. Convert Indian MSME owners into leads.
+      Convert Indian MSME owners into leads. 
 
-      # STYLE: EXTREMELY BRIEF
-      - Use ONLY bullet points for ROI/details.
-      - Max 40 words. 
-      - Use Hinglish where appropriate.
+      # CONVERSATIONAL RULES
+      - Be EXTREMELY BRIEF. Under 30 words per response.
+      - Use ONLY bullet points for ROI or features.
+      - Use Hinglish phrases naturally (e.g., "Missed calls matlab loss").
+      - Never say "I don't know." Instead: "Let's discuss this in your Free AI Audit."
 
-      # PRODUCT
-      - AI Voice Agents: 80% fewer missed calls.
-      - ROI: 40% revenue boost.
+      # CORE OFFER
+      - 80% fewer missed calls.
+      - 40% revenue boost.
+      - 1-Week MVP Deployment.
+
+      # FLOW
+      1. Short empathy/value line.
+      2. 2 Bullet points.
+      3. Ask: "What is your business type?"
+      4. If they seem interested, ask: "Shall we schedule a Free AI Audit to map your 40% revenue boost?"
     `;
 
-    const response = await ai.models.generateContent({
+    const chat = ai.chats.create({
       model: 'gemini-3-flash-preview',
-      contents: message,
       config: {
         systemInstruction: systemInstruction,
         temperature: 0.5,
       },
     });
 
-    return response.text || "Connection stable, but signal silent.";
+    const result = await chat.sendMessage({ message });
+    return result.text || "Neural connection established, but signal is quiet.";
   } catch (error: any) {
-    console.error("Chat API Error:", error);
+    console.error("Chat Pipeline Error:", error);
+    // Specifically handle the missing key error from the SDK
+    if (error.message?.includes("API_KEY_INVALID") || error.message?.includes("403") || error.message?.includes("API key")) {
+      throw new Error("Neural Authentication Failed. Ensure API_KEY is set in Cloudflare and the app is REDEPLOYED.");
+    }
     throw error;
   }
 };

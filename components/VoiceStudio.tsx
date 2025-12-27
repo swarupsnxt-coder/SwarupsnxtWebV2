@@ -216,7 +216,7 @@ const VoiceStudio: React.FC = () => {
       setLoadingStage('Querying Speech Models...');
       addLog(`ENCODING VOCAL SIGNAL...`);
       
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY as string });
       const voiceName = persona.voices[gender];
       
       const response = await ai.models.generateContent({
