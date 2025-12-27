@@ -2,21 +2,15 @@ import { GoogleGenAI, Modality } from "@google/genai";
 
 /**
  * Decodes raw 16-bit PCM data into an AudioBuffer.
- * Used in the frontend.
+ * The Gemini TTS API returns raw PCM data without headers.
  */
 export async function decodeAudioData(
   data: Uint8Array,
   ctx: AudioContext,
-  sampleRate: number,
-  numChannels: number,
+  sampleRate: number = 24000,
+  numChannels: number = 1,
 ): Promise<AudioBuffer> {
-  const evenLength = data.byteLength - (data.byteLength % 2);
-  const dataInt16 = new Int16Array(
-    data.buffer,
-    data.byteOffset,
-    evenLength / 2
-  );
-  
+  const dataInt16 = new Int16Array(data.buffer, data.byteOffset, data.byteLength / 2);
   const frameCount = dataInt16.length / numChannels;
   const buffer = ctx.createBuffer(numChannels, frameCount, sampleRate);
 
@@ -30,19 +24,24 @@ export async function decodeAudioData(
 }
 
 /**
- * Generates speech (TTS) using Gemini 2.5 Flash.
- * Accept 'env' for Cloudflare Worker compatibility.
+ * Helper to decode base64 string to Uint8Array
  */
-export const generateSpeech = async (text: string, voiceName: string, env?: any): Promise<string> => {
-  // Cloudflare Environment Bridge
-  if (env?.API_KEY) {
-    if (typeof process === 'undefined') (globalThis as any).process = { env: {} };
-    process.env.API_KEY = env.API_KEY;
+export function decodeBase64(base64: string): Uint8Array {
+  const binaryString = atob(base64);
+  const len = binaryString.length;
+  const bytes = new Uint8Array(len);
+  for (let i = 0; i < len; i++) {
+    bytes[i] = binaryString.charCodeAt(i);
   }
+  return bytes;
+}
 
+/**
+ * Generates speech (TTS) using Gemini 2.5 Flash Preview TTS.
+ */
+export const generateSpeech = async (text: string, voiceName: string): Promise<string> => {
   try {
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY as string });
-    
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash-preview-tts",
       contents: [{ parts: [{ text }] }],
@@ -56,9 +55,7 @@ export const generateSpeech = async (text: string, voiceName: string, env?: any)
       },
     });
 
-    const candidate = response.candidates?.[0];
-    const base64Audio = candidate?.content?.parts?.find(p => p.inlineData)?.inlineData?.data;
-
+    const base64Audio = response.candidates?.[0]?.content?.parts?.find(p => p.inlineData)?.inlineData?.data;
     if (!base64Audio) throw new Error("Vocal signal lost in transmission.");
     return base64Audio;
   } catch (error: any) {
@@ -69,56 +66,44 @@ export const generateSpeech = async (text: string, voiceName: string, env?: any)
 
 /**
  * Strategic interaction logic for 'Swarup' Assistant.
- * Accept 'env' for Cloudflare Worker compatibility.
+ * Optimized for maximum ROI impact and extreme brevity.
  */
-export const chatWithAgent = async (message: string, personaDescription: string, env?: any) => {
-  // Cloudflare Environment Bridge
-  if (env?.API_KEY) {
-    if (typeof process === 'undefined') (globalThis as any).process = { env: {} };
-    process.env.API_KEY = env.API_KEY;
-  }
-
+export const chatWithAgent = async (message: string) => {
   try {
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY as string });
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     
     const systemInstruction = `
-      # IDENTITY
-      You are "Swarup," the AI Strategic Assistant for Swarups NXT. 
-      Persona: Confident, ROI-focused, "Value for Money."
+# IDENTITY
+You are "Swarup," the Strategic AI Assistant for Swarups NXT.
 
-      # MISSION
-      Convert Indian MSME owners into high-intent leads. 
+# PROTOCOL: EXTREME BREVITY
+- Max 35 words total.
+- Use Hinglish where appropriate (e.g., "Seedha ROI focus").
 
-      # RULES
-      - BRIEF. Max 25 words.
-      - Use Bullet Points only.
-      - Use "Hinglish" naturally (e.g., "Missed calls matlab paison ka nuksaan").
-      - Never say "I don't know." Say: "Ye hum AI Audit mein finalise karenge."
+# RESPONSE STRUCTURE (STRICT)
+1. Quick validation of the user's input.
+2. Provide your main answer in 1 to 3 crisp bullet points.
+3. Use business value logic (savings, efficiency, speed).
+4. DO NOT repeat the "80% missed calls" or "40% revenue boost" stats in every response. Use different ROI angles.
+5. End with a qualification question: "What business are you in?" or "Ready for an audit?"
 
-      # OFFER
-      - 80% fewer missed calls.
-      - 40% revenue boost.
-      - 1-Week MVP Live.
-
-      # FLOW
-      1. One-line empathy.
-      2. 2 ROI Bullets.
-      3. ASK: "What is your business type?"
-      4. ASK: "Audit fix karein?"
+# ANTI-HALLUCINATION
+- Stick to 1-week MVP timeline.
+- Never guess pricing.
     `;
 
-    const chat = ai.chats.create({
+    const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
+      contents: message,
       config: {
         systemInstruction: systemInstruction,
-        temperature: 0.5,
+        temperature: 0.7,
       },
     });
 
-    const result = await chat.sendMessage({ message });
-    return result.text || "Signal detected. Ready for protocol.";
+    return response.text || "NXT Core Ready. Protocol engaged.";
   } catch (error: any) {
-    console.error("Chat Error:", error);
+    console.error("Chat Interaction Error:", error);
     throw error;
   }
 };

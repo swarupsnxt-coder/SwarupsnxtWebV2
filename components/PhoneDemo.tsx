@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ChatMessage } from '../types';
+import { chatWithAgent } from '../services/geminiService';
 
 const PhoneDemo: React.FC = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([
@@ -50,13 +51,16 @@ const PhoneDemo: React.FC = () => {
   }, []);
 
   const toggleListening = async () => {
-    if (!recognitionRef.current) return alert("Speech recognition not supported.");
-    if (isListening) return recognitionRef.current.stop();
+    if (!recognitionRef.current) return alert("Speech recognition not supported in this browser.");
+    if (isListening) {
+      recognitionRef.current.stop();
+      return;
+    }
     try {
       await navigator.mediaDevices.getUserMedia({ audio: true });
       recognitionRef.current.start();
     } catch (err) {
-      alert("Microphone access is required.");
+      alert("Microphone access is required for voice input.");
     }
   };
 
@@ -68,35 +72,27 @@ const PhoneDemo: React.FC = () => {
     if (!customMessage) setInput("");
     setMessages(prev => [...prev, { role: 'user', text: trimmedInput }]);
     setIsTyping(true);
-    
-    setTypingStatus("Synthesizing ROI Blueprint...");
+    setTypingStatus("Strategizing ROI response...");
 
     try {
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: trimmedInput, persona: "Swarup" })
-      });
-
-      const data = await response.json();
-      if (data.error) throw new Error(data.error);
-
-      setMessages(prev => [...prev, { role: 'model', text: data.reply }]);
+      const reply = await chatWithAgent(trimmedInput);
+      setMessages(prev => [...prev, { role: 'model', text: reply }]);
     } catch (error: any) {
-      setMessages(prev => [...prev, { 
-        role: 'model', 
-        text: `[AUTH ERROR]\nCloudflare API Key missing. Please set API_KEY in your Pages dashboard and Redeploy.`
-      }]);
+      console.error("Chat Demo Error:", error);
+      let errorMessage = "Signal interrupted. Please check your connection.";
+      if (error.message === "API_KEY_MISSING") {
+        errorMessage = "[SYSTEM ERROR]\nAPI_KEY not detected in environment. Secure uplink failed.";
+      }
+      setMessages(prev => [...prev, { role: 'model', text: errorMessage }]);
     } finally {
       setIsTyping(false);
-      setTypingStatus("Analyzing request...");
     }
   };
 
   const quickActions = [
-    { label: "Missed Calls", query: "I'm missing too many calls." },
-    { label: "Timeline", query: "How fast can you deploy?" },
-    { label: "Cost", query: "Is AI expensive?" }
+    { label: "Missed Calls", query: "Tell me how you stop missed calls." },
+    { label: "Timeline", query: "How fast is the 1-week deployment?" },
+    { label: "Security", query: "Is my business data secure?" }
   ];
 
   return (
@@ -129,13 +125,13 @@ const PhoneDemo: React.FC = () => {
             </div>
           </div>
 
-          <div ref={scrollRef} className="flex-grow overflow-y-auto px-5 py-6 space-y-5 bg-[#f8f9fb] dark:bg-[#0b0b0e]">
+          <div ref={scrollRef} className="flex-grow overflow-y-auto px-5 py-6 space-y-5 bg-[#f8f9fb] dark:bg-[#0b0b0e] scroll-smooth">
             {messages.map((m, i) => (
               <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'} animate-fadeIn`}>
                 <div className={`max-w-[85%] px-4 py-2.5 rounded-[20px] text-[13px] leading-relaxed shadow-sm whitespace-pre-wrap ${
                   m.role === 'user' 
                     ? 'bg-[#007aff] text-white rounded-tr-[4px]' 
-                    : m.text.includes('[AUTH ERROR]')
+                    : m.text.includes('[SYSTEM ERROR]')
                       ? 'bg-red-50 text-red-600 border border-red-200 text-[10px] font-mono'
                       : 'bg-white text-slate-800 dark:bg-slate-900 dark:text-white dark:border-white/10 border border-slate-200 rounded-tl-[4px]'
                 }`}>
@@ -145,14 +141,14 @@ const PhoneDemo: React.FC = () => {
             ))}
           </div>
 
-          <div className="px-4 pt-3 pb-10 bg-white/95 dark:bg-[#0b0b0e]/95 border-t border-slate-100 dark:border-white/5 z-30">
+          <div className="px-4 pt-3 pb-8 bg-white/95 dark:bg-[#0b0b0e]/95 border-t border-slate-100 dark:border-white/5 z-30">
             <div className="flex gap-2 overflow-x-auto pb-3 no-scrollbar mb-1">
               {quickActions.map((action, idx) => (
-                <button key={idx} onClick={() => handleSend(action.query)} className="flex-shrink-0 px-3 py-1.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-white/5 rounded-full text-[10px] font-bold text-slate-600 dark:text-slate-400 whitespace-nowrap">{action.label}</button>
+                <button key={idx} onClick={() => handleSend(action.query)} className="flex-shrink-0 px-3 py-1.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-white/5 rounded-full text-[10px] font-bold text-slate-600 dark:text-slate-400 whitespace-nowrap active:scale-95 transition-transform">{action.label}</button>
               ))}
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 mb-2">
               <button onClick={toggleListening} className={`w-9 h-9 flex items-center justify-center rounded-full transition-colors ${isListening ? 'bg-red-500 text-white animate-pulse' : 'bg-slate-100 dark:bg-slate-800 text-[#007aff]'}`}>
                 <i className={`fa-solid ${isListening ? 'fa-microphone-lines' : 'fa-microphone'}`}></i>
               </button>
@@ -170,7 +166,8 @@ const PhoneDemo: React.FC = () => {
                 </button>
               </div>
             </div>
-            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-[120px] h-[5px] bg-slate-900/10 dark:bg-white/10 rounded-full"></div>
+
+            <div className="mt-4 mx-auto w-[120px] h-[5px] bg-slate-900/10 dark:bg-white/10 rounded-full"></div>
           </div>
         </div>
       </div>

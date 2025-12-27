@@ -3,28 +3,39 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Swarups NXT | Hyper-Realistic AI Voice Agents & Digital Employees</title>
     
     <!-- Primary Meta Tags -->
-    <meta name="title" content="Swarups NXT | Hyper-Realistic AI Voice Agents & Digital Employees" />
-    <meta name="description" content="Convert Indian MSME/SMB business owners into leads with AI automation. Voice Agents, Chatbots, and CRM integrations that lead to 80% fewer missed calls and a 40% boost in revenue." />
-    <meta name="keywords" content="AI Voice Agents, WhatsApp Chatbots, CRM Automation, Indian MSME, Business Growth, Swarups NXT, AI Lead Gen, Zoho CRM Integration" />
+    <title>Swarups NXT | Unlock Next Gen AI Solutions</title>
+
+    <meta name="title" content="Swarups NXT | Unlock Next Gen AI Solutions" />
+    <meta name="description" content="Swarups NXT delivers next-gen AI voice agents, chatbots, and SaaS automation for MSMEs, SMBs, and enterprises—reducing missed calls, accelerating conversions, and scaling customer engagement." />
+    <meta name="keywords" content="AI Voice Agents, AI Chatbots, Digital Employees, SaaS Automation, MSME AI Solutions, SMB Automation, Enterprise AI, Swarups NXT" />
     <meta name="author" content="Swarups NXT" />
     <meta name="robots" content="index, follow" />
     <meta name="theme-color" content="#1e266e" />
 
-    <!-- Open Graph / Facebook -->
+    <!-- Open Graph / Facebook / LinkedIn / WhatsApp -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://swarupsnxt.com/" />
-    <meta property="og:title" content="Swarups NXT | Stop Chatting. Start Closing." />
-    <meta property="og:description" content="Hyper-realistic Digital Employees that handle your entire sales funnel with sub-200ms latency. 80% fewer missed calls. 40% more revenue." />
-    <meta property="og:image" content="https://images.unsplash.com/photo-1589254065878-42c9da997008?auto=format&fit=crop&q=80&w=1200" />
+    <meta property="og:title" content="Swarups NXT | Unlock Next Gen AI Solutions" />
+    <meta property="og:description" content="AI voice agents, chatbots, and digital employees built for real business outcomes. Simplify automation. Accelerate growth." />
+    <meta property="og:image" content="https://swarupsnxt.com/assets/Dark%20version.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="Swarups NXT" />
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Swarups NXT | Unlock Next Gen AI Solutions" />
+    <meta name="twitter:description" content="Next-gen AI voice agents and digital employees that help businesses automate engagement and scale smarter." />
+    <meta name="twitter:image" content="https://swarupsnxt.com/assets/Dark%20version.png" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="logo.svg" />
 
     <!-- Environment Shim -->
     <script>
-      // Safe initialization of process.env for bundler compatibility
       window.process = window.process || { env: {} };
-      window.process.env = window.process.env || {};
     </script>
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -69,7 +80,6 @@
         font-family: 'Inter', sans-serif;
         overflow-x: hidden;
       }
-      /* Smooth global transitions for theme switching */
       *, *::before, *::after {
         transition-property: background-color, border-color, color, fill, stroke;
         transition-duration: 300ms;
@@ -104,20 +114,12 @@
         66% { transform: translate(-20px, 20px) scale(0.9); }
         100% { transform: translate(0, 0) scale(1); }
       }
-      @keyframes neural-pulse {
-        0%, 100% { opacity: 0.1; }
-        50% { opacity: 0.3; }
-      }
       .float-animation {
         animation: float 4s ease-in-out infinite;
       }
       .blob-animation {
         animation: blob-drift 20s ease-in-out infinite;
       }
-      .neural-pulse-animation {
-        animation: neural-pulse 4s ease-in-out infinite;
-      }
-      /* Custom Scrollbar */
       ::-webkit-scrollbar {
         width: 8px;
       }
@@ -142,16 +144,16 @@
     {
       "imports": {
         "react": "https://esm.sh/react@^19.2.3",
-        "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
         "react/": "https://esm.sh/react@^19.2.3/",
-        "@google/genai": "https://esm.sh/@google/genai@^1.34.0"
+        "@google/genai": "https://esm.sh/@google/genai@^1.34.0",
+        "react-dom": "https://esm.sh/react-dom@^19.2.3",
+        "react-dom/": "https://esm.sh/react-dom@^19.2.3/"
       }
     }
     </script>
   </head>
   <body class="bg-slate-50 dark:bg-[#0f172a] transition-colors duration-500">
     <div id="root"></div>
-    <!-- Entry point script -->
     <script type="module" src="index.tsx"></script>
   </body>
 </html>
