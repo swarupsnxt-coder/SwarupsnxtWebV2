@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ChatMessage } from '../types';
 import { chatWithAgent } from '../services/geminiService';
-import { PERSONAS } from '../constants';
 
 const PhoneDemo: React.FC = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([
@@ -10,7 +9,6 @@ const PhoneDemo: React.FC = () => {
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [isListening, setIsListening] = useState(false);
-  const [typingStatus, setTypingStatus] = useState("Analyzing request...");
   const [currentTime, setCurrentTime] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
   const recognitionRef = useRef<any>(null);
@@ -70,26 +68,18 @@ const PhoneDemo: React.FC = () => {
     if (!customMessage) setInput("");
     setMessages(prev => [...prev, { role: 'user', text: trimmedInput }]);
     setIsTyping(true);
-    
-    const statuses = ["Consulting ROI blueprints...", "Mapping automation funnel...", "Synthesizing Strategic Response..."];
-    let sIdx = 0;
-    const statusInterval = setInterval(() => {
-      setTypingStatus(statuses[sIdx % statuses.length]);
-      sIdx++;
-    }, 800);
 
     try {
-      const reply = await chatWithAgent(trimmedInput, PERSONAS[0].description);
+      const reply = await chatWithAgent(trimmedInput, "");
       setMessages(prev => [...prev, { role: 'model', text: reply }]);
     } catch (error: any) {
+      console.error("Chat Error:", error);
       setMessages(prev => [...prev, { 
         role: 'model', 
-        text: `[CONNECTION ERROR]\n${error.message || "Failed to connect to Neural Engine."}\n\nTroubleshooting:\n- Ensure API_KEY is set in Cloudflare Settings.\n- Trigger a 'Retry Deployment'.`
+        text: `[SYSTEM ERROR]\nNeural handshake failed. Please check your API key in the dashboard and redeploy.`
       }]);
     } finally {
-      clearInterval(statusInterval);
       setIsTyping(false);
-      setTypingStatus("Analyzing request...");
     }
   };
 
@@ -106,7 +96,7 @@ const PhoneDemo: React.FC = () => {
           
           <div className="absolute top-0 left-0 w-full h-11 z-50 flex justify-center pt-3 pointer-events-none">
             <div className={`h-[34px] bg-black rounded-full flex items-center justify-center px-4 ring-1 ring-white/10 shadow-2xl transition-all ${isTyping || isListening ? 'w-[250px]' : 'w-[120px]'}`}>
-              {isTyping && <span className="text-[9px] text-white/90 font-bold uppercase tracking-wider animate-pulse">{typingStatus}</span>}
+              {isTyping && <span className="text-[9px] text-white/90 font-bold uppercase tracking-wider animate-pulse">Analyzing...</span>}
             </div>
           </div>
 
@@ -134,7 +124,7 @@ const PhoneDemo: React.FC = () => {
                 <div className={`max-w-[85%] px-4 py-2.5 rounded-[20px] text-[13px] leading-relaxed shadow-sm whitespace-pre-wrap ${
                   m.role === 'user' 
                     ? 'bg-[#007aff] text-white rounded-tr-[4px]' 
-                    : m.text.includes('[CONNECTION ERROR]')
+                    : m.text.includes('[SYSTEM ERROR]')
                       ? 'bg-red-50 text-red-600 border border-red-200 text-[10px] font-mono'
                       : 'bg-white text-slate-800 border border-slate-200 rounded-tl-[4px]'
                 }`}>

@@ -29,7 +29,7 @@ export async function decodeAudioData(
 }
 
 /**
- * Generates speech with robust part extraction. 
+ * Generates speech via Gemini 2.5 TTS
  */
 export const generateSpeech = async (text: string, voiceName: string): Promise<string> => {
   try {
@@ -48,32 +48,17 @@ export const generateSpeech = async (text: string, voiceName: string): Promise<s
       },
     });
 
-    if (!response.candidates || response.candidates.length === 0) {
-      throw new Error("Neural Engine Error.");
-    }
-
-    const candidate = response.candidates[0];
-    let base64Audio: string | undefined;
-    const parts = candidate.content?.parts || [];
-    
-    for (const part of parts) {
-      if (part.inlineData && part.inlineData.data) {
-        base64Audio = part.inlineData.data;
-        break; 
-      }
-    }
-
-    if (!base64Audio) throw new Error(`Audio payload missing.`);
+    const base64Audio = response.candidates?.[0]?.content?.parts?.find(p => p.inlineData)?.inlineData?.data;
+    if (!base64Audio) throw new Error(`Neural speech signal lost.`);
     return base64Audio;
   } catch (error: any) {
-    console.error("TTS Pipeline Error:", error);
-    throw new Error(error.message || "Neural Handshake Interrupted.");
+    console.error("TTS Error:", error);
+    throw error;
   }
 };
 
 /**
- * Strategic interaction logic for 'Swarup' Assistant.
- * Optimized for mobile lead conversion and Indian MSME ROI.
+ * Primary chat interaction logic using direct generateContent.
  */
 export const chatWithAgent = async (message: string, personaDescription: string) => {
   try {
@@ -81,40 +66,30 @@ export const chatWithAgent = async (message: string, personaDescription: string)
     
     const systemInstruction = `
       # MISSION
-      You are "Swarup," the Strategic AI Assistant for Swarups NXT. Convert Indian MSME business owners into leads.
+      You are "Swarup," Strategic AI Assistant for Swarups NXT. Convert Indian MSME owners into leads.
 
-      # STYLE: EXTREMELY BRIEF & BULLETED
-      - Use ONLY bullet points for key details.
-      - Maximum 40 words per response.
-      - Use professional Hinglish (e.g., "Missed calls matlab missed revenue") to build rapport.
+      # STYLE: EXTREMELY BRIEF
+      - Use ONLY bullet points for ROI/details.
+      - Max 40 words. 
+      - Use Hinglish where appropriate.
 
-      # KNOWLEDGE BASE
-      - AI Voice Agents: 24/7 capture, 80% fewer missed leads.
+      # PRODUCT
+      - AI Voice Agents: 80% fewer missed calls.
       - ROI: 40% revenue boost.
-      - Timeline: 1-Week MVP.
-
-      # CONVERSATIONAL STEPS
-      1. One-line empathetic acknowledgement.
-      2. 2-3 specific ROI bullet points.
-      3. ASK: "What is your business type?" or "What's your biggest bottleneck?"
-      4. END HIGH-INTENT CHATS WITH: "Shall we schedule a Free AI Audit?"
     `;
 
-    const chat = ai.chats.create({
+    const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
+      contents: message,
       config: {
         systemInstruction: systemInstruction,
-        temperature: 0.4,
+        temperature: 0.5,
       },
     });
 
-    const result = await chat.sendMessage({ message: message });
-    return result.text || "Neural link stable but response empty.";
+    return response.text || "Connection stable, but signal silent.";
   } catch (error: any) {
-    console.error("Chat Error:", error);
-    if (error.message?.includes("API_KEY_INVALID") || error.message?.includes("403")) {
-      throw new Error("Auth Failed: Ensure API_KEY is set in Cloudflare and the app is redeployed.");
-    }
-    throw new Error(`Link Failed: ${error.message || "Neural connection timeout."}`);
+    console.error("Chat API Error:", error);
+    throw error;
   }
 };
