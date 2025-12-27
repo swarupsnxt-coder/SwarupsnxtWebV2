@@ -88,7 +88,7 @@ export const FAQS = [
   },
   {
     question: "How long does it take to deploy?",
-    answer: "Standard deployments take less than 48 hours. Our '1-Week MVP' protocol handles full integration with your existing CRM and knowledge base."
+    answer: "Standard deployments take a few weeks. Our implementation protocol handles full architectural mapping and integration with your existing CRM and knowledge base."
   },
   {
     question: "Does it support Indian regional languages?",

@@ -9,8 +9,8 @@ const VoiceStudio: React.FC = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isBuffering, setIsBuffering] = useState(false);
   const [syncPercentage, setSyncPercentage] = useState(0);
-  const [generatedScript, setGeneratedScript] = useState('');
   const [statusLogs, setStatusLogs] = useState<string[]>([]);
+  const [loadingStage, setLoadingStage] = useState('');
 
   const audioContextRef = useRef<AudioContext | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
@@ -74,7 +74,7 @@ const VoiceStudio: React.FC = () => {
       'Tamil': "வணக்கம், நாளை உங்கள் மருத்துவ பரிசோதனை இருப்பதை உறுதி செய்ய அழைக்கிறேன்.",
       'Telugu': "నమస్కారం, అపోలో వెల్‌నెస్ నుండి మీ రేపటి హెల్త్ చెకప్ గురించి కాల్ చేస్తున్నాను.",
       'Malayalam': "നമസ്കാരം, നാളത്തെ നിങ്ങളുടെ ഹെൽത്ത് ചെക്കപ്പ് സ്ഥിരീകരിക്കാനാണ് ഞാൻ വിളിക്കുന്നത്. കൃത്യസമയത്ത് എത്താൻ ശ്രദ്ധിക്കുമല്ലോ.",
-      'Kannada': "ನಮಸ್ಕಾರ, ನಾಳೆಯ ನಿಮ್ಮ ಆರೋಗ್ಯ ತಪಾಸಣೆಯನ್ನು ಖಚಿತಪಡಿಸಲು ಕರೆ ಮಾಡುತ್ತಿದ್ದೇನೆ. ದಯವಿಟ್ಟು ಸಮಯಕ್ಕೆ ಸರಿಯಾಗಿ ಬನ್ನಿ.",
+      'Kannada': "ನಮಸ್ಕಾರ, ನಾಳೆಯ ನಿಮ್ಮ ఆరోగ్య తపಾಸಣೆಯನ್ನು ಖಚಿತಪಡಿಸಲು ಕರೆ ಮಾಡುತ್ತಿದ್ದೇನೆ. దయవిట్టు సమయక్కె సరియాగి బన్ని.",
       'Marathi': "नमस्कार, आपल्या उद्याच्या आरोग्य तपासणीची पुष्टी करण्यासाठी मी कॉल केला आहे. कृपया वेळेवर उपस्थित राहा.",
       'Punjabi': "ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ, ਤੁਹਾਡੀ ਕੱਲ੍ਹ ਦੀ ਸਿਹਤ ਜਾਂਚ ਦੀ ਪੁਸ਼ਟੀ ਕਰਨ ਲਈ ਫ਼ੋਨ ਕੀਤਾ ਹੈ। ਕਿਰਪਾ ਕਰਕੇ ਸਮੇਂ ਸਿਰ ਪਹੁੰਚੋ ਜੀ।"
     },
@@ -237,6 +237,7 @@ const VoiceStudio: React.FC = () => {
     setIsPlaying(false);
     setIsBuffering(false);
     setSyncPercentage(0);
+    setLoadingStage('');
   };
 
   const speakWithGenAI = async (text: string) => {
@@ -251,9 +252,21 @@ const VoiceStudio: React.FC = () => {
     }
     
     setIsBuffering(true);
-    addLog(`ENCODING VOCAL SIGNAL...`);
+    setSyncPercentage(10);
+    setLoadingStage('Initializing Neural Matrix...');
+    addLog(`INIT NEURAL HANDSHAKE...`);
+
+    const progressTimer = setInterval(() => {
+        setSyncPercentage(prev => {
+            if (prev < 85) return prev + Math.random() * 5;
+            return prev;
+        });
+    }, 200);
 
     try {
+      setLoadingStage('Querying Speech Models...');
+      addLog(`ENCODING VOCAL SIGNAL...`);
+      
       const ai = new GoogleGenAI({ apiKey });
       const voiceName = persona.voices[gender];
       
@@ -270,12 +283,19 @@ const VoiceStudio: React.FC = () => {
         }
       });
       
-      if (reqId !== currentRequestId.current) return;
+      if (reqId !== currentRequestId.current) {
+        clearInterval(progressTimer);
+        return;
+      }
+
+      setLoadingStage('Processing Neural Stream...');
+      setSyncPercentage(90);
 
       const candidate = response.candidates?.[0];
       const base64Audio = candidate?.content?.parts?.find(p => p.inlineData)?.inlineData?.data;
       
       if (!base64Audio) {
+        clearInterval(progressTimer);
         addLog("SYNC FAILED. FALLBACK.");
         speakWithFallback(text);
         return;
@@ -287,9 +307,13 @@ const VoiceStudio: React.FC = () => {
       const ctx = audioContextRef.current;
       if (ctx.state === 'suspended') await ctx.resume();
       
+      setLoadingStage('Decoding Vocal Frequencies...');
       const buffer = await decodeAudioData(decode(base64Audio), ctx);
       
-      if (reqId !== currentRequestId.current) return;
+      if (reqId !== currentRequestId.current) {
+        clearInterval(progressTimer);
+        return;
+      }
 
       if (!analyserRef.current) {
         analyserRef.current = ctx.createAnalyser();
@@ -309,14 +333,20 @@ const VoiceStudio: React.FC = () => {
       };
       sourceRef.current = source;
       
-      addLog("STREAMING NEURAL VOICE...");
+      clearInterval(progressTimer);
       setSyncPercentage(100);
+      setLoadingStage('Transmission Ready.');
+      addLog("STREAMING NEURAL VOICE...");
+
       setTimeout(() => {
-        setIsBuffering(false);
-        setIsPlaying(true);
-        source.start();
-      }, 300);
+        if (reqId === currentRequestId.current) {
+          setIsBuffering(false);
+          setIsPlaying(true);
+          source.start();
+        }
+      }, 400);
     } catch (e) {
+      clearInterval(progressTimer);
       console.error("GenAI TTS Failed:", e);
       addLog("ERROR. FALLBACK ACTIVE.");
       speakWithFallback(text);
@@ -325,6 +355,7 @@ const VoiceStudio: React.FC = () => {
 
   const speakWithFallback = (text: string) => {
     setIsBuffering(false);
+    setLoadingStage('');
     const persona = PERSONAS[personaKey as keyof typeof PERSONAS];
     addLog("OS SYNTHESIS OVERRIDE.");
     const utter = new SpeechSynthesisUtterance(text);
@@ -341,7 +372,6 @@ const VoiceStudio: React.FC = () => {
   const handleAction = async () => {
     if (isPlaying || isBuffering) { stopAudio(); return; }
     const script = getScript();
-    setGeneratedScript('');
     speakWithGenAI(script);
   };
 
@@ -359,7 +389,7 @@ const VoiceStudio: React.FC = () => {
           <div>
             <h3 className="text-xs font-black text-slate-800 dark:text-white uppercase tracking-[0.3em]">Vocal Engine</h3>
             <p className={`text-[8px] font-bold uppercase tracking-widest transition-colors duration-500 ${isBuffering ? 'text-purple-500 animate-pulse' : 'text-accent-600 dark:text-accent-400'}`}>
-                {isBuffering ? `Neural Sync: ${Math.round(syncPercentage)}%` : 'NXT-Core-Alpha Online'}
+                {isBuffering ? `Neural Sync Active` : 'NXT-Core-Alpha Online'}
             </p>
           </div>
         </div>
@@ -442,14 +472,28 @@ const VoiceStudio: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-slate-950 rounded-2xl p-4 font-mono text-[8px] border border-white/5 h-12 flex items-center justify-between overflow-hidden relative">
-             <div className="flex gap-2 items-center relative z-10">
-                <span className={`w-1.5 h-1.5 rounded-full ${isBuffering ? 'bg-purple-500 animate-ping' : 'bg-accent-500 animate-pulse'}`}></span>
-                {statusLogs.map((log, idx) => (
-                  <span key={idx} className={`whitespace-nowrap overflow-hidden text-ellipsis ${isBuffering ? 'text-purple-400' : 'text-accent-500/80'}`}>
-                    {log}
+          <div className="bg-slate-950 rounded-2xl p-4 font-mono text-[8px] border border-white/5 h-16 flex items-center justify-between overflow-hidden relative">
+             <div className="flex flex-col gap-2 relative z-10 w-full overflow-hidden">
+                <div className="flex gap-2 items-center">
+                  <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${isBuffering ? 'bg-purple-500 animate-ping' : 'bg-accent-500 animate-pulse'}`}></span>
+                  <span className={`whitespace-nowrap overflow-hidden text-ellipsis ${isBuffering ? 'text-purple-400' : 'text-accent-500/80'}`}>
+                    {statusLogs[0] || 'NEURAL LINK STABLE'}
                   </span>
-                ))}
+                </div>
+                {isBuffering && (
+                  <div className="flex flex-col gap-1 pl-3.5">
+                    <div className="flex items-center justify-between w-full">
+                      <span className="text-[7px] text-purple-500 font-black uppercase tracking-widest">Neural Sync</span>
+                      <span className="text-[7px] text-purple-400 font-bold">{Math.round(syncPercentage)}%</span>
+                    </div>
+                    <div className="w-full h-[3px] bg-white/10 rounded-full overflow-hidden shadow-inner">
+                      <div 
+                        className="h-full bg-gradient-to-r from-purple-600 to-accent-500 transition-all duration-300" 
+                        style={{ width: `${syncPercentage}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                )}
              </div>
              {isBuffering && (
                <div className="absolute inset-0 bg-purple-500/5 animate-pulse"></div>
@@ -463,25 +507,16 @@ const VoiceStudio: React.FC = () => {
           </div>
 
           {isBuffering && (
-            <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-slate-900/30 dark:bg-brand-900/30 backdrop-blur-md transition-all duration-500 animate-fade-in">
+            <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-slate-900/60 dark:bg-brand-900/60 backdrop-blur-md transition-all duration-500 animate-fade-in px-8 text-center">
                <div className="relative mb-6">
-                  <div className="w-20 h-20 rounded-full border-4 border-accent-500/20 border-t-accent-500 animate-spin"></div>
+                  <div className="w-20 h-20 rounded-full border-4 border-accent-500/10 border-t-accent-500 animate-spin"></div>
                   <div className="absolute inset-0 flex items-center justify-center">
                      <i className="fa-solid fa-dna text-accent-500 text-2xl animate-pulse"></i>
                   </div>
                </div>
-               <div className="flex flex-col items-center gap-2">
-                 <p className="text-[10px] font-black text-white uppercase tracking-[0.4em] animate-pulse">
-                    Forging Neural Pathway...
-                 </p>
-                 <div className="w-32 h-1 bg-white/20 rounded-full overflow-hidden">
-                   <div 
-                    className="h-full bg-accent-500 transition-all duration-300" 
-                    style={{ width: `${syncPercentage}%` }}
-                   ></div>
-                 </div>
-                 <p className="text-[8px] font-black text-accent-400 uppercase tracking-widest">{Math.round(syncPercentage)}% Complete</p>
-               </div>
+               <p className="text-[12px] font-black text-white uppercase tracking-[0.4em] animate-pulse">
+                  {loadingStage}
+               </p>
             </div>
           )}
 

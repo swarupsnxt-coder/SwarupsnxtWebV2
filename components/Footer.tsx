@@ -1,3 +1,4 @@
+
 import React from 'react';
 import Logo from './Logo';
 
@@ -17,16 +18,15 @@ const Footer: React.FC<FooterProps> = ({ onPrivacyClick, onSecurityClick }) => {
               Swarups NXT is a global pioneer in Hyper-Realistic AI Digital Employees. 
               Bridging the gap between human empathy and computational efficiency.
             </p>
-            <div className="flex space-x-4">
-              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-slate-200 dark:bg-white/5 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-[#2BB6C6] hover:text-[#0f172a] transition-all">
-                <i className="fa-brands fa-linkedin-in"></i>
-              </a>
-              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-slate-200 dark:bg-white/5 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-[#2BB6C6] hover:text-[#0f172a] transition-all">
-                <i className="fa-brands fa-x-twitter"></i>
-              </a>
-              <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-slate-200 dark:bg-white/5 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-[#2BB6C6] hover:text-[#0f172a] transition-all">
-                <i className="fa-brands fa-github"></i>
-              </a>
+            <div className="space-y-4 mb-8">
+              <div className="flex items-center gap-3 text-slate-600 dark:text-slate-400">
+                <i className="fa-solid fa-envelope text-[#2BB6C6]"></i>
+                <a href="mailto:hello@swarupsnxt.com" className="hover:text-[#2BB6C6] transition-colors">hello@swarupsnxt.com</a>
+              </div>
+              <div className="flex items-center gap-3 text-slate-600 dark:text-slate-400">
+                <i className="fa-solid fa-phone text-[#2BB6C6]"></i>
+                <a href="tel:+917550007208" className="hover:text-[#2BB6C6] transition-colors">+91 7550007208</a>
+              </div>
             </div>
           </div>
 

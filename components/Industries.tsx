@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { INDUSTRIES } from '../constants';
 
@@ -6,7 +5,7 @@ const Industries: React.FC = () => {
   const [activeTab, setActiveTab] = useState(INDUSTRIES[0].id);
 
   return (
-    <section id="solutions" className="py-24 bg-slate-50 dark:bg-[#0f172a] relative overflow-hidden transition-colors duration-500">
+    <section id="solutions" className="py-24 bg-slate-50 dark:bg-[#0f172a] relative overflow-hidden transition-colors duration-500 scroll-mt-28">
       <div className="container mx-auto px-4">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <div>

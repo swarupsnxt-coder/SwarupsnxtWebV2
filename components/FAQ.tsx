@@ -1,16 +1,16 @@
-
 import React, { useState } from 'react';
 import { FAQS } from '../constants';
 
 const FAQ: React.FC = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const whatsappLink = "https://wa.me/917550007208?text=Hello%20Swarups%20NXT,%20I%20have%20some%20questions%20about%20your%20AI%20solutions.";
 
   const toggleFAQ = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
   };
 
   return (
-    <section id="faq" className="py-24 bg-white dark:bg-[#0f172a] border-t border-slate-200 dark:border-white/5 transition-colors duration-500">
+    <section id="faq" className="py-24 bg-white dark:bg-[#0f172a] border-t border-slate-200 dark:border-white/5 transition-colors duration-500 scroll-mt-28">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-16">
@@ -49,12 +49,14 @@ const FAQ: React.FC = () => {
           <div className="mt-16 bg-gradient-to-br from-[#2BB6C6]/10 to-[#1e266e]/10 p-10 rounded-[40px] border border-[#2BB6C6]/20 text-center">
             <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 italic">Still have questions?</h3>
             <p className="text-slate-500 dark:text-slate-400 mb-8 max-w-lg mx-auto">Our solution architects are ready to help you map your 40% revenue boost with a custom blueprint.</p>
-            <button 
-              onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-              className="px-10 py-4 bg-[#2BB6C6] text-[#0f172a] font-bold rounded-xl hover:scale-105 transition-all shadow-xl shadow-[#2BB6C6]/20"
+            <a 
+              href={whatsappLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block px-10 py-4 bg-[#2BB6C6] text-[#0f172a] font-bold rounded-xl hover:scale-105 transition-all shadow-xl shadow-[#2BB6C6]/20 text-center"
             >
-              Contact Architect
-            </button>
+              Chat with Us
+            </a>
           </div>
         </div>
       </div>

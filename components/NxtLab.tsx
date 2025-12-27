@@ -113,13 +113,13 @@ const NxtLab: React.FC = () => {
           <StatusNode label="Vocal Range" value="12Hz - 22kHz" icon="fa-wave-square" position="bottom-48 right-16" />
 
           {/* Voice Studio Column */}
-          <div className="lg:col-span-7 h-full relative group">
+          <div id="voice-studio-container" className="lg:col-span-7 h-full relative group scroll-mt-32">
              <div className="absolute -inset-1 bg-gradient-to-r from-[#2BB6C6]/10 to-[#1e266e]/10 rounded-[2.6rem] blur opacity-25 group-hover:opacity-60 transition duration-1000 group-hover:duration-200"></div>
              <VoiceStudio />
           </div>
 
           {/* Phone Demo Column */}
-          <div className="lg:col-span-5 flex justify-center h-full">
+          <div id="phone-demo" className="lg:col-span-5 flex justify-center h-full scroll-mt-32">
             <PhoneDemo />
           </div>
         </div>

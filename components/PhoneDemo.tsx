@@ -91,13 +91,15 @@ const PhoneDemo: React.FC = () => {
       "Analyzing intent...",
       "Querying knowledge...",
       "Structuring data...",
-      "Finalizing response..."
+      "Finalizing response...",
+      "Synthesizing persona...",
+      "Polishing output..."
     ];
     let sIdx = 0;
     const statusInterval = setInterval(() => {
       setTypingStatus(statuses[sIdx % statuses.length]);
       sIdx++;
-    }, 600);
+    }, 800);
 
     try {
       const reply = await chatWithAgent(trimmedInput, PERSONAS[0].description);
@@ -129,13 +131,13 @@ const PhoneDemo: React.FC = () => {
           
           {/* Top Sensors Area (Dynamic Island) */}
           <div className="absolute top-0 left-0 w-full h-11 z-50 flex justify-center pointer-events-none">
-            <div className={`mt-3 h-[34px] bg-black rounded-full flex items-center justify-between px-4 ring-1 ring-white/10 shadow-lg transition-all duration-500 ${isTyping || isListening ? 'w-[200px]' : 'w-[110px]'}`}>
+            <div className={`mt-3 h-[34px] bg-black rounded-full flex items-center justify-between px-4 ring-1 ring-white/10 shadow-lg transition-all duration-500 ${isTyping || isListening ? 'w-[240px]' : 'w-[110px]'}`}>
               <div className="w-4 h-4 rounded-full bg-[#1a1a1a] flex items-center justify-center">
-                <div className={`w-1.5 h-1.5 rounded-full ${isTyping ? 'bg-orange-500' : isListening ? 'bg-red-500 animate-ping' : 'bg-blue-500/20'}`}></div>
+                <div className={`w-1.5 h-1.5 rounded-full ${isTyping ? 'bg-[#2BB6C6] animate-pulse' : isListening ? 'bg-red-500 animate-ping' : 'bg-blue-500/20'}`}></div>
               </div>
               {(isTyping || isListening) && (
-                <div className="text-[9px] text-white/60 font-black uppercase tracking-widest animate-pulse overflow-hidden whitespace-nowrap">
-                  {isListening ? 'Listening...' : 'Neural Link Active'}
+                <div className="text-[9px] text-white/90 font-black uppercase tracking-widest animate-pulse overflow-hidden whitespace-nowrap px-2">
+                  {isListening ? 'Listening...' : typingStatus}
                 </div>
               )}
               <div className="flex gap-1.5 items-center">
@@ -167,7 +169,7 @@ const PhoneDemo: React.FC = () => {
             </div>
             <div className="flex-grow">
               <h4 className="text-[14px] font-extrabold text-slate-900 dark:text-white tracking-tight leading-none mb-1 text-ellipsis overflow-hidden whitespace-nowrap">Aria Neural Bot</h4>
-              <p className="text-[10px] text-[#2BB6C6] font-bold uppercase tracking-wider opacity-80">{isTyping ? 'Synthesizing...' : 'Live Protocol Active'}</p>
+              <p className="text-[10px] text-[#2BB6C6] font-bold uppercase tracking-wider opacity-80">{isTyping ? typingStatus : 'Live Protocol Active'}</p>
             </div>
           </div>
 
@@ -186,14 +188,14 @@ const PhoneDemo: React.FC = () => {
             ))}
             {isTyping && (
               <div className="flex flex-col items-start gap-1">
-                <div className="bg-[#e9e9eb] dark:bg-[#1c1c1e] px-4 py-3 rounded-[22px] rounded-tl-none border border-slate-200 dark:border-white/5">
-                  <div className="flex gap-1.5">
-                    <div className="w-1.5 h-1.5 bg-slate-400 dark:bg-slate-500 rounded-full animate-bounce"></div>
-                    <div className="w-1.5 h-1.5 bg-slate-400 dark:bg-slate-500 rounded-full animate-bounce [animation-delay:0.2s]"></div>
-                    <div className="w-1.5 h-1.5 bg-slate-400 dark:bg-slate-500 rounded-full animate-bounce [animation-delay:0.4s]"></div>
+                <div className="bg-[#e9e9eb] dark:bg-[#1c1c1e] px-4 py-3 rounded-[22px] rounded-tl-none border border-slate-200 dark:border-white/5 shadow-inner">
+                  <div className="flex gap-1.5 items-center">
+                    <div className="w-1.5 h-1.5 bg-accent-500 rounded-full animate-bounce"></div>
+                    <div className="w-1.5 h-1.5 bg-accent-500/60 rounded-full animate-bounce [animation-delay:0.2s]"></div>
+                    <div className="w-1.5 h-1.5 bg-accent-500/30 rounded-full animate-bounce [animation-delay:0.4s]"></div>
                   </div>
                 </div>
-                <span className="ml-2 text-[8px] text-[#2BB6C6] font-black uppercase tracking-widest animate-pulse">{typingStatus}</span>
+                <span className="ml-2 text-[8px] text-[#2BB6C6] font-black uppercase tracking-widest animate-pulse mt-1">{typingStatus}</span>
               </div>
             )}
           </div>
