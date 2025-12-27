@@ -76,7 +76,7 @@ const VoiceStudio: React.FC = () => {
     'Banking': {
       'Indian English': "Greetings from NXT Finance. We've detected a high-value transaction on your corporate card. Did you authorize this payment?",
       'US English': "Hello, this is NXT Finance security. We noticed a large transaction on your business card. Can you confirm if you authorized this?",
-      'Hindi': "NXT फाइनेंस से नमस्कार। आपके कार्ड पर एक बड़ा लेन-देन देखा गया है। क्या आपने इसे अधिकृत किया है?",
+      'Hindi': "NXT फाइनेंस से नमस्कार। आपके कार्ड पर एक बड़ा लेन-देवन देखा गया है। क्या आपने इसे अधिकृत किया है?",
       'Tamil': "NXT பைனான்ஸிலிருந்து வணக்கம். உங்கள் கார்டில் ஒரு பெரிய பரிவர்த்தனை நடந்துள்ளது. இதை நீங்கள் அங்கீகரித்தீர்களா?",
       'Telugu': "NXT ఫైనాన్స్ నుండి నమస్కారం. మీ కార్డ్‌లో ఒక పెద్ద లావాదేవీని గుర్తించాము. మీరు దీనిని ఆమోదించారా?",
       'Malayalam': "NXT ഫിനാൻസിൽ നിന്ന് നമസ്കാരം. നിങ്ങളുടെ കാർഡിൽ ഒരു വലിയ ഇടപാട് ഞങ്ങൾ കണ്ടെത്തി. നിങ്ങൾ ഇത് അംഗീകരിച്ചിട്ടുണ്ടോ?",
@@ -104,7 +104,7 @@ const VoiceStudio: React.FC = () => {
       'Malayalam': "ഹായ്! സ്വരൂപ് ഷോപ്പിൽ നിന്നുള്ള നിങ്ങളുടെ ഓർഡർ ഡെലിവറിക്കായി പുറപ്പെട്ടു. ഏജന്റ് 2 മണിക്കൂറിനുള്ളിൽ എത്തും. ദയവായി OTP തയ്യാറാക്കി വെക്കുക.",
       'Kannada': "ಹಾಯ್! ಸ್ವರೂಪ್ ಶಾಪ್‌ನಿಂದ ನಿಮ್ಮ ಆರ್ಡರ್ ಡೆಲಿವರಿಗಾಗಿ ಹೊರಟಿದೆ. 2 ಗಂಟೆಯೊಳಗೆ ಏಜೆಂಟ್ ಬರುತ್ತಾರೆ. ದಯವಿಟ್ಟು ನಿಮ್ಮ OTP ಸಿದ್ಧವಾಗಿಟ್ಟುಕೊಳ್ಳಿ.",
       'Marathi': "नमस्कार! स्वरूप शॉपवरून तुमची ऑर्डर डिलिव्हरीसाठी निघाली आहे. कृपया तुमचा OTP तयार ठेवा.",
-      'Punjabi': "ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ! ਸਵਰੂਪ ਸ਼ਾਪ ਤੋਂ ਤੁਹਾਡਾ ਆਰਡਰ ਡਿਲੀਵਰੀ ਲਈ ਨਿਕਲ ਚੁੱਕਾ ਹੈ। ਸਾਡਾ ਏਜੰਟ 2 ਘੰਟਿਆਂ ਵਿੱਚ ਪਹੁੰਚ ਜਾਵੇਗਾ। ਕਿਰਪา ਕਰਕੇ ਆਪਣਾ OTP ਤਿਆਰ ਰੱਖੋ।"
+      'Punjabi': "ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ! ਸਵਰੂਪ ਸ਼ਾਪ ਤੋਂ ਤੁਹਾਡਾ ਆਰਡਰ ਡਿਲੀਵਰੀ ਲਈ ਨਿਕਲ ਚੁੱਕਾ ਹੈ। ਸਾਡਾ ਏਜੰਟ 2 ਘੰਟਿਆਂ ਵਿੱਚ ਪਹੁੰਚ ਜਾਵੇਗਾ। ਕਿਰਪਾ ਕਰਕੇ ਆਪਣਾ OTP ਤਿਆਰ ਰੱਖੋ।"
     },
     'EdTech': {
       'Indian English': "Hi, this is Atlas from NXT Academy. You've successfully unlocked the AI module. Ready to start your first lesson?",
@@ -112,7 +112,7 @@ const VoiceStudio: React.FC = () => {
       'Hindi': "हाय, मैं NXT एकेडमी से एटलस बोल रहा हूँ। आपने एआई मॉड्यूल को सफलतापूर्वक अनलॉक कर लिया है। क्या आप अपना पहला पाठ शुरू करने के लिए तैयार हैं?",
       'Tamil': "வணக்கம், நான் NXT அகாடமியிலிருந்து அட்லஸ் பேசுகிறேன். நீங்கள் AI பாடத்திட்டத்தை வெற்றிகரமாகத் திறந்துவிட்டீர்கள். முதல் பாடத்தைத் தொடங்கலாமா?",
       'Telugu': "హాయ్, నేను NXT అకాడమీ నుండి అట్లాస్ మాట్లాడుతున్నాను. మీరు AI మాడ్యూల్‌ను అన్‌లాక్ చేసారు. మొదటి పాఠం ప్రారంభించడానికి సిద్ధంగా ఉన్నారా?",
-      'Malayalam': "ഹായ്, NXT అకాడమీలో നിന്ന് അറ്റ്‌ലസ് ആണ്. നിങ്ങൾ AI മൊഡ്യൂൾ വിജയകരമായി അൺലോക്ക് ചെയ്തു. ആദ്യ പാഠം തുടങ്ങാൻ തയ്യാറാണോ?",
+      'Malayalam': "ഹായ്, NXT అకాడమీలో నుంచి అറ്റ്‌లస్ ആണ്. നിങ്ങൾ AI മൊഡ്യൂൾ വിജയകരമായി അൺലോക്ക് ചെയ്തു. ആദ്യ പാഠം തുടങ്ങാൻ തയ്യാറാണോ?",
       'Kannada': "ಹಾಯ್, ನಾನು NXT ಅಕಾಡೆಮಿಯಿಂದ ಅಟ್ಲಾಸ್ ಮಾತನಾಡುತ್ತಿದ್ದೇನೆ. ನೀವು AI ಮಾಡ್ಯೂಲ್ ಅನ್ನು ಅನ್ಲಾಕ್ ಮಾಡಿದ್ದೀರಿ. ಮೊದಲ ಪಾಠವನ್ನು ಪ್ರಾರಂಭಿಸಲು ಸಿದ್ಧರಿದ್ದೀರಾ?",
       'Marathi': "नमस्कार, मी NXT अकॅडमीमधून ॲटलस बोलत आहे. तुम्ही AI मॉड्यूल यशस्वीरित्या अनलॉक केले आहे. पहिला धडा सुरू करायचा का?",
       'Punjabi': "ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ, ਮੈਂ NXT ਅਕੈਡਮੀ ਤੋਂ ਐਟਲਸ ਹਾਂ। ਤੁਸੀਂ AI ਮੋਡਿਊਲ ਨੂੰ ਸਫਲਤਾਪੂਰਵਕ ਅਨਲੌਕ ਕਰ ਲਿਆ ਹੈ। ਕੀ ਤੁਸੀਂ ਪਹਿਲਾ ਪਾਠ ਸ਼ੁਰੂ ਕਰਨ ਲਈ ਤਿਆਰ ਹੋ?"
@@ -146,7 +146,7 @@ const VoiceStudio: React.FC = () => {
             y: Math.random() * canvas.height,
             vx: (Math.random() - 0.5) * 1.2,
             vy: (Math.random() - 0.5) * 1.2,
-            size: Math.random() * 1.5 + 0.5,
+            size: Math.random() * 2 + 0.5,
             opacity: Math.random() * 0.5 + 0.1
           });
         }
@@ -325,7 +325,7 @@ const VoiceStudio: React.FC = () => {
           <div className="bg-slate-50/80 dark:bg-slate-950/40 rounded-[2.5rem] p-6 md:p-8 border border-slate-200 dark:border-white/5 flex flex-col gap-6 shadow-inner">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">Sector Protocol</label>
+                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">Industry</label>
                 <select 
                   value={industry} 
                   onChange={(e) => { setIndustry(e.target.value); stopAudio(); }}
@@ -336,7 +336,7 @@ const VoiceStudio: React.FC = () => {
                 </select>
               </div>
               <div className="space-y-2">
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">Language Logic</label>
+                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">Language</label>
                 <select 
                   value={language} 
                   onChange={(e) => { setLanguage(e.target.value); stopAudio(); }}
