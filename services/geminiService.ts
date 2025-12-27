@@ -2,13 +2,16 @@ import { GoogleGenAI, Modality } from "@google/genai";
 
 /**
  * Safely resolves the API key from the environment.
- * Note: Cloudflare Pages environment variables are injected at BUILD TIME.
- * If you added your key after the last deployment, you MUST redeploy your project.
+ * IMPORTANT: Cloudflare Pages variables are only available at BUILD TIME.
+ * You must redeploy your site after adding a key in the dashboard.
  */
 const resolveApiKey = (): string | undefined => {
   try {
-    const key = process.env.API_KEY;
-    // Check for common failure strings or empty values
+    // Check various common injection points for frontend environments
+    const key = (window as any).process?.env?.API_KEY || 
+                (process?.env?.API_KEY) || 
+                (import.meta as any).env?.VITE_API_KEY;
+
     if (!key || key === "undefined" || key === "null" || key.trim() === "") {
       return undefined;
     }
@@ -24,7 +27,7 @@ const resolveApiKey = (): string | undefined => {
 export const getConfigurationError = (): string | null => {
   const apiKey = resolveApiKey();
   if (!apiKey) {
-    return "Neural Engine Offline: API_KEY is not detected. If you just added the key in the Cloudflare Dashboard, you MUST TRIGGER A NEW DEPLOYMENT for the changes to take effect.";
+    return "Neural Engine Offline: API_KEY not detected. \n\nTroubleshooting:\n1. Ensure 'API_KEY' is added in Cloudflare Pages Settings > Environment Variables.\n2. You MUST trigger a NEW DEPLOYMENT (Redeploy) for the key to be active.\n3. Verify the variable name is exactly 'API_KEY'.";
   }
   return null;
 };
@@ -147,7 +150,7 @@ export const chatWithAgent = async (message: string, personaDescription: string)
       model: 'gemini-3-flash-preview',
       config: {
         systemInstruction: systemInstruction,
-        temperature: 0.5, // Lower temperature for more consistent brevity
+        temperature: 0.5,
       },
     });
 

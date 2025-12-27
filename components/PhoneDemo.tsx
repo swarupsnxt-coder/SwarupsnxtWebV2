@@ -93,7 +93,7 @@ const PhoneDemo: React.FC = () => {
     if (configError) {
       setMessages(prev => [...prev, 
         { role: 'user', text: trimmedInput },
-        { role: 'model', text: `[SYSTEM]: ${configError}` }
+        { role: 'model', text: `[SYSTEM ERROR]\n${configError}` }
       ]);
       setInput("");
       return;
@@ -121,7 +121,7 @@ const PhoneDemo: React.FC = () => {
     } catch (error: any) {
       setMessages(prev => [...prev, { 
         role: 'model', 
-        text: `[ERROR]: Neural link interrupted. Please try again.` 
+        text: `[ERROR]: Neural link interrupted. Check your API configuration.` 
       }]);
     } finally {
       clearInterval(statusInterval);
@@ -193,9 +193,19 @@ const PhoneDemo: React.FC = () => {
                   <div className={`max-w-[82%] px-4 py-2.5 rounded-[20px] text-[13px] leading-relaxed shadow-sm whitespace-pre-wrap ${
                     m.role === 'user' 
                       ? 'bg-[#007aff] text-white font-medium rounded-tr-[4px]' 
-                      : 'bg-white dark:bg-[#1c1c1e] text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-white/10 rounded-tl-[4px]'
+                      : m.text.includes('[SYSTEM ERROR]') 
+                        ? 'bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800 rounded-tl-[4px] font-mono text-[10px]'
+                        : 'bg-white dark:bg-[#1c1c1e] text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-white/10 rounded-tl-[4px]'
                   }`}>
                     {m.text}
+                    {m.text.includes('[SYSTEM ERROR]') && (
+                      <button 
+                        onClick={() => window.location.reload()} 
+                        className="mt-3 block w-full py-2 bg-red-600 text-white rounded-lg text-[9px] font-bold uppercase tracking-widest hover:bg-red-700 transition-colors"
+                      >
+                        Retry Protocol
+                      </button>
+                    )}
                   </div>
                 </div>
               ))}
