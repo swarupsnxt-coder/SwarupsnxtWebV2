@@ -1,42 +1,6 @@
 import { GoogleGenAI, Modality } from "@google/genai";
 
 /**
- * Direct resolution of the API key from process.env.
- * Bundlers like Vite/Cloudflare require 'process.env.API_KEY' to be 
- * referenced literally for static replacement during the build.
- */
-const resolveApiKey = (): string | undefined => {
-  try {
-    // Static reference for replacement engine
-    const key = process.env.API_KEY;
-    if (key && key !== "undefined" && key !== "null" && key.trim() !== "") {
-      return key;
-    }
-  } catch (e) {}
-  
-  // Fallback for shimmed environments
-  try {
-    const winKey = (window as any).process?.env?.API_KEY;
-    if (winKey && winKey !== "undefined" && winKey.trim() !== "") {
-      return winKey;
-    }
-  } catch (e) {}
-
-  return undefined;
-};
-
-/**
- * Diagnostic utility to verify API configuration.
- */
-export const getConfigurationError = (): string | null => {
-  const apiKey = resolveApiKey();
-  if (!apiKey) {
-    return "Neural Engine Offline: API_KEY is missing. \n\nTroubleshooting:\n1. Verify variable 'API_KEY' exists in Cloudflare Pages settings.\n2. Ensure it is set for ALL environments (Production & Preview).\n3. You MUST trigger a NEW DEPLOYMENT (Retry Deployment) for changes to take effect.";
-  }
-  return null;
-};
-
-/**
  * Decodes raw 16-bit PCM data into an AudioBuffer.
  */
 export async function decodeAudioData(
@@ -68,9 +32,6 @@ export async function decodeAudioData(
  * Generates speech with robust part extraction. 
  */
 export const generateSpeech = async (text: string, voiceName: string): Promise<string> => {
-  const configError = getConfigurationError();
-  if (configError) throw new Error(configError);
-  
   try {
     const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     
@@ -112,35 +73,31 @@ export const generateSpeech = async (text: string, voiceName: string): Promise<s
 
 /**
  * Strategic interaction logic for 'Swarup' Assistant.
- * Implements strict training, knowledge base grounding, and anti-hallucination guardrails.
+ * Optimized for mobile lead conversion and Indian MSME ROI.
  */
 export const chatWithAgent = async (message: string, personaDescription: string) => {
-  const configError = getConfigurationError();
-  if (configError) throw new Error(configError);
-
   try {
     const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     
     const systemInstruction = `
       # MISSION
-      You are "Swarup," the Strategic AI Assistant for Swarups NXT. Convert Indian MSME business owners into leads. 
+      You are "Swarup," the Strategic AI Assistant for Swarups NXT. Convert Indian MSME business owners into leads.
 
-      # STYLE: EXTREMELY CONCISE & BULLETED
-      - Be extremely brief. Maximum 2 sentences.
-      - Use ONLY bullet points for features, ROI, or bottlenecks.
-      - Use professional Hinglish if the user does.
-      - Total response must be under 40 words.
+      # STYLE: EXTREMELY BRIEF & BULLETED
+      - Use ONLY bullet points for key details.
+      - Maximum 40 words per response.
+      - Use professional Hinglish (e.g., "Missed calls matlab missed revenue") to build rapport.
 
-      # CORE KNOWLEDGE
+      # KNOWLEDGE BASE
       - AI Voice Agents: 24/7 capture, 80% fewer missed leads.
       - ROI: 40% revenue boost.
-      - Setup: 1-Week MVP deployment.
+      - Timeline: 1-Week MVP.
 
-      # CONVERSATIONAL FUNNEL
-      1. One-line acknowledgement.
-      2. 2-3 Bullet points of value.
-      3. Ask for business type or bottleneck.
-      4. CTA: Free AI Audit.
+      # CONVERSATIONAL STEPS
+      1. One-line empathetic acknowledgement.
+      2. 2-3 specific ROI bullet points.
+      3. ASK: "What is your business type?" or "What's your biggest bottleneck?"
+      4. END HIGH-INTENT CHATS WITH: "Shall we schedule a Free AI Audit?"
     `;
 
     const chat = ai.chats.create({
@@ -155,6 +112,9 @@ export const chatWithAgent = async (message: string, personaDescription: string)
     return result.text || "Neural link stable but response empty.";
   } catch (error: any) {
     console.error("Chat Error:", error);
+    if (error.message?.includes("API_KEY_INVALID") || error.message?.includes("403")) {
+      throw new Error("Auth Failed: Ensure API_KEY is set in Cloudflare and the app is redeployed.");
+    }
     throw new Error(`Link Failed: ${error.message || "Neural connection timeout."}`);
   }
 };
