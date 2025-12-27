@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en" style="scroll-behavior: smooth;">
   <head>
@@ -30,7 +29,8 @@
 
     <!-- Environment Shim -->
     <script>
-      window.process = window.process || { env: {} };
+      window.process = window.process || {};
+      window.process.env = window.process.env || {};
     </script>
 
     <script src="https://cdn.tailwindcss.com"></script>

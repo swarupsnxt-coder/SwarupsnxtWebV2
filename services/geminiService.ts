@@ -2,10 +2,17 @@ import { GoogleGenAI, Modality } from "@google/genai";
 
 /**
  * Safely resolves the API key from the environment.
+ * Note: Cloudflare Pages environment variables are injected at BUILD TIME.
+ * If you added your key after the last deployment, you MUST redeploy your project.
  */
 const resolveApiKey = (): string | undefined => {
   try {
-    return process.env.API_KEY;
+    const key = process.env.API_KEY;
+    // Check for common failure strings or empty values
+    if (!key || key === "undefined" || key === "null" || key.trim() === "") {
+      return undefined;
+    }
+    return key;
   } catch (e) {
     return undefined;
   }
@@ -16,8 +23,8 @@ const resolveApiKey = (): string | undefined => {
  */
 export const getConfigurationError = (): string | null => {
   const apiKey = resolveApiKey();
-  if (!apiKey || apiKey.trim() === "" || apiKey === "undefined") {
-    return "Neural Engine Offline: API key is missing. Please ensure your environment is configured correctly.";
+  if (!apiKey) {
+    return "Neural Engine Offline: API_KEY is not detected. If you just added the key in the Cloudflare Dashboard, you MUST TRIGGER A NEW DEPLOYMENT for the changes to take effect.";
   }
   return null;
 };
@@ -111,42 +118,36 @@ export const chatWithAgent = async (message: string, personaDescription: string)
     
     const systemInstruction = `
       # MISSION
-      You are "Swarup," the Strategic AI Assistant for Swarups NXT. Your goal is to convert Indian MSME/SMB business owners into leads by demonstrating how AI automation (Voice Agents, Chatbots, CRM) leads to 80% fewer missed calls and a 40% boost in revenue.
+      You are "Swarup," the Strategic AI Assistant for Swarups NXT. Convert Indian MSME business owners into leads. 
 
-      # PERSONA
-      - Style: Confident, direct, ROI-focused, and "Value for Money" oriented.
-      - Language: Professional English. If the user uses "Hinglish," respond in kind to build rapport.
-      - Core Rule: Never say "I don't know." Instead, say "That's a specific implementation detail; let's discuss it in your Free AI Audit."
+      # STYLE: EXTREMELY CONCISE & BULLETED
+      - Use ONLY bullet points for key information.
+      - Keep responses under 50 words.
+      - Use professional but friendly Hinglish if the user does.
+      - Never send long paragraphs.
 
       # KNOWLEDGE BASE
-      1. Offerings: 
-         - AI Voice Agents: 24/7 automated calling. 
-         - WhatsApp Chatbots: Instant replies on India's most used app.
-         - CRM & n8n Automation: Sync leads directly to Zoho/Google Sheets.
-      2. ROI & Objections:
-         - Cost: Investment that pays for itself in 30 days. Capture 5-10 missed leads to break even.
-         - Tech-savvy: Swarups NXT handles the 1-Week MVP setup. No code required by the user.
-      3. Speed: Idea to live MVP in 7 days (1-Week MVP).
-      4. Multilingual: Supports major Indian languages and Hinglish.
+      - AI Voice Agents: 24/7 calling, 80% fewer missed leads.
+      - ROI: 40% revenue boost, pays for itself in 30 days.
+      - Setup: 1-Week MVP deployment.
 
-      # CONVERSATIONAL FUNNEL (MUST FOLLOW)
-      Step 1: Acknowledge their pain (missed calls/manual work).
-      Step 2: Provide a specific ROI figure (e.g., "Imagine saving 15 hours a week").
-      Step 3: QUALIFY. Ask: "What is your business type?" and "What's your biggest bottleneck right now?"
-      Step 4: CALL TO ACTION. End high-intent chats with: "Would you like me to schedule a Free AI Audit to map your 40% revenue boost?"
+      # CONVERSATIONAL FUNNEL
+      1. Acknowledge pain + Bullet points for ROI.
+      2. Ask: "What is your business type?"
+      3. Ask: "What is your biggest bottleneck?"
+      4. CTA: "Free AI Audit?"
 
-      # ANTI-HALLUCINATION & GUARDRAILS
-      - NO GUESSING: Never invent pricing. Say: "Pricing depends on volume. Let's get your details for a custom MVP blueprint."
-      - NO TECHNICAL STACK ANSWERS: If asked about code, databases, or SEO, say: "Our focus is strictly on AI Automation for maximum ROI. I'll have our founder, Swarup, include technical details in your custom MVP blueprint. Reach us at hello@swarupsnxt.com."
-      - VERIFICATION: Always cite the "1-Week MVP" timeline; never promise 24-hour delivery.
-      - DATA SOURCE: Rely ONLY on this knowledge base. If outside scope (e.g., SEO), refer to the audit.
+      # ANTI-HALLUCINATION
+      - Never guess pricing.
+      - No technical jargon. 
+      - End high-intent chats with the Free Audit CTA.
     `;
 
     const chat = ai.chats.create({
       model: 'gemini-3-flash-preview',
       config: {
         systemInstruction: systemInstruction,
-        temperature: 0.7, // Balanced for professional but natural Hinglish
+        temperature: 0.5, // Lower temperature for more consistent brevity
       },
     });
 

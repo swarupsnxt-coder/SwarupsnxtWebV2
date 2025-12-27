@@ -5,7 +5,7 @@ import { PERSONAS } from '../constants';
 
 const PhoneDemo: React.FC = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([
-    { role: 'model', text: "Namaste! I'm Swarup's Strategic AI Assistant. I help business owners stop missing calls and start boosting revenue by 40%. What business are you in?" }
+    { role: 'model', text: "Namaste! I'm Swarup's AI Assistant.\n\n• 80% fewer missed calls\n• 40% revenue boost\n\nWhat business are you in?" }
   ]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
@@ -131,10 +131,10 @@ const PhoneDemo: React.FC = () => {
   };
 
   const quickActions = [
-    { label: "Missed Calls", query: "I'm missing too many calls during lunch." },
-    { label: "How fast?", query: "How quickly can you deploy?" },
-    { label: "Is it costly?", query: "AI sounds expensive for my business." },
-    { label: "Hinglish demo", query: "Can your agents talk in Hinglish?" }
+    { label: "Missed Calls", query: "I'm missing too many calls." },
+    { label: "Timeline", query: "How fast can you deploy?" },
+    { label: "Cost", query: "Is AI expensive?" },
+    { label: "Hinglish", query: "Can you talk in Hinglish?" }
   ];
 
   return (
@@ -190,7 +190,7 @@ const PhoneDemo: React.FC = () => {
             <div ref={scrollRef} className="flex-grow overflow-y-auto px-5 py-6 space-y-5 custom-scrollbar bg-[#f8f9fb] dark:bg-[#0b0b0e]">
               {messages.map((m, i) => (
                 <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'} animate-fadeIn`}>
-                  <div className={`max-w-[82%] px-4 py-2.5 rounded-[20px] text-[13px] leading-relaxed shadow-sm ${
+                  <div className={`max-w-[82%] px-4 py-2.5 rounded-[20px] text-[13px] leading-relaxed shadow-sm whitespace-pre-wrap ${
                     m.role === 'user' 
                       ? 'bg-[#007aff] text-white font-medium rounded-tr-[4px]' 
                       : 'bg-white dark:bg-[#1c1c1e] text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-white/10 rounded-tl-[4px]'
