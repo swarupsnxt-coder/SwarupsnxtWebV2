@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 const Contact: React.FC = () => {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
-  const [formData, setFormData] = useState({ name: '', email: '', company: '', useCase: '', honeypot: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', company: '', useCase: '', message: '', honeypot: '' });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -12,7 +12,7 @@ const Contact: React.FC = () => {
     // Simulated submission for demo purposes
     setTimeout(() => {
       setStatus('success');
-      setFormData({ name: '', email: '', company: '', useCase: '', honeypot: '' });
+      setFormData({ name: '', email: '', company: '', useCase: '', message: '', honeypot: '' });
     }, 1500);
   };
 
@@ -98,7 +98,7 @@ const Contact: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <label className={labelClasses}>Neural Endpoint (Email)</label>
+                  <label className={labelClasses}>Work Email</label>
                   <input 
                     type="email" 
                     required
@@ -138,6 +138,18 @@ const Contact: React.FC = () => {
                   <option value="Education" className="dark:bg-slate-900">Education</option>
                   <option value="Other" className="dark:bg-slate-900">Custom Protocol</option>
                 </select>
+              </div>
+
+              <div>
+                <label className={labelClasses}>Project Description</label>
+                <textarea 
+                  rows={3}
+                  required
+                  placeholder="Describe your current bottleneck and how AI can solve it..." 
+                  className={inputClasses + " resize-none"}
+                  value={formData.message}
+                  onChange={e => setFormData({...formData, message: e.target.value})}
+                />
               </div>
 
               <button 

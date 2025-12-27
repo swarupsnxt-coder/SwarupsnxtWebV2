@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Persona, IndustrySector } from './types';
 
@@ -30,7 +29,7 @@ export const INDUSTRIES: IndustrySector[] = [
     id: 'healthcare',
     title: 'Healthcare',
     description: 'Patient scheduling and follow-ups with HIPAA-ready protocols.',
-    image: 'https://images.unsplash.com/photo-1504813184591-01552661c8a5?auto=format&fit=crop&q=80&w=800',
+    image: 'https://images.unsplash.com/photo-1504813184591-01572f98c85f?auto=format&fit=crop&q=80&w=800',
     faqs: [
       { question: 'Is it patient-data secure?', answer: 'We use end-to-end encryption compliant with DPDP Act 2023.' }
     ]
@@ -57,7 +56,7 @@ export const INDUSTRIES: IndustrySector[] = [
     id: 'education',
     title: 'Education',
     description: 'Provide 24/7 tutoring and administrative support for students and parents.',
-    image: 'https://images.unsplash.com/photo-1523240715630-9917c134812a?auto=format&fit=crop&q=80&w=800',
+    image: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=800',
     faqs: [
       { question: 'Can it explain complex topics?', answer: 'Leveraging Gemini 3, our agents can simplify advanced academic concepts.' }
     ]

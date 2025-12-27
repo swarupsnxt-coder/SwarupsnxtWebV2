@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Logo from './Logo';
 
@@ -19,13 +18,13 @@ const Footer: React.FC<FooterProps> = ({ onPrivacyClick, onSecurityClick }) => {
               Bridging the gap between human empathy and computational efficiency.
             </p>
             <div className="flex space-x-4">
-              <a href="#" className="w-10 h-10 rounded-full bg-slate-200 dark:bg-white/5 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-[#2BB6C6] hover:text-[#0f172a] transition-all">
+              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-slate-200 dark:bg-white/5 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-[#2BB6C6] hover:text-[#0f172a] transition-all">
                 <i className="fa-brands fa-linkedin-in"></i>
               </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-slate-200 dark:bg-white/5 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-[#2BB6C6] hover:text-[#0f172a] transition-all">
+              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-slate-200 dark:bg-white/5 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-[#2BB6C6] hover:text-[#0f172a] transition-all">
                 <i className="fa-brands fa-x-twitter"></i>
               </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-slate-200 dark:bg-white/5 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-[#2BB6C6] hover:text-[#0f172a] transition-all">
+              <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-slate-200 dark:bg-white/5 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-[#2BB6C6] hover:text-[#0f172a] transition-all">
                 <i className="fa-brands fa-github"></i>
               </a>
             </div>
@@ -45,8 +44,8 @@ const Footer: React.FC<FooterProps> = ({ onPrivacyClick, onSecurityClick }) => {
             <h4 className="text-sm font-bold uppercase tracking-widest text-slate-900 dark:text-white mb-6">Company</h4>
             <ul className="space-y-4 text-sm text-slate-500 dark:text-slate-500">
               <li><a href="#" className="hover:text-[#2BB6C6] transition-colors">Careers</a></li>
-              <li><button onClick={onPrivacyClick} className="hover:text-[#2BB6C6] transition-colors">Privacy Protocol</button></li>
-              <li><button onClick={onSecurityClick} className="hover:text-[#2BB6C6] transition-colors">Security Terms</button></li>
+              <li><button onClick={onPrivacyClick} className="hover:text-[#2BB6C6] transition-colors text-left">Privacy Protocol</button></li>
+              <li><button onClick={onSecurityClick} className="hover:text-[#2BB6C6] transition-colors text-left">Security Terms</button></li>
               <li><a href="#" className="hover:text-[#2BB6C6] transition-colors">Ethics Board</a></li>
             </ul>
           </div>

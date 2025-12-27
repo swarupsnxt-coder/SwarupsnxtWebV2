@@ -1,4 +1,3 @@
-
 import { GoogleGenAI, Modality } from "@google/genai";
 
 /**
@@ -6,7 +5,7 @@ import { GoogleGenAI, Modality } from "@google/genai";
  */
 const resolveApiKey = (): string | undefined => {
   try {
-    return (window as any).process?.env?.API_KEY || (process as any)?.env?.API_KEY;
+    return process.env.API_KEY;
   } catch (e) {
     return undefined;
   }
@@ -14,18 +13,18 @@ const resolveApiKey = (): string | undefined => {
 
 /**
  * Diagnostic utility to verify API configuration.
- * Returns a user-friendly error message if configuration is missing or invalid.
  */
 export const getConfigurationError = (): string | null => {
   const apiKey = resolveApiKey();
   if (!apiKey || apiKey.trim() === "" || apiKey === "undefined") {
-    return "Service Configuration Problem: The Neural Engine API key is missing. Please check your environment settings.";
+    return "Neural Engine Offline: API key is missing. Please ensure your environment is configured correctly.";
   }
   return null;
 };
 
 /**
- * Decodes raw PCM data into an AudioBuffer
+ * Decodes raw 16-bit PCM data into an AudioBuffer.
+ * Optimized for the raw PCM stream (S16_LE) returned by the Gemini TTS model.
  */
 export async function decodeAudioData(
   data: Uint8Array,
@@ -33,30 +32,40 @@ export async function decodeAudioData(
   sampleRate: number,
   numChannels: number,
 ): Promise<AudioBuffer> {
-  const dataInt16 = new Int16Array(data.buffer);
+  // Ensure the byte length is even for Int16 conversion
+  const evenLength = data.byteLength - (data.byteLength % 2);
+  const dataInt16 = new Int16Array(
+    data.buffer,
+    data.byteOffset,
+    evenLength / 2
+  );
+  
   const frameCount = dataInt16.length / numChannels;
   const buffer = ctx.createBuffer(numChannels, frameCount, sampleRate);
 
   for (let channel = 0; channel < numChannels; channel++) {
     const channelData = buffer.getChannelData(channel);
     for (let i = 0; i < frameCount; i++) {
+      // Normalize Int16 range [-32768, 32767] to Float32 range [-1.0, 1.0]
       channelData[i] = dataInt16[i * numChannels + channel] / 32768.0;
     }
   }
   return buffer;
 }
 
+/**
+ * Generates speech with robust part extraction. 
+ * Optimized to prevent 'OTHER' finish reasons by using shorter, clearer prompts.
+ */
 export const generateSpeech = async (text: string, voiceName: string): Promise<string> => {
   const configError = getConfigurationError();
   if (configError) throw new Error(configError);
   
-  if (!text.trim()) {
-    throw new Error("Input Error: No text provided for neural synthesis.");
-  }
-
   try {
     const apiKey = resolveApiKey()!;
     const ai = new GoogleGenAI({ apiKey });
+    
+    // The TTS model is highly sensitive to prompt structure.
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash-preview-tts",
       contents: [{ parts: [{ text }] }],
@@ -70,58 +79,76 @@ export const generateSpeech = async (text: string, voiceName: string): Promise<s
       },
     });
 
-    const candidate = response.candidates?.[0];
-    if (candidate?.finishReason === 'SAFETY') {
-      throw new Error("Safety Protocol: The requested content was flagged by neural filters.");
+    if (!response.candidates || response.candidates.length === 0) {
+      throw new Error("Neural Engine Error: The model returned no candidates.");
     }
 
-    const base64Audio = candidate?.content?.parts?.[0]?.inlineData?.data;
-    if (!base64Audio) {
-      throw new Error("Neural Engine Error: No audio data returned from the service.");
+    const candidate = response.candidates[0];
+    
+    // Safety check
+    if (candidate.finishReason === 'SAFETY') {
+      throw new Error("Content Filter Block: The requested text was flagged by safety protocols.");
     }
+
+    // Extraction loop for the inlineData part
+    let base64Audio: string | undefined;
+    const parts = candidate.content?.parts || [];
+    
+    for (const part of parts) {
+      if (part.inlineData && part.inlineData.data) {
+        base64Audio = part.inlineData.data;
+        break; 
+      }
+    }
+
+    if (!base64Audio) {
+      const reason = candidate.finishReason || "UNKNOWN";
+      const textPart = parts.find(p => p.text)?.text;
+      
+      if (textPart) {
+        throw new Error(`Neural Refusal: ${textPart}`);
+      }
+      
+      throw new Error(`Neural Sync Failure: Audio payload missing from response. Finish Reason: ${reason}.`);
+    }
+
     return base64Audio;
   } catch (error: any) {
-    const msg = error.message || "";
-    if (msg.includes('API key not valid') || msg.includes('403') || msg.includes('API_KEY_INVALID')) {
-      throw new Error("Service Configuration Problem: The provided API key is invalid or has insufficient permissions.");
-    }
-    if (msg.includes('429')) {
-      throw new Error("Quota Exceeded: The Neural Engine is processing too many requests. Please try again later.");
-    }
-    throw new Error(msg || "An unexpected error occurred during neural synthesis.");
+    console.error("TTS Pipeline Error:", error);
+    throw new Error(error.message || "Neural Handshake Interrupted.");
   }
 };
 
+/**
+ * Standard chat interaction logic with ROI-focused persona.
+ * Enforces concise bulleted responses.
+ */
 export const chatWithAgent = async (message: string, personaDescription: string) => {
   const configError = getConfigurationError();
   if (configError) throw new Error(configError);
 
-  if (!message.trim()) {
-    throw new Error("Transmission Error: Empty message signal.");
-  }
-  
   try {
     const apiKey = resolveApiKey()!;
     const ai = new GoogleGenAI({ apiKey });
     const chat = ai.chats.create({
       model: 'gemini-3-flash-preview',
       config: {
-        systemInstruction: `You are a digital employee at Swarups NXT. Persona: ${personaDescription}. Be concise and professional.`,
+        systemInstruction: `
+          You are 'Swarup', a Strategic AI Assistant for Swarups NXT.
+          RULES:
+          1. Keep responses EXTREMELY concise.
+          2. Use BULLET POINTS for all lists/features.
+          3. Focus on ROI and business value (80% fewer missed calls, 40% revenue boost).
+          4. If user asks for pricing, explain that it is an investment starting at $1.50/hr that pays for itself in 30 days.
+          5. End high-intent messages with a CTA for a Free AI Audit.
+        `,
       },
     });
 
     const result = await chat.sendMessage({ message });
-    
-    if (result.candidates?.[0]?.finishReason === 'SAFETY') {
-      return "[NEURAL BLOCK]: Content restricted by safety protocols.";
-    }
-
-    return result.text || "Empty signal received from neural core.";
+    return result.text || "Connection stable but signal empty.";
   } catch (error: any) {
-    const msg = error.message || "";
-    if (msg.includes('API key not valid') || msg.includes('403') || msg.includes('API_KEY_INVALID')) {
-      throw new Error("Service Configuration Problem: Invalid Neural Link credentials.");
-    }
-    throw new Error(`Neural Link Error: ${msg || "Connection timed out."}`);
+    console.error("Chat Error:", error);
+    throw new Error(`Link Failed: ${error.message || "Neural connection timeout."}`);
   }
 };

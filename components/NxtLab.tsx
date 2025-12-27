@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState } from 'react';
 import VoiceStudio from './VoiceStudio';
 import PhoneDemo from './PhoneDemo';
@@ -66,7 +65,7 @@ const StatusNode: React.FC<{ label: string, value: string, icon: string, positio
   
   return (
     <div 
-      className={`absolute ${position} z-20 hidden xl:flex items-center group cursor-crosshair`}
+      className={`absolute ${position} z-10 hidden xl:flex items-center group cursor-crosshair`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -84,20 +83,19 @@ const StatusNode: React.FC<{ label: string, value: string, icon: string, positio
 const NxtLab: React.FC = () => {
   return (
     <section id="nxt-lab" className="py-24 bg-white dark:bg-[#0f172a] relative overflow-hidden transition-colors duration-500 scroll-mt-24">
-      <LabCanvas />
-      
-      <div className="absolute inset-0 pointer-events-none z-30 overflow-hidden">
-        <div className="w-full h-[2px] bg-gradient-to-r from-transparent via-[#2BB6C6]/10 to-transparent absolute top-0 left-0 animate-scanline"></div>
+      {/* Background Layer Effects */}
+      <div className="absolute inset-0 pointer-events-none z-0">
+        <LabCanvas />
+        <div className="w-full h-[2px] bg-gradient-to-r from-transparent via-[#2BB6C6]/5 to-transparent absolute top-0 left-0 animate-scanline opacity-30"></div>
         <div 
-          className="absolute inset-0 opacity-[0.02] dark:opacity-[0.04] animate-flicker"
+          className="absolute inset-0 opacity-[0.01] dark:opacity-[0.03] animate-flicker"
           style={{ 
             backgroundImage: 'linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03))', 
             backgroundSize: '100% 3px, 3px 100%' 
           }}
         ></div>
+        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-[0.02] pointer-events-none"></div>
       </div>
-
-      <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-[0.02] pointer-events-none z-0"></div>
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
@@ -108,20 +106,20 @@ const NxtLab: React.FC = () => {
           <p className="text-slate-500 dark:text-slate-400 max-w-2xl mx-auto font-medium">Experience the sub-200ms future. Real-time neural synthesis and interaction.</p>
         </div>
 
-        <div className="grid lg:grid-cols-12 gap-12 items-start">
+        <div className="grid lg:grid-cols-12 gap-12 items-start relative z-10">
           <StatusNode label="Core Latency" value="184ms" icon="fa-bolt" position="top-40 left-10" />
           <StatusNode label="Neural Sync" value="99.92%" icon="fa-arrows-rotate" position="bottom-60 left-20" />
           <StatusNode label="Engine Load" value="14.2 GFLOPs" icon="fa-microchip" position="top-32 right-12" />
-          <StatusNode label="Vocal Range" value="12Hz - 22kHz" icon="fa-waveform" position="bottom-48 right-16" />
+          <StatusNode label="Vocal Range" value="12Hz - 22kHz" icon="fa-wave-square" position="bottom-48 right-16" />
 
           {/* Voice Studio Column */}
-          <div id="voice-studio" className="lg:col-span-7 h-full relative group scroll-mt-32">
-             <div className="absolute -inset-1 bg-gradient-to-r from-[#2BB6C6]/20 to-[#1e266e]/20 rounded-[2.6rem] blur opacity-25 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
+          <div className="lg:col-span-7 h-full relative group">
+             <div className="absolute -inset-1 bg-gradient-to-r from-[#2BB6C6]/10 to-[#1e266e]/10 rounded-[2.6rem] blur opacity-25 group-hover:opacity-60 transition duration-1000 group-hover:duration-200"></div>
              <VoiceStudio />
           </div>
 
           {/* Phone Demo Column */}
-          <div id="phone-demo" className="lg:col-span-5 flex justify-center h-full scroll-mt-32">
+          <div className="lg:col-span-5 flex justify-center h-full">
             <PhoneDemo />
           </div>
         </div>

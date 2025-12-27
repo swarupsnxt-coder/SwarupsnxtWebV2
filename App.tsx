@@ -6,7 +6,6 @@ import NxtLab from './components/NxtLab';
 import HowItWorks from './components/HowItWorks';
 import ComparisonTable from './components/ComparisonTable';
 import Industries from './components/Industries';
-import ROICalculator from './components/ROICalculator';
 import FAQ from './components/FAQ';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
@@ -55,7 +54,6 @@ const App: React.FC = () => {
         <HowItWorks />
         <ComparisonTable />
         <Industries />
-        <ROICalculator />
         <FAQ />
         <Contact />
       </main>
@@ -65,25 +63,30 @@ const App: React.FC = () => {
         onSecurityClick={() => setShowSecurity(true)} 
       />
 
-      {/* Floating Chat Trigger */}
+      {/* Floating Chat Trigger - Beautiful Bot Icon */}
       <div className="fixed bottom-8 right-8 z-40 group flex flex-col items-end">
         {/* Label on hover */}
         <div className="mb-4 px-4 py-2 bg-slate-900 text-white text-[10px] font-bold uppercase tracking-widest rounded-xl opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all shadow-2xl pointer-events-none">
-          Connect to Aria Neural Assistant
+          Consult Aria Bot
         </div>
         
         <button 
           onClick={scrollToDemo}
-          className="w-16 h-16 rounded-full bg-gradient-to-tr from-[#1e266e] to-[#2BB6C6] text-white shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all relative overflow-hidden"
+          className="w-16 h-16 rounded-full bg-gradient-to-tr from-[#1e266e] to-[#2BB6C6] text-white shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all relative overflow-hidden group/btn"
           aria-label="Open Neural Chat"
         >
-          <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-          {/* Changed to fa-circle-nodes for a sleek neural network representation */}
-          <i className="fa-solid fa-circle-nodes text-2xl group-hover:scale-110 transition-transform"></i>
+          {/* Enhanced Pulsating glow effect */}
+          <div className="absolute inset-0 bg-[#2BB6C6] opacity-30 animate-pulse group-hover/btn:opacity-50 scale-125"></div>
           
-          <span className="absolute -top-1 -right-1 flex h-4 w-4">
+          <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          
+          {/* Bot Icon */}
+          <i className="fa-solid fa-robot text-2xl group-hover:rotate-12 transition-transform z-10 drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]"></i>
+          
+          {/* Notification Indicator */}
+          <span className="absolute -top-1 -right-1 flex h-4 w-4 z-20">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#2BB6C6] opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-4 w-4 bg-[#2BB6C6]"></span>
+            <span className="relative inline-flex rounded-full h-4 w-4 bg-[#2BB6C6] border-2 border-white dark:border-[#0f172a]"></span>
           </span>
         </button>
       </div>
