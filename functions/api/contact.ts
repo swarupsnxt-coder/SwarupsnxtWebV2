@@ -1,42 +1,25 @@
-
-/**
- * Cloudflare Pages Function for Secure Lead Sync
- * Environment variables are accessed via the 'env' parameter.
- */
-
 interface Env {
   API_KEY: string;
   ZOHO_REFRESH_TOKEN: string;
 }
 
-// Fixed: Defined the PagesFunction type which is missing from the global scope in this context
-type PagesFunction<Env = any> = (context: {
-  request: Request;
-  env: Env;
-  params: Record<string, string>;
-  data: Record<string, unknown>;
-}) => Response | Promise<Response>;
-
-export const onRequestPost: PagesFunction<Env> = async (context) => {
+// Fix: Removed PagesFunction type annotation which was causing a 'Cannot find name' error in this environment.
+export const onRequestPost: any = async (context: any) => {
   const { request, env } = context;
+
+  // Sync shim for consistency to ensure process.env.API_KEY is available for the Gemini SDK
+  if (env?.API_KEY) {
+    if (typeof process === 'undefined') (globalThis as any).process = { env: {} };
+    process.env.API_KEY = env.API_KEY;
+  }
 
   try {
     const data: any = await request.json();
-
-    // Fixed: Always use process.env.API_KEY exclusively as required by the GenAI SDK guidelines
-    if (!process.env.API_KEY) {
-      return new Response(JSON.stringify({ error: "API_KEY not found in process.env" }), {
-        status: 500,
-        headers: { "Content-Type": "application/json" },
-      });
-    }
-
-    // Logic for syncing to Zoho CRM or Google Sheets...
-    console.log("Processing lead for:", data.email);
+    console.log("Lead captured:", data.email);
 
     return new Response(JSON.stringify({ 
       status: "success", 
-      message: "Lead successfully captured via NXT Neural Gateway" 
+      message: "Lead processed via NXT Secure Gateway." 
     }), {
       headers: { "Content-Type": "application/json" },
     });

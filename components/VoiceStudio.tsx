@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { GoogleGenAI, Modality } from "@google/genai";
 
 const VoiceStudio: React.FC = () => {
   const [industry, setIndustry] = useState('Real Estate');
@@ -10,7 +9,6 @@ const VoiceStudio: React.FC = () => {
   const [isBuffering, setIsBuffering] = useState(false);
   const [syncPercentage, setSyncPercentage] = useState(0);
   const [statusLogs, setStatusLogs] = useState<string[]>([]);
-  const [loadingStage, setLoadingStage] = useState('');
 
   const audioContextRef = useRef<AudioContext | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
@@ -29,35 +27,35 @@ const VoiceStudio: React.FC = () => {
       name: 'Enthusiastic',
       icon: 'fa-bolt',
       voices: { female: 'Kore', male: 'Fenrir' },
-      directive: 'Speak with high energy, excitement, and a bright, friendly smile in your voice.',
+      directive: 'Speak with high energy and a friendly smile.',
       fallbackParams: { pitch: 1.3, rate: 1.2 }
     },
     assertive: {
       name: 'Assertive',
       icon: 'fa-user-tie',
       voices: { female: 'Kore', male: 'Fenrir' },
-      directive: 'Speak with authority, confidence, and a professional, commanding tone.',
+      directive: 'Speak with authority and confidence.',
       fallbackParams: { pitch: 1.0, rate: 1.05 }
     },
     calm: {
       name: 'Calm & Caring',
       icon: 'fa-leaf',
       voices: { female: 'Zephyr', male: 'Puck' },
-      directive: 'Speak softly, slowly, and with deep empathy and reassurance.',
+      directive: 'Speak softly with deep empathy.',
       fallbackParams: { pitch: 0.9, rate: 0.8 }
     },
     neutral: {
       name: 'Efficiency Pro',
       icon: 'fa-robot',
       voices: { female: 'Kore', male: 'Puck' },
-      directive: 'Speak with a neutral, clear, and highly efficient informative tone.',
+      directive: 'Speak with clear, efficient neutrality.',
       fallbackParams: { pitch: 1.0, rate: 1.0 }
     }
   };
 
   const SCRIPTS: Record<string, Record<string, string>> = {
     'Real Estate': {
-      'Indian English': "Hi there! This is Swarup from Luxury Homes. I'm following up on your inquiry about the park-facing apartments. Would you like to schedule a virtual tour this weekend?",
+      'Indian English': "Hi there! This is Swarup from Luxury Homes. I'm following up on your inquiry. Would you like to schedule a virtual tour?",
       'Hindi': "नमस्ते! मैं लक्ज़री होम्स से बात कर रही हूँ। क्या हम एक वर्चुअल टूर शेड्यूल कर सकते हैं?",
       'Tamil': "வணக்கம்! நான் லக்சுரி ஹோம்ஸிலிருந்து அழைக்கிறேன். நீங்கள் கேட்ட புதிய வீடுகள் பற்றிய தகவல்கள் என்னிடம் உள்ளன."
     }
@@ -138,11 +136,9 @@ const VoiceStudio: React.FC = () => {
       
       if (isPlaying) {
         gradient.addColorStop(0, isDark ? 'rgba(34, 211, 238, 0.8)' : 'rgba(43, 182, 198, 0.9)');
-        gradient.addColorStop(0.2, isDark ? 'rgba(34, 211, 238, 0.1)' : 'rgba(43, 182, 198, 0.2)');
         gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
       } else if (isBuffering) {
         gradient.addColorStop(0, 'rgba(168, 85, 247, 0.7)');
-        gradient.addColorStop(0.2, 'rgba(168, 85, 247, 0.1)');
         gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
       }
 
@@ -193,62 +189,29 @@ const VoiceStudio: React.FC = () => {
     setIsPlaying(false);
     setIsBuffering(false);
     setSyncPercentage(0);
-    setLoadingStage('');
   };
 
-  const speakWithGenAI = async (text: string) => {
+  const speakWithAPI = async (text: string) => {
     const reqId = ++currentRequestId.current;
     const persona = PERSONAS[personaKey as keyof typeof PERSONAS];
     
     setIsBuffering(true);
-    setSyncPercentage(10);
-    setLoadingStage('Initializing Neural Matrix...');
+    setSyncPercentage(20);
     addLog(`INIT NEURAL HANDSHAKE...`);
 
-    const progressTimer = setInterval(() => {
-        setSyncPercentage(prev => {
-            if (prev < 85) return prev + Math.random() * 5;
-            return prev;
-        });
-    }, 200);
-
     try {
-      setLoadingStage('Querying Speech Models...');
-      addLog(`ENCODING VOCAL SIGNAL...`);
-      
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY as string });
-      const voiceName = persona.voices[gender];
-      
-      const response = await ai.models.generateContent({
-        model: "gemini-2.5-flash-preview-tts",
-        contents: [{ parts: [{ text: text }] }],
-        config: {
-          responseModalities: [Modality.AUDIO],
-          speechConfig: { 
-            voiceConfig: { 
-              prebuiltVoiceConfig: { voiceName: voiceName as any } 
-            } 
-          }
-        }
+      const response = await fetch('/api/speech', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text, voiceName: persona.voices[gender] })
       });
-      
-      if (reqId !== currentRequestId.current) {
-        clearInterval(progressTimer);
-        return;
-      }
 
-      setLoadingStage('Processing Neural Stream...');
-      setSyncPercentage(90);
-
-      const candidate = response.candidates?.[0];
-      const base64Audio = candidate?.content?.parts?.find(p => p.inlineData)?.inlineData?.data;
+      const data = await response.json();
+      if (data.error) throw new Error(data.error);
       
-      if (!base64Audio) {
-        clearInterval(progressTimer);
-        addLog("SYNC FAILED. FALLBACK.");
-        speakWithFallback(text);
-        return;
-      }
+      if (reqId !== currentRequestId.current) return;
+
+      const base64Audio = data.base64Audio;
       
       if (!audioContextRef.current) {
         audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 24000 });
@@ -276,20 +239,12 @@ const VoiceStudio: React.FC = () => {
       };
       sourceRef.current = source;
       
-      clearInterval(progressTimer);
       setSyncPercentage(100);
-      setLoadingStage('Transmission Ready.');
-
-      setTimeout(() => {
-        if (reqId === currentRequestId.current) {
-          setIsBuffering(false);
-          setIsPlaying(true);
-          source.start();
-        }
-      }, 400);
+      setIsBuffering(false);
+      setIsPlaying(true);
+      source.start();
     } catch (e) {
-      clearInterval(progressTimer);
-      console.error("GenAI TTS Failed:", e);
+      console.error("API TTS Failed:", e);
       addLog("ERROR. FALLBACK ACTIVE.");
       speakWithFallback(text);
     }
@@ -297,7 +252,6 @@ const VoiceStudio: React.FC = () => {
 
   const speakWithFallback = (text: string) => {
     setIsBuffering(false);
-    setLoadingStage('');
     const persona = PERSONAS[personaKey as keyof typeof PERSONAS];
     addLog("OS SYNTHESIS OVERRIDE.");
     const utter = new SpeechSynthesisUtterance(text);
@@ -310,11 +264,11 @@ const VoiceStudio: React.FC = () => {
 
   const handleAction = async () => {
     if (isPlaying || isBuffering) { stopAudio(); return; }
-    speakWithGenAI(getScript());
+    speakWithAPI(getScript());
   };
 
   return (
-    <div id="voice-studio" className="relative bg-white/90 dark:bg-slate-900/90 backdrop-blur-3xl rounded-[2.5rem] md:rounded-[3rem] p-5 md:p-8 border border-slate-200 dark:border-white/10 shadow-[0_30px_100px_rgba(0,0,0,0.05)] dark:shadow-[0_30px_100px_rgba(0,0,0,0.3)] flex flex-col gap-6 h-full transition-all duration-500">
+    <div id="voice-studio" className="relative bg-white/90 dark:bg-slate-900/90 backdrop-blur-3xl rounded-[2.5rem] md:rounded-[3rem] p-5 md:p-8 border border-slate-200 dark:border-white/10 shadow-xl flex flex-col gap-6 h-full transition-all duration-500">
       
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-2">
         <div className="flex items-center gap-3 self-start">
@@ -322,16 +276,11 @@ const VoiceStudio: React.FC = () => {
             <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-white transition-all duration-500 shadow-lg ${isBuffering ? 'bg-purple-600 animate-pulse shadow-purple-500/30' : 'bg-accent-500 shadow-accent-500/20'}`}>
               <i className={`fa-solid ${isBuffering ? 'fa-dna' : 'fa-brain'}`}></i>
             </div>
-            <div className={`absolute -top-1 -right-1 w-3 h-3 border-2 border-white dark:border-slate-900 rounded-full ${isBuffering ? 'bg-purple-500 animate-ping' : 'bg-green-500'}`}></div>
           </div>
           <div>
             <h3 className="text-xs font-black text-slate-800 dark:text-white uppercase tracking-[0.3em]">Vocal Engine</h3>
             <p className="text-[8px] font-bold uppercase tracking-widest text-accent-600">NXT-Core-Alpha Online</p>
           </div>
-        </div>
-        
-        <div className="px-4 py-2 bg-slate-100 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-white/10">
-          <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">Template Mode Active</span>
         </div>
       </div>
 
@@ -378,7 +327,7 @@ const VoiceStudio: React.FC = () => {
                     key={key}
                     onClick={() => { setPersonaKey(key); stopAudio(); }}
                     disabled={isBuffering}
-                    className={`p-3 rounded-2xl text-[9px] font-black border transition-all flex items-center gap-2 ${personaKey === key ? 'bg-slate-900 text-white border-slate-900' : 'bg-white border-slate-100 text-slate-500'}`}
+                    className={`p-3 rounded-2xl text-[9px] font-black border transition-all flex items-center gap-2 ${personaKey === key ? 'bg-slate-900 text-white border-slate-900' : 'bg-white border-slate-100 text-slate-500 dark:bg-slate-800 dark:border-white/5 dark:text-slate-400'}`}
                   >
                     <i className={`fa-solid ${v.icon}`}></i>
                     <span>{v.name}</span>
@@ -388,7 +337,7 @@ const VoiceStudio: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-slate-950 rounded-2xl p-4 font-mono text-[8px] border border-white/5 h-16 flex items-center relative overflow-hidden">
+          <div className="bg-slate-950 rounded-2xl p-4 font-mono text-[8px] border border-white/5 h-16 flex items-center relative overflow-hidden shadow-inner">
              <div className="flex gap-2 items-center">
                 <span className={`w-1.5 h-1.5 rounded-full ${isBuffering ? 'bg-purple-500 animate-ping' : 'bg-accent-500 animate-pulse'}`}></span>
                 <span className="text-accent-500/80">{statusLogs[0] || 'NEURAL LINK STABLE'}</span>
@@ -408,7 +357,7 @@ const VoiceStudio: React.FC = () => {
             <button 
               onClick={handleAction}
               disabled={isBuffering}
-              className={`w-28 h-28 rounded-full flex items-center justify-center transition-all duration-700 transform hover:scale-110 active:scale-95 ${isPlaying || isBuffering ? 'bg-white border-2 border-accent-400 shadow-[0_0_60px_rgba(34,211,238,0.4)]' : 'bg-slate-900 text-white'}`}
+              className={`w-28 h-28 rounded-full flex items-center justify-center transition-all duration-700 transform hover:scale-110 active:scale-95 ${isPlaying || isBuffering ? 'bg-white border-2 border-accent-400 shadow-[0_0_60px_rgba(34,211,238,0.4)]' : 'bg-slate-900 text-white shadow-xl'}`}
             >
               {isBuffering ? <i className="fa-solid fa-circle-notch fa-spin text-accent-500 text-3xl"></i> : isPlaying ? <i className="fa-solid fa-stop text-accent-500 text-3xl"></i> : <i className="fa-solid fa-play text-3xl"></i>}
             </button>
@@ -416,7 +365,7 @@ const VoiceStudio: React.FC = () => {
             {(isPlaying || isBuffering) && (
               <div className="bg-white/95 dark:bg-slate-800/90 backdrop-blur-xl border border-slate-100 dark:border-white/10 rounded-2xl p-5 shadow-2xl max-w-[240px] text-center animate-fadeIn">
                 <p className="text-[10px] text-slate-800 dark:text-gray-100 font-bold italic leading-relaxed">
-                   {isBuffering ? "Synthesizing patterns..." : `"${getScript()}"`}
+                   {isBuffering ? "Connecting to Neural Grid..." : `"${getScript()}"`}
                 </p>
               </div>
             )}

@@ -1,7 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ChatMessage } from '../types';
-import { chatWithAgent } from '../services/geminiService';
-import { PERSONAS } from '../constants';
 
 const PhoneDemo: React.FC = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([
@@ -71,23 +69,25 @@ const PhoneDemo: React.FC = () => {
     setMessages(prev => [...prev, { role: 'user', text: trimmedInput }]);
     setIsTyping(true);
     
-    const statuses = ["Consulting ROI blueprints...", "Mapping automation funnel...", "Synthesizing Strategic Response..."];
-    let sIdx = 0;
-    const statusInterval = setInterval(() => {
-      setTypingStatus(statuses[sIdx % statuses.length]);
-      sIdx++;
-    }, 800);
+    setTypingStatus("Synthesizing ROI Blueprint...");
 
     try {
-      const reply = await chatWithAgent(trimmedInput, PERSONAS[0].description);
-      setMessages(prev => [...prev, { role: 'model', text: reply }]);
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: trimmedInput, persona: "Swarup" })
+      });
+
+      const data = await response.json();
+      if (data.error) throw new Error(data.error);
+
+      setMessages(prev => [...prev, { role: 'model', text: data.reply }]);
     } catch (error: any) {
       setMessages(prev => [...prev, { 
         role: 'model', 
-        text: `[CONNECTION ERROR]\n${error.message || "Failed to connect to Neural Engine."}\n\nTroubleshooting:\n- Ensure API_KEY is set in Cloudflare Settings.\n- Trigger a 'Retry Deployment'.`
+        text: `[AUTH ERROR]\nCloudflare API Key missing. Please set API_KEY in your Pages dashboard and Redeploy.`
       }]);
     } finally {
-      clearInterval(statusInterval);
       setIsTyping(false);
       setTypingStatus("Analyzing request...");
     }
@@ -107,14 +107,15 @@ const PhoneDemo: React.FC = () => {
           <div className="absolute top-0 left-0 w-full h-11 z-50 flex justify-center pt-3 pointer-events-none">
             <div className={`h-[34px] bg-black rounded-full flex items-center justify-center px-4 ring-1 ring-white/10 shadow-2xl transition-all ${isTyping || isListening ? 'w-[250px]' : 'w-[120px]'}`}>
               {isTyping && <span className="text-[9px] text-white/90 font-bold uppercase tracking-wider animate-pulse">{typingStatus}</span>}
+              {isListening && <span className="text-[9px] text-white/90 font-bold uppercase tracking-wider animate-pulse">Listening...</span>}
             </div>
           </div>
 
           <div className="px-10 pt-5 pb-1 flex justify-between items-center z-40">
             <span className="text-[13px] font-bold text-slate-900 dark:text-white">{currentTime}</span>
             <div className="flex items-center gap-2">
-              <i className="fa-solid fa-signal text-[10px] text-slate-900"></i>
-              <i className="fa-solid fa-wifi text-[10px] text-slate-900"></i>
+              <i className="fa-solid fa-signal text-[10px] text-slate-900 dark:text-slate-400"></i>
+              <i className="fa-solid fa-wifi text-[10px] text-slate-900 dark:text-slate-400"></i>
             </div>
           </div>
 
@@ -134,9 +135,9 @@ const PhoneDemo: React.FC = () => {
                 <div className={`max-w-[85%] px-4 py-2.5 rounded-[20px] text-[13px] leading-relaxed shadow-sm whitespace-pre-wrap ${
                   m.role === 'user' 
                     ? 'bg-[#007aff] text-white rounded-tr-[4px]' 
-                    : m.text.includes('[CONNECTION ERROR]')
+                    : m.text.includes('[AUTH ERROR]')
                       ? 'bg-red-50 text-red-600 border border-red-200 text-[10px] font-mono'
-                      : 'bg-white text-slate-800 border border-slate-200 rounded-tl-[4px]'
+                      : 'bg-white text-slate-800 dark:bg-slate-900 dark:text-white dark:border-white/10 border border-slate-200 rounded-tl-[4px]'
                 }`}>
                   {m.text}
                 </div>
@@ -147,12 +148,12 @@ const PhoneDemo: React.FC = () => {
           <div className="px-4 pt-3 pb-10 bg-white/95 dark:bg-[#0b0b0e]/95 border-t border-slate-100 dark:border-white/5 z-30">
             <div className="flex gap-2 overflow-x-auto pb-3 no-scrollbar mb-1">
               {quickActions.map((action, idx) => (
-                <button key={idx} onClick={() => handleSend(action.query)} className="flex-shrink-0 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-full text-[10px] font-bold text-slate-600 whitespace-nowrap">{action.label}</button>
+                <button key={idx} onClick={() => handleSend(action.query)} className="flex-shrink-0 px-3 py-1.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-white/5 rounded-full text-[10px] font-bold text-slate-600 dark:text-slate-400 whitespace-nowrap">{action.label}</button>
               ))}
             </div>
 
             <div className="flex items-center gap-3">
-              <button onClick={toggleListening} className={`w-9 h-9 flex items-center justify-center rounded-full ${isListening ? 'bg-red-500 text-white animate-pulse' : 'bg-slate-100 text-[#007aff]'}`}>
+              <button onClick={toggleListening} className={`w-9 h-9 flex items-center justify-center rounded-full transition-colors ${isListening ? 'bg-red-500 text-white animate-pulse' : 'bg-slate-100 dark:bg-slate-800 text-[#007aff]'}`}>
                 <i className={`fa-solid ${isListening ? 'fa-microphone-lines' : 'fa-microphone'}`}></i>
               </button>
               
@@ -162,14 +163,14 @@ const PhoneDemo: React.FC = () => {
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleSend()}
                   placeholder="Ask Swarup..."
-                  className="w-full bg-[#f2f2f7] border border-slate-200 rounded-full px-5 py-2 text-[14px] outline-none"
+                  className="w-full bg-[#f2f2f7] dark:bg-slate-800 dark:text-white border border-slate-200 dark:border-white/5 rounded-full px-5 py-2 text-[14px] outline-none"
                 />
                 <button onClick={() => handleSend()} className="absolute right-1 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center bg-[#007aff] rounded-full text-white disabled:opacity-30">
                   <i className="fa-solid fa-arrow-up text-xs font-black"></i>
                 </button>
               </div>
             </div>
-            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-[120px] h-[5px] bg-slate-900/10 rounded-full"></div>
+            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-[120px] h-[5px] bg-slate-900/10 dark:bg-white/10 rounded-full"></div>
           </div>
         </div>
       </div>

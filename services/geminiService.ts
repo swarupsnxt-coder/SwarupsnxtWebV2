@@ -2,6 +2,7 @@ import { GoogleGenAI, Modality } from "@google/genai";
 
 /**
  * Decodes raw 16-bit PCM data into an AudioBuffer.
+ * Used in the frontend.
  */
 export async function decodeAudioData(
   data: Uint8Array,
@@ -29,11 +30,17 @@ export async function decodeAudioData(
 }
 
 /**
- * Generates speech with robust part extraction. 
+ * Generates speech (TTS) using Gemini 2.5 Flash.
+ * Accept 'env' for Cloudflare Worker compatibility.
  */
-export const generateSpeech = async (text: string, voiceName: string): Promise<string> => {
+export const generateSpeech = async (text: string, voiceName: string, env?: any): Promise<string> => {
+  // Cloudflare Environment Bridge
+  if (env?.API_KEY) {
+    if (typeof process === 'undefined') (globalThis as any).process = { env: {} };
+    process.env.API_KEY = env.API_KEY;
+  }
+
   try {
-    // Literal reference for Vite/Cloudflare build-time replacement
     const ai = new GoogleGenAI({ apiKey: process.env.API_KEY as string });
     
     const response = await ai.models.generateContent({
@@ -62,54 +69,56 @@ export const generateSpeech = async (text: string, voiceName: string): Promise<s
 
 /**
  * Strategic interaction logic for 'Swarup' Assistant.
- * Optimized for Indian MSME lead generation.
+ * Accept 'env' for Cloudflare Worker compatibility.
  */
-export const chatWithAgent = async (message: string, personaDescription: string) => {
+export const chatWithAgent = async (message: string, personaDescription: string, env?: any) => {
+  // Cloudflare Environment Bridge
+  if (env?.API_KEY) {
+    if (typeof process === 'undefined') (globalThis as any).process = { env: {} };
+    process.env.API_KEY = env.API_KEY;
+  }
+
   try {
-    // Literal reference for Vite/Cloudflare build-time replacement
     const ai = new GoogleGenAI({ apiKey: process.env.API_KEY as string });
     
     const systemInstruction = `
       # IDENTITY
-      You are "Swarup," the Strategic AI Assistant for Swarups NXT. 
-      Persona: Confident, direct, ROI-focused, "Value for Money."
+      You are "Swarup," the AI Strategic Assistant for Swarups NXT. 
+      Persona: Confident, ROI-focused, "Value for Money."
 
       # MISSION
-      Convert Indian MSME/SMB owners into leads. 
+      Convert Indian MSME owners into high-intent leads. 
 
-      # CONVERSATIONAL STYLE
-      - EXTREMELY BRIEF. Under 25 words.
-      - Use ONLY bullet points for value.
-      - Use "Hinglish" naturally (e.g., "Missed calls matlab leads ka loss").
-      - Never say "I don't know." Say: "Ye specific detail hum AI Audit mein discuss karenge."
+      # RULES
+      - BRIEF. Max 25 words.
+      - Use Bullet Points only.
+      - Use "Hinglish" naturally (e.g., "Missed calls matlab paison ka nuksaan").
+      - Never say "I don't know." Say: "Ye hum AI Audit mein finalise karenge."
 
-      # CORE KNOWLEDGE
-      - AI Voice Agents: 24/7 capture, 80% fewer missed calls.
-      - ROI: 40% revenue boost.
-      - Speed: 1-Week MVP Live.
+      # OFFER
+      - 80% fewer missed calls.
+      - 40% revenue boost.
+      - 1-Week MVP Live.
 
       # FLOW
-      1. Acknowledge pain point (missed calls/manual work).
-      2. 2 Bullets on ROI.
+      1. One-line empathy.
+      2. 2 ROI Bullets.
       3. ASK: "What is your business type?"
-      4. END WITH: "Should we schedule a Free AI Audit to map your 40% revenue boost?"
+      4. ASK: "Audit fix karein?"
     `;
 
     const chat = ai.chats.create({
       model: 'gemini-3-flash-preview',
       config: {
         systemInstruction: systemInstruction,
-        temperature: 0.4,
+        temperature: 0.5,
       },
     });
 
     const result = await chat.sendMessage({ message });
-    return result.text || "Neural link established. Awaiting input.";
+    return result.text || "Signal detected. Ready for protocol.";
   } catch (error: any) {
     console.error("Chat Error:", error);
-    if (error.message?.includes("API_KEY_INVALID") || error.message?.includes("403")) {
-      throw new Error("Neural Auth Failed. Please verify API_KEY in Cloudflare and Redeploy.");
-    }
     throw error;
   }
 };
