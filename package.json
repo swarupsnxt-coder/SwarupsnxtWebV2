@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && vite build --ssr entry-server.tsx --outDir .ssr && node scripts/prerender.mjs",
     "preview": "vite preview",
     "pages:dev": "vite build && npx --yes wrangler@4 pages dev dist --ai=AI"
   },
@@ -16,6 +16,9 @@
   "devDependencies": {
     "@types/node": "^22.14.0",
     "@vitejs/plugin-react": "^5.0.0",
+    "autoprefixer": "^10.6.1",
+    "postcss": "^8.5.28",
+    "tailwindcss": "^3.4.19",
     "typescript": "~5.8.2",
     "vite": "^6.2.0"
   }

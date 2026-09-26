@@ -56,9 +56,17 @@ const Products: React.FC = () => {
                   </h3>
                 </div>
 
-                <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed font-medium mb-8 flex-grow">
+                <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed font-medium mb-4">
                   {product.desc}
                 </p>
+
+                <details className="group/details mb-8 flex-grow">
+                  <summary className="cursor-pointer list-none text-sm font-bold text-slate-900 dark:text-white hover:text-[#2BB6C6] transition-colors flex items-center gap-2 [&::-webkit-details-marker]:hidden">
+                    <i className="fa-solid fa-plus text-[10px] text-[#2BB6C6] group-open/details:rotate-45 transition-transform" aria-hidden="true"></i>
+                    More about {product.title}
+                  </summary>
+                  <p className="mt-3 text-slate-600 dark:text-slate-400 text-sm leading-relaxed">{product.details}</p>
+                </details>
 
                 <div className="pt-6 border-t border-slate-200 dark:border-white/5">
                   <div className="text-[11px] font-black text-[#2BB6C6] uppercase tracking-widest mb-1">Best for</div>

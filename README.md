@@ -11,7 +11,7 @@ Prerequisite: Node.js 20+
 ```bash
 npm install
 npm run dev      # http://localhost:3000
-npm run build    # production build into dist/
+npm run build    # production build into dist/ (includes pre-rendering + structured data)
 ```
 
 No API keys are needed to run the site. The chat assistant (Cloudflare Workers AI) needs a one-time dashboard setup and runs locally with `npm run pages:dev` — see [SETUP-AI.md](SETUP-AI.md).
@@ -21,3 +21,4 @@ No API keys are needed to run the site. The chat assistant (Cloudflare Workers A
 - Project rules and facts for contributors (and Claude Code): [CLAUDE.md](CLAUDE.md)
 - Upgrade plan, phase by phase: [docs/PROMPTS.md](docs/PROMPTS.md)
 - Latest audit: [AUDIT.md](AUDIT.md)
+- After launch (search engines, link previews): [POST-LAUNCH-SEO.md](POST-LAUNCH-SEO.md)

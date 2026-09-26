@@ -15,27 +15,25 @@ import { PrivacyModal, SecurityModal } from './components/Modals';
 import { Theme } from './types';
 
 const App: React.FC = () => {
-  const [theme, setTheme] = useState<Theme>(() => {
-    const saved = localStorage.getItem('nxt_theme');
-    if (saved) return saved as Theme;
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? Theme.DARK : Theme.LIGHT;
-  });
+  // The inline script in index.html applies the saved/system theme before first paint;
+  // read it back from the <html> class (server render defaults to light).
+  const [theme, setTheme] = useState<Theme>(() =>
+    typeof document !== 'undefined' && document.documentElement.classList.contains('dark') ? Theme.DARK : Theme.LIGHT
+  );
 
   const [showPrivacy, setShowPrivacy] = useState(false);
   const [showSecurity, setShowSecurity] = useState(false);
 
   useEffect(() => {
-    const root = window.document.documentElement;
-    if (theme === Theme.DARK) {
-      root.classList.add('dark');
-    } else {
-      root.classList.remove('dark');
-    }
-    localStorage.setItem('nxt_theme', theme);
+    document.documentElement.classList.toggle('dark', theme === Theme.DARK);
   }, [theme]);
 
   const toggleTheme = () => {
-    setTheme(prev => prev === Theme.DARK ? Theme.LIGHT : Theme.DARK);
+    setTheme(prev => {
+      const next = prev === Theme.DARK ? Theme.LIGHT : Theme.DARK;
+      try { localStorage.setItem('nxt_theme', next); } catch { /* storage unavailable */ }
+      return next;
+    });
   };
 
   return (

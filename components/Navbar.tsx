@@ -64,9 +64,11 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme }) => {
               <button 
                 onClick={toggleTheme}
                 className="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-400 hover:text-[#2BB6C6] transition-all hover:scale-110 active:scale-95 shadow-sm"
-                aria-label="Toggle Theme"
+                aria-label="Toggle dark mode"
               >
-                <i className={`fa-solid ${theme === Theme.DARK ? 'fa-sun' : 'fa-moon'} transition-transform duration-500 ${theme === Theme.DARK ? 'rotate-[360deg]' : 'rotate-0'}`}></i>
+                {/* Icon follows the <html class="dark"> via CSS so pre-rendered HTML matches on hydration. */}
+                <i className="fa-solid fa-moon dark:hidden" aria-hidden="true"></i>
+                <i className="fa-solid fa-sun hidden dark:inline-block" aria-hidden="true"></i>
               </button>
               
               <a

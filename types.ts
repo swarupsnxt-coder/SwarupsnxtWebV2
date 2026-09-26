@@ -9,6 +9,7 @@ export interface IndustrySector {
   title: string;
   problem: string;
   solution: string;
+  details: string;
   product: string;
   image: string;
   imageAlt: string;

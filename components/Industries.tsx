@@ -35,8 +35,8 @@ const Industries: React.FC = () => {
                         <i className={`fa-solid fa-chevron-right transition-transform ${isActive ? 'rotate-90 text-[#2BB6C6]' : 'text-slate-400 dark:text-slate-600'}`} aria-hidden="true"></i>
                       </button>
                     </h3>
-                    {isActive && (
-                      <div id={`industry-panel-${industry.id}`} className="px-6 pb-6 animate-fadeIn space-y-3">
+                    {/* All panels stay in the HTML (hidden when closed) so the text is indexable. */}
+                    <div id={`industry-panel-${industry.id}`} hidden={!isActive} className="px-6 pb-6 animate-fadeIn space-y-3">
                         <div className="bg-slate-100 dark:bg-[#0f172a] p-4 rounded-xl border border-slate-200 dark:border-white/5">
                           <div className="text-[11px] text-[#2BB6C6] font-bold uppercase tracking-widest mb-1">The problem</div>
                           <p className="text-sm text-slate-700 dark:text-slate-300">{industry.problem}</p>
@@ -45,12 +45,12 @@ const Industries: React.FC = () => {
                           <div className="text-[11px] text-[#2BB6C6] font-bold uppercase tracking-widest mb-1">What the AI agent does</div>
                           <p className="text-sm text-slate-700 dark:text-slate-300">{industry.solution}</p>
                         </div>
-                        <div className="flex items-center gap-2 text-sm">
+                        <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed px-1">{industry.details}</p>
+                        <div className="flex flex-wrap items-center gap-2 text-sm px-1">
                           <span className="font-bold text-slate-500 dark:text-slate-400">Best fit:</span>
                           <span className="font-bold text-slate-900 dark:text-white">{industry.product}</span>
                         </div>
                       </div>
-                    )}
                   </div>
                 );
               })}

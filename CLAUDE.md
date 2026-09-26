@@ -29,9 +29,15 @@ standing instructions.
 
 ## Tech stack
 - React 19 + TypeScript, built with Vite 6 (output: `dist/`)
-- Tailwind CSS via the Play CDN script in `index.html` (theme config and custom keyframes are
-  inline there; there is no `tailwind.config.js`). Font Awesome and Google Fonts (Inter,
-  Suez One) are loaded from CDNs in `index.html`.
+- Tailwind CSS v3, compiled at build time (`tailwind.config.js`, `postcss.config.js`,
+  global styles in `index.css`). Font Awesome and Google Fonts (Inter, Suez One) load from
+  CDNs in `index.html`.
+- Pre-rendered at build time: `npm run build` = client build + SSR build of
+  `entry-server.tsx` + `scripts/prerender.mjs`, which injects the page HTML and schema.org
+  JSON-LD into `dist/index.html`. Keep components safe to render without `window`/`document`
+  during render (use effects), and don't make markup depend on browser-only state (hydration).
+- SEO files in `public/`: `robots.txt`, `sitemap.xml`, `llms.txt`, `og-image.png`, icons.
+  Post-launch steps: `POST-LAUNCH-SEO.md`.
 - Cloudflare Pages Functions in `functions/api/` (`chat.ts`: website assistant on Workers AI via
   the `AI` binding, protected by Turnstile). Shared server code in `lib/` (`llm.ts`,
   `knowledge.ts`, `session.ts`). Setup steps: `SETUP-AI.md`.

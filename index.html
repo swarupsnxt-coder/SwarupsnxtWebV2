@@ -3,148 +3,59 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
-    <!-- Primary Meta Tags -->
-    <title>Swarups NXT | Unlock Next Gen AI Solutions</title>
 
-    <meta name="title" content="Swarups NXT | Unlock Next Gen AI Solutions" />
-    <meta name="description" content="Swarups NXT delivers next-gen AI voice agents, chatbots, and SaaS automation for MSMEs, SMBs, and enterprises—reducing missed calls, accelerating conversions, and scaling customer engagement." />
-    <meta name="keywords" content="AI Voice Agents, AI Chatbots, Digital Employees, SaaS Automation, MSME AI Solutions, SMB Automation, Enterprise AI, Swarups NXT" />
+    <title>AI Voice Agents &amp; Chatbots in India | Swarups NXT</title>
+    <meta name="description" content="Swarups NXT sets up AI voice agents, chatbots, WhatsApp campaigns &amp; voice blast for Indian businesses. 24x7, in English, Hindi and other Indian languages." />
     <meta name="author" content="Swarups NXT" />
     <meta name="robots" content="index, follow" />
     <meta name="theme-color" content="#1e266e" />
+    <link rel="canonical" href="https://swarupsnxt.com/" />
 
     <!-- Open Graph / Facebook / LinkedIn / WhatsApp -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://swarupsnxt.com/" />
-    <meta property="og:title" content="Swarups NXT | Unlock Next Gen AI Solutions" />
-    <meta property="og:description" content="AI voice agents, chatbots, and digital employees built for real business outcomes. Simplify automation. Accelerate growth." />
-    <meta property="og:image" content="https://swarupsnxt.com/assets/Dark%20version.png" />
+    <meta property="og:site_name" content="Swarups NXT" />
+    <meta property="og:locale" content="en_IN" />
+    <meta property="og:title" content="AI Voice Agents &amp; Chatbots for Indian Businesses | Swarups NXT" />
+    <meta property="og:description" content="AI agents that answer calls and chats 24x7 on phone, WhatsApp and your website, in English, Hindi and other Indian languages. Book a demo." />
+    <meta property="og:image" content="https://swarupsnxt.com/og-image.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:site_name" content="Swarups NXT" />
+    <meta property="og:image:alt" content="Swarups NXT — AI voice agents and chatbots for Indian businesses" />
 
     <!-- Twitter / X -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Swarups NXT | Unlock Next Gen AI Solutions" />
-    <meta name="twitter:description" content="Next-gen AI voice agents and digital employees that help businesses automate engagement and scale smarter." />
-    <meta name="twitter:image" content="https://swarupsnxt.com/assets/Dark%20version.png" />
+    <meta name="twitter:title" content="AI Voice Agents &amp; Chatbots for Indian Businesses | Swarups NXT" />
+    <meta name="twitter:description" content="AI agents that answer calls and chats 24x7 on phone, WhatsApp and your website, in English, Hindi and other Indian languages." />
+    <meta name="twitter:image" content="https://swarupsnxt.com/og-image.png" />
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="logo.svg" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Apply the saved/system theme before first paint (the page is pre-rendered). -->
     <script>
-      tailwind.config = {
-        darkMode: 'class',
-        theme: {
-          extend: {
-            colors: {
-              brand: '#1e266e',
-              accent: { DEFAULT: '#2BB6C6', 400: '#2BB6C6', 500: '#2BB6C6' },
-            },
-            animation: {
-              'fadeIn': 'fadeIn 0.5s ease-out forwards',
-              'scanline': 'scanline 10s linear infinite',
-              'flicker': 'flicker 0.2s infinite alternate',
-            },
-            keyframes: {
-              fadeIn: {
-                '0%': { opacity: '0', transform: 'translateY(10px)' },
-                '100%': { opacity: '1', transform: 'translateY(0)' },
-              },
-              scanline: {
-                '0%': { transform: 'translateY(-100%)' },
-                '100%': { transform: 'translateY(100%)' },
-              },
-              flicker: {
-                '0%': { opacity: '0.97' },
-                '100%': { opacity: '1' },
-              }
-            }
+      (function () {
+        try {
+          var t = localStorage.getItem('nxt_theme');
+          if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
           }
-        }
-      }
+        } catch (e) {}
+      })();
     </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Suez+One&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    <style>
-      body {
-        font-family: 'Inter', sans-serif;
-        overflow-x: hidden;
-      }
-      *, *::before, *::after {
-        transition-property: background-color, border-color, color, fill, stroke;
-        transition-duration: 300ms;
-        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-      }
-      h1, h2, h3, h4 {
-        font-family: 'Suez One', serif;
-      }
-      .glass {
-        background: rgba(255, 255, 255, 0.7);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-      }
-      .dark .glass {
-        background: rgba(15, 23, 42, 0.7);
-        border: 1px solid rgba(255, 255, 255, 0.05);
-      }
-      .gradient-text {
-        background: linear-gradient(90deg, #2BB6C6, #1e266e);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-      }
-      @keyframes float {
-        0% { transform: translateY(0px); }
-        50% { transform: translateY(-10px); }
-        100% { transform: translateY(0px); }
-      }
-      @keyframes blob-drift {
-        0% { transform: translate(0, 0) scale(1); }
-        33% { transform: translate(30px, -50px) scale(1.1); }
-        66% { transform: translate(-20px, 20px) scale(0.9); }
-        100% { transform: translate(0, 0) scale(1); }
-      }
-      .float-animation {
-        animation: float 4s ease-in-out infinite;
-      }
-      .blob-animation {
-        animation: blob-drift 20s ease-in-out infinite;
-      }
-      ::-webkit-scrollbar {
-        width: 8px;
-      }
-      ::-webkit-scrollbar-track {
-        background: transparent;
-      }
-      .dark ::-webkit-scrollbar-track {
-        background: #0f172a;
-      }
-      ::-webkit-scrollbar-thumb {
-        background: #e2e8f0;
-        border-radius: 10px;
-      }
-      .dark ::-webkit-scrollbar-thumb {
-        background: #1e266e;
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background: #2BB6C6;
-      }
-      @media (prefers-reduced-motion: reduce) {
-        *, *::before, *::after {
-          animation-duration: 0.01ms !important;
-          animation-iteration-count: 1 !important;
-          scroll-behavior: auto !important;
-        }
-      }
-    </style>
+    <!-- Icons load without blocking the first render. -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" onload="this.onload=null;this.rel='stylesheet'" />
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" /></noscript>
+
+    <!--app-jsonld-->
   </head>
   <body class="bg-slate-50 dark:bg-[#0f172a] transition-colors duration-500">
-    <div id="root"></div>
-    <script type="module" src="index.tsx"></script>
+    <div id="root"><!--app-html--></div>
+    <script type="module" src="/index.tsx"></script>
   </body>
 </html>

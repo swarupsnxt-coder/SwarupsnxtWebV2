@@ -1,6 +1,15 @@
-import React, { useEffect, useRef } from 'react';
-import VoiceStudio from './VoiceStudio';
-import PhoneDemo from './PhoneDemo';
+import React, { Suspense, lazy, useEffect, useRef, useState } from 'react';
+
+// Demos are code-split and only loaded when the section approaches the viewport.
+const VoiceStudio = lazy(() => import('./VoiceStudio'));
+const PhoneDemo = lazy(() => import('./PhoneDemo'));
+
+const VoicePlaceholder = () => (
+  <div className="rounded-[2.5rem] md:rounded-[3rem] border border-slate-200 dark:border-white/10 bg-white/95 dark:bg-slate-900/95 min-h-[640px] animate-pulse" aria-hidden="true"></div>
+);
+const PhonePlaceholder = () => (
+  <div className="w-[300px] sm:w-[320px] h-[640px] sm:h-[680px] rounded-[60px] border-[3px] border-slate-300 dark:border-slate-800 bg-[#f2f2f2] dark:bg-[#1a1a1a] animate-pulse" aria-hidden="true"></div>
+);
 
 const LabCanvas: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -73,8 +82,21 @@ const LabCanvas: React.FC = () => {
 };
 
 const NxtLab: React.FC = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const [loadDemos, setLoadDemos] = useState(false);
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el || !('IntersectionObserver' in window)) { setLoadDemos(true); return; }
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) { setLoadDemos(true); observer.disconnect(); }
+    }, { rootMargin: '600px 0px' });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section id="nxt-lab" className="py-24 bg-white dark:bg-[#0f172a] relative overflow-hidden transition-colors duration-500 scroll-mt-24">
+    <section ref={sectionRef} id="nxt-lab" className="py-24 bg-white dark:bg-[#0f172a] relative overflow-hidden transition-colors duration-500 scroll-mt-24">
       {/* Background Layer Effects */}
       <div className="absolute inset-0 pointer-events-none z-0">
         <LabCanvas />
@@ -96,14 +118,14 @@ const NxtLab: React.FC = () => {
           {/* Voice Studio Column */}
           <div id="voice-studio-container" className="lg:col-span-7 h-full relative group scroll-mt-32">
              <div className="absolute -inset-1 bg-gradient-to-r from-[#2BB6C6]/10 to-[#1e266e]/10 rounded-[2.6rem] blur opacity-25 group-hover:opacity-60 transition duration-1000 group-hover:duration-200"></div>
-             <VoiceStudio />
+             {loadDemos ? <Suspense fallback={<VoicePlaceholder />}><VoiceStudio /></Suspense> : <VoicePlaceholder />}
           </div>
 
           {/* Phone Demo Column */}
           <div className="lg:col-span-5 flex justify-center h-full scroll-mt-32 relative group/phone-container">
             <div id="phone-demo" className="relative rounded-[60px] transition-all duration-500">
               <div className="absolute -inset-8 bg-accent-500/5 rounded-full blur-3xl group-hover/phone-container:bg-accent-500/10 transition-all duration-700"></div>
-              <PhoneDemo />
+              {loadDemos ? <Suspense fallback={<PhonePlaceholder />}><PhoneDemo /></Suspense> : <PhonePlaceholder />}
             </div>
           </div>
         </div>
