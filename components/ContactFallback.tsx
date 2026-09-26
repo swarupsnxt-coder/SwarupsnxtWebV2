@@ -5,6 +5,7 @@ interface ContactFallbackProps {
   title?: string;
   message?: string;
   compact?: boolean;
+  whatsappText?: string;
 }
 
 // Shown wherever an AI feature is unavailable, so visitors always have a way to reach us.
@@ -12,10 +13,11 @@ const ContactFallback: React.FC<ContactFallbackProps> = ({
   title = 'This demo is being upgraded',
   message = 'Talk to us directly and we\'ll show you what an AI agent can do for your business.',
   compact = false,
+  whatsappText = WHATSAPP_DEMO_TEXT,
 }) => {
   const actions = [
     { label: 'Book a demo', icon: 'fa-solid fa-calendar-check', href: '#contact', primary: true },
-    { label: 'WhatsApp', icon: 'fa-brands fa-whatsapp', href: whatsappLink(WHATSAPP_DEMO_TEXT), external: true },
+    { label: 'WhatsApp', icon: 'fa-brands fa-whatsapp', href: whatsappLink(whatsappText), external: true },
     { label: 'Call', icon: 'fa-solid fa-phone', href: telLink },
     { label: 'Email', icon: 'fa-solid fa-envelope', href: mailtoLink('Book a demo') },
   ];

@@ -14,7 +14,7 @@ npm run dev      # http://localhost:3000
 npm run build    # production build into dist/
 ```
 
-No API keys are needed to run the site.
+No API keys are needed to run the site. The chat assistant (Cloudflare Workers AI) needs a one-time dashboard setup and runs locally with `npm run pages:dev` — see [SETUP-AI.md](SETUP-AI.md).
 
 ## Project notes
 

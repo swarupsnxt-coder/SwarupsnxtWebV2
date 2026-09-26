@@ -19,6 +19,98 @@ export const telLink = `tel:${CONTACT.phone}`;
 export const WHATSAPP_DEFAULT_TEXT = "Hi Swarups NXT, I'd like to know more about your AI solutions";
 export const WHATSAPP_DEMO_TEXT = "Hi Swarups NXT, I'd like to book a demo";
 
+// Product list follows CLAUDE.md "What this is". Every card links to WhatsApp with a product-specific message.
+export const PRODUCTS = [
+  {
+    icon: 'fa-microphone-lines',
+    iconType: 'fa-solid',
+    title: 'AI Voice Agents',
+    tag: 'Voice',
+    desc: 'Answer inbound calls and make follow-up calls 24x7, in English, Hindi and other Indian languages. The agent hands over to your team when a person is needed.',
+    bestFor: 'Missed calls, after-hours enquiries, follow-ups',
+    image: 'https://images.unsplash.com/photo-1589254065878-42c9da997008?auto=format&fit=crop&q=80&w=800',
+    ctaLabel: 'Ask about voice agents',
+    ctaText: "Hi, I'm interested in AI Voice Agents",
+  },
+  {
+    icon: 'fa-bullhorn',
+    iconType: 'fa-solid',
+    title: 'Voice Blast',
+    tag: 'Voice broadcast',
+    desc: 'Send a recorded or AI-voiced message to thousands of phones at once, in the language your customers speak. Capture interest with press-a-key (IVR) responses and see who answered, missed or pressed a key.',
+    bestFor: 'Announcements, appointment and payment reminders, promotions, surveys',
+    image: 'https://images.unsplash.com/photo-1556656793-08538906a9f8?auto=format&fit=crop&q=80&w=800',
+    ctaLabel: 'Plan a voice blast',
+    ctaText: "Hi, I'm interested in Voice Blast",
+  },
+  {
+    icon: 'fa-comments',
+    iconType: 'fa-solid',
+    title: 'AI Chatbots',
+    tag: 'Chat',
+    desc: 'Answer questions, capture leads and book appointments on WhatsApp and your website — instantly, day or night.',
+    bestFor: 'Lead capture, FAQs, appointment booking',
+    image: 'https://images.unsplash.com/photo-1611746872915-64382b5c76da?auto=format&fit=crop&q=80&w=800',
+    ctaLabel: 'Ask about chatbots',
+    ctaText: "Hi, I'm interested in AI Chatbots",
+  },
+  {
+    icon: 'fa-whatsapp',
+    iconType: 'fa-brands',
+    title: 'WhatsApp Campaigns',
+    tag: 'Campaigns',
+    desc: 'Reach customers where they already are. Broadcast offers, reminders and updates to opted-in contacts with images, videos, documents and buttons — personalised, with AI answering replies 24x7 and reports on delivered, read and replied.',
+    bestFor: 'Festive offers, reminders, order updates, lead follow-ups, win-back',
+    image: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&q=80&w=800',
+    ctaLabel: 'Plan a WhatsApp campaign',
+    ctaText: "Hi, I'm interested in WhatsApp campaigns",
+  },
+  {
+    icon: 'fa-headset',
+    iconType: 'fa-solid',
+    title: 'AI Contact Center',
+    tag: 'Contact center',
+    desc: 'AI handles routine calls and chats, while your agents take the conversations that need a person. Fewer queues, less repetitive work.',
+    bestFor: 'High call volumes, support teams',
+    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800',
+    ctaLabel: 'Ask about the contact center',
+    ctaText: "Hi, I'm interested in the AI Contact Center",
+  },
+  {
+    icon: 'fa-layer-group',
+    iconType: 'fa-solid',
+    title: 'Omnichannel Bots',
+    tag: 'Omnichannel',
+    desc: 'One AI assistant across phone, WhatsApp, website chat and social media, so customers get the same helpful answers wherever they reach you.',
+    bestFor: 'Businesses active on many channels',
+    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800',
+    ctaLabel: 'Ask about omnichannel bots',
+    ctaText: "Hi, I'm interested in Omnichannel Bots",
+  },
+  {
+    icon: 'fa-share-nodes',
+    iconType: 'fa-solid',
+    title: 'Social Media Bots',
+    tag: 'Social',
+    desc: 'Reply to Instagram and Facebook comments and DMs automatically, and turn interested followers into leads.',
+    bestFor: 'Social enquiries, campaign responses',
+    image: 'https://images.unsplash.com/photo-1611162618071-b39a2ec055fb?auto=format&fit=crop&q=80&w=800',
+    ctaLabel: 'Ask about social media bots',
+    ctaText: "Hi, I'm interested in Social Media Bots",
+  },
+  {
+    icon: 'fa-gears',
+    iconType: 'fa-solid',
+    title: 'SaaS Automation',
+    tag: 'Automation',
+    desc: 'Automate repetitive work between your tools — lead entry, follow-up reminders, status updates — so your team can focus on customers.',
+    bestFor: 'Manual data entry, follow-up tasks',
+    image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=800',
+    ctaLabel: 'Ask about automation',
+    ctaText: "Hi, I'm interested in SaaS Automation",
+  }
+];
+
 export const INDUSTRIES: IndustrySector[] = [
   {
     id: 'real-estate',

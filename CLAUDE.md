@@ -26,15 +26,17 @@ standing instructions.
 - Tailwind CSS via the Play CDN script in `index.html` (theme config and custom keyframes are
   inline there; there is no `tailwind.config.js`). Font Awesome and Google Fonts (Inter,
   Suez One) are loaded from CDNs in `index.html`.
-- Cloudflare Pages Functions in `functions/api/` (`chat.ts`, `speech.ts`)
+- Cloudflare Pages Functions in `functions/api/` (`chat.ts`: website assistant on Workers AI via
+  the `AI` binding, protected by Turnstile). Shared server code in `lib/` (`llm.ts`,
+  `knowledge.ts`, `session.ts`). Setup steps: `SETUP-AI.md`.
 - GitHub repo: swarupsnxt-coder/SwarupsnxtWebV2 (connected to Cloudflare Pages)
 
 ## Key files
 - `App.tsx`: page composition, modal/theme state
 - `components/`: one file per section or widget (Navbar, Hero, Products, Industries, WhyUs,
   HowItWorks, FAQ, Contact, ChatWidget, PhoneDemo, VoiceStudio, NxtLab, Modals, ...)
-- `constants.tsx`: shared content data (e.g. FAQ entries); `types.ts`: shared types
-- `services/geminiService.ts`: legacy Gemini calls (to be removed, see rule 12)
+- `constants.tsx`: contact details, products, industries, FAQ — used by the page AND the
+  chatbot's knowledge (`lib/knowledge.ts`), so edit content there; `types.ts`: shared types
 - `components/Contact.tsx`: `#contact` section (WhatsApp / Call / Email, no form)
 - `index.html`: meta/OG tags, Tailwind CDN config, global styles
 
