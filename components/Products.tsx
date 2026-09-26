@@ -1,6 +1,7 @@
 import React from 'react';
+import { whatsappLink } from '../constants';
 
-// Product list follows CLAUDE.md "What this is". WhatsApp Campaigns and Voice Blast are added in Phase B.
+// Product list follows CLAUDE.md "What this is". Every card links to WhatsApp with a product-specific message.
 const products = [
   {
     icon: 'fa-microphone-lines',
@@ -10,6 +11,19 @@ const products = [
     desc: 'Answer inbound calls and make follow-up calls 24x7, in English, Hindi and other Indian languages. The agent hands over to your team when a person is needed.',
     bestFor: 'Missed calls, after-hours enquiries, follow-ups',
     image: 'https://images.unsplash.com/photo-1589254065878-42c9da997008?auto=format&fit=crop&q=80&w=800',
+    ctaLabel: 'Ask about voice agents',
+    ctaText: "Hi, I'm interested in AI Voice Agents",
+  },
+  {
+    icon: 'fa-bullhorn',
+    iconType: 'fa-solid',
+    title: 'Voice Blast',
+    tag: 'Voice broadcast',
+    desc: 'Send a recorded or AI-voiced message to thousands of phones at once, in the language your customers speak. Capture interest with press-a-key (IVR) responses and see who answered, missed or pressed a key.',
+    bestFor: 'Announcements, appointment and payment reminders, promotions, surveys',
+    image: 'https://images.unsplash.com/photo-1556656793-08538906a9f8?auto=format&fit=crop&q=80&w=800',
+    ctaLabel: 'Plan a voice blast',
+    ctaText: "Hi, I'm interested in Voice Blast",
   },
   {
     icon: 'fa-comments',
@@ -19,6 +33,19 @@ const products = [
     desc: 'Answer questions, capture leads and book appointments on WhatsApp and your website — instantly, day or night.',
     bestFor: 'Lead capture, FAQs, appointment booking',
     image: 'https://images.unsplash.com/photo-1611746872915-64382b5c76da?auto=format&fit=crop&q=80&w=800',
+    ctaLabel: 'Ask about chatbots',
+    ctaText: "Hi, I'm interested in AI Chatbots",
+  },
+  {
+    icon: 'fa-whatsapp',
+    iconType: 'fa-brands',
+    title: 'WhatsApp Campaigns',
+    tag: 'Campaigns',
+    desc: 'Reach customers where they already are. Broadcast offers, reminders and updates to opted-in contacts with images, videos, documents and buttons — personalised, with AI answering replies 24x7 and reports on delivered, read and replied.',
+    bestFor: 'Festive offers, reminders, order updates, lead follow-ups, win-back',
+    image: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&q=80&w=800',
+    ctaLabel: 'Plan a WhatsApp campaign',
+    ctaText: "Hi, I'm interested in WhatsApp campaigns",
   },
   {
     icon: 'fa-headset',
@@ -28,6 +55,8 @@ const products = [
     desc: 'AI handles routine calls and chats, while your agents take the conversations that need a person. Fewer queues, less repetitive work.',
     bestFor: 'High call volumes, support teams',
     image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800',
+    ctaLabel: 'Ask about the contact center',
+    ctaText: "Hi, I'm interested in the AI Contact Center",
   },
   {
     icon: 'fa-layer-group',
@@ -37,6 +66,8 @@ const products = [
     desc: 'One AI assistant across phone, WhatsApp, website chat and social media, so customers get the same helpful answers wherever they reach you.',
     bestFor: 'Businesses active on many channels',
     image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800',
+    ctaLabel: 'Ask about omnichannel bots',
+    ctaText: "Hi, I'm interested in Omnichannel Bots",
   },
   {
     icon: 'fa-share-nodes',
@@ -46,6 +77,8 @@ const products = [
     desc: 'Reply to Instagram and Facebook comments and DMs automatically, and turn interested followers into leads.',
     bestFor: 'Social enquiries, campaign responses',
     image: 'https://images.unsplash.com/photo-1611162618071-b39a2ec055fb?auto=format&fit=crop&q=80&w=800',
+    ctaLabel: 'Ask about social media bots',
+    ctaText: "Hi, I'm interested in Social Media Bots",
   },
   {
     icon: 'fa-gears',
@@ -55,6 +88,8 @@ const products = [
     desc: 'Automate repetitive work between your tools — lead entry, follow-up reminders, status updates — so your team can focus on customers.',
     bestFor: 'Manual data entry, follow-up tasks',
     image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=800',
+    ctaLabel: 'Ask about automation',
+    ctaText: "Hi, I'm interested in SaaS Automation",
   }
 ];
 
@@ -78,7 +113,7 @@ const Products: React.FC = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-8">
           {products.map((product) => (
             <div
               key={product.title}
@@ -120,6 +155,17 @@ const Products: React.FC = () => {
                   <div className="text-[11px] font-black text-[#2BB6C6] uppercase tracking-widest mb-1">Best for</div>
                   <div className="text-sm font-bold text-slate-900 dark:text-white">{product.bestFor}</div>
                 </div>
+
+                <a
+                  href={whatsappLink(product.ctaText)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-[#2BB6C6] hover:gap-3 transition-all"
+                >
+                  <i className="fa-brands fa-whatsapp" aria-hidden="true"></i>
+                  <span>{product.ctaLabel}</span>
+                  <i className="fa-solid fa-arrow-right-long text-xs" aria-hidden="true"></i>
+                </a>
               </div>
             </div>
           ))}
