@@ -1,105 +1,140 @@
-import React from 'react';
-import { Persona, IndustrySector } from './types';
+import { IndustrySector } from './types';
 
-export const COLORS = {
-  BRAND: '#1e266e', 
-  ACCENT: '#2BB6C6', 
-  DARK_BG: '#0f172a'
+// Single source of truth for contact details and prefilled messages.
+export const CONTACT = {
+  phone: '+917550007208',
+  phoneDisplay: '+91 7550007208',
+  email: 'hello@swarupsnxt.com',
+  whatsappNumber: '917550007208',
 };
 
-export const PERSONAS: Persona[] = [
-  { id: 'p1', name: 'Aria', voice: 'Kore', description: 'Empathetic & Calm', industry: 'Healthcare' },
-  { id: 'p2', name: 'Victor', voice: 'Fenrir', description: 'Professional & Authoritative', industry: 'Finance' },
-  { id: 'p3', name: 'Luna', voice: 'Puck', description: 'Energetic & Friendly', industry: 'Real Estate' },
-  { id: 'p4', name: 'Atlas', voice: 'Charon', description: 'Precise & Technical', industry: 'Technology' },
-];
+export const whatsappLink = (text: string) =>
+  `https://wa.me/${CONTACT.whatsappNumber}?text=${encodeURIComponent(text)}`;
+
+export const mailtoLink = (subject: string) =>
+  `mailto:${CONTACT.email}?subject=${encodeURIComponent(subject)}`;
+
+export const telLink = `tel:${CONTACT.phone}`;
+
+export const WHATSAPP_DEFAULT_TEXT = "Hi Swarups NXT, I'd like to know more about your AI solutions";
+export const WHATSAPP_DEMO_TEXT = "Hi Swarups NXT, I'd like to book a demo";
 
 export const INDUSTRIES: IndustrySector[] = [
   {
     id: 'real-estate',
     title: 'Real Estate',
-    description: 'Automate property tours and lead qualification with 24/7 availability.',
+    problem: 'Property enquiries arrive at all hours, and leads go cold before a salesperson calls back.',
+    solution: 'Answers every enquiry instantly, qualifies budget and location, and books site visits into your team\'s calendar.',
+    product: 'AI Voice Agents + AI Chatbots',
     image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&q=80&w=800',
-    faqs: [
-      { question: 'Can it book site visits?', answer: 'Yes, our agents sync directly with your CRM calendar.' },
-      { question: 'Does it understand floor plans?', answer: 'Advanced reasoning allows it to explain architectural details accurately.' }
-    ]
+    imageAlt: 'Modern residential building exterior',
   },
   {
     id: 'healthcare',
-    title: 'Healthcare',
-    description: 'Patient scheduling and follow-ups with HIPAA-ready protocols.',
+    title: 'Healthcare & Clinics',
+    problem: 'Front-desk staff are busy with patients, so appointment calls go unanswered and no-shows pile up.',
+    solution: 'Books and reschedules appointments by phone or WhatsApp, and sends reminders before each visit.',
+    product: 'AI Voice Agents + WhatsApp chatbot',
     image: 'https://images.unsplash.com/photo-1504813184591-01572f98c85f?auto=format&fit=crop&q=80&w=800',
-    faqs: [
-      { question: 'Is it patient-data secure?', answer: 'We use end-to-end encryption compliant with DPDP Act 2023.' }
-    ]
-  },
-  {
-    id: 'finance',
-    title: 'Finance',
-    description: 'Scalable support for insurance claims and mortgage processing.',
-    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800',
-    faqs: [
-      { question: 'Can it detect fraud?', answer: 'Our agents flag conversational anomalies in real-time.' }
-    ]
-  },
-  {
-    id: 'ecommerce',
-    title: 'E-commerce',
-    description: 'Boost sales with personalized shopping assistants and order tracking bots.',
-    image: 'https://images.unsplash.com/photo-1557821552-17105176677c?auto=format&fit=crop&q=80&w=800',
-    faqs: [
-      { question: 'Can it handle complex order queries?', answer: 'Yes, it integrates with Shopify and other ERPs to provide real-time status.' }
-    ]
+    imageAlt: 'Hospital corridor',
   },
   {
     id: 'education',
     title: 'Education',
-    description: 'Provide 24/7 tutoring and administrative support for students and parents.',
+    problem: 'Admission season brings more calls and messages from parents than the team can handle.',
+    solution: 'Answers admission and fee-structure questions, shares brochures, and schedules campus visits or counselling calls.',
+    product: 'AI Chatbots + AI Voice Agents',
     image: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=800',
-    faqs: [
-      { question: 'Can it explain complex topics?', answer: 'Leveraging Gemini 3, our agents can simplify advanced academic concepts.' }
-    ]
+    imageAlt: 'Students working together',
   },
   {
-    id: 'logistics',
-    title: 'Logistics',
-    description: 'Optimize supply chain communication and delivery coordination with automated tracking agents.',
-    image: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=800',
-    faqs: [
-      { question: 'Can it coordinate driver schedules?', answer: 'Our agents can handle dispatch notifications and ETA updates via voice or text.' }
-    ]
-  }
+    id: 'ecommerce',
+    title: 'E-commerce & D2C',
+    problem: 'Customers keep asking "where is my order?", and unconfirmed COD orders get returned.',
+    solution: 'Shares order status, confirms COD orders before dispatch, and answers product questions on WhatsApp and chat.',
+    product: 'AI Chatbots + Omnichannel Bots',
+    image: 'https://images.unsplash.com/photo-1557821552-17105176677c?auto=format&fit=crop&q=80&w=800',
+    imageAlt: 'Online shopping on a laptop',
+  },
+  {
+    id: 'finance',
+    title: 'Finance & NBFC Collections',
+    problem: 'Calling every borrower about upcoming or missed EMIs takes a large team and a lot of time.',
+    solution: 'Makes polite EMI reminder calls in the borrower\'s language, captures a promise-to-pay date, and flags cases for your team.',
+    product: 'AI Voice Agents',
+    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800',
+    imageAlt: 'Financial charts on a screen',
+  },
+  {
+    id: 'automobile',
+    title: 'Automobile Dealers',
+    problem: 'Test-drive and service enquiries come in after hours, and follow-ups depend on busy staff.',
+    solution: 'Books test drives and service appointments, sends service reminders, and follows up with interested buyers.',
+    product: 'AI Voice Agents + WhatsApp chatbot',
+    image: 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&q=80&w=800',
+    imageAlt: 'Car parked on a road',
+  },
+  {
+    id: 'hospitality',
+    title: 'Hospitality',
+    problem: 'Booking and availability questions arrive around the clock, across phone, WhatsApp and social media.',
+    solution: 'Answers room availability and amenity questions, takes booking requests, and hands special requests to your staff.',
+    product: 'Omnichannel Bots + AI Contact Center',
+    image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80&w=800',
+    imageAlt: 'Hotel with a swimming pool',
+  },
 ];
 
-export const INTEGRATIONS = [
-  { name: 'Salesforce', logo: 'fa-brands fa-salesforce' },
-  { name: 'HubSpot', logo: 'fa-brands fa-hubspot' },
-  { name: 'Zoho', logo: 'CUSTOM_ZOHO' }, 
-  { name: 'Shopify', logo: 'fa-brands fa-shopify' },
-  { name: 'Slack', logo: 'fa-brands fa-slack' },
-  { name: 'WhatsApp', logo: 'fa-brands fa-whatsapp' }
+// Channels (not third-party integrations) — see AUDIT.md TODO on confirming integrations.
+export const CHANNELS = [
+  { name: 'Phone Calls', icon: 'fa-solid fa-phone' },
+  { name: 'WhatsApp', icon: 'fa-brands fa-whatsapp' },
+  { name: 'Website Chat', icon: 'fa-solid fa-comments' },
+  { name: 'Instagram', icon: 'fa-brands fa-instagram' },
+  { name: 'Facebook', icon: 'fa-brands fa-facebook-messenger' },
 ];
 
 export const FAQS = [
   {
-    question: "What is sub-200ms latency?",
-    answer: "Most AI agents take 2-5 seconds to respond, which feels robotic. Our proprietary optimization pipeline reduces the time between user input and AI response to under 200 milliseconds, making conversations feel truly human."
+    question: 'Which languages do your AI agents speak?',
+    // TODO(confirm): language coverage per product/channel.
+    answer: 'English and all major Indian languages: Hindi, Bengali, Marathi, Telugu, Tamil, Gujarati, Kannada, Malayalam, Punjabi and Odia. They also understand everyday Hinglish.',
   },
   {
-    question: "How long does it take to deploy?",
-    answer: "Standard deployments take a few weeks. Our implementation protocol handles full architectural mapping and integration with your existing CRM and knowledge base."
+    question: 'Which channels do you support?',
+    answer: 'Phone calls, WhatsApp, website chat, and social media such as Instagram and Facebook. You can start with one channel and add more later.',
   },
   {
-    question: "Does it support Indian regional languages?",
-    answer: "Yes, our agents are built for the Indian market and understand natural regional phrasing in major Indian languages as well as 'Hinglish'."
+    question: 'How long does setup take?',
+    // TODO(confirm): typical timeline ("1 week" vs "a few weeks").
+    answer: 'It depends on the channels and how much your agent needs to know. After a short discovery call, we share a clear timeline for your setup.',
   },
   {
-    question: "Is my data secure?",
-    answer: "Absolutely. We use enterprise-grade AES-256 encryption and are compliant with the DPDP Act 2023. Your lead data is strictly yours."
+    question: 'Will the AI replace my staff?',
+    answer: 'No. It takes care of routine, repetitive calls and messages so your team can spend their time on the conversations that need a person.',
   },
   {
-    question: "Can I try it before I buy?",
-    answer: "Yes! You can test our live models in the 'NXT Lab' section of this page or schedule a free AI audit for a custom demo."
-  }
+    question: 'What happens when the AI can\'t answer?',
+    // TODO(confirm): handover method (call transfer / chat handover / notification).
+    answer: 'It hands the conversation over to your team, so the customer is never left without an answer.',
+  },
+  {
+    question: 'Do I need a technical team?',
+    answer: 'No. We handle the setup, training and changes for you. Your team only needs to tell us how your business works.',
+  },
+  {
+    question: 'How is my customer data handled?',
+    // TODO(confirm): data storage and processing details.
+    answer: 'Your business information is used only to set up and run your AI agent. We walk you through exactly how your data is handled during the discovery call.',
+  },
+  {
+    question: 'Can it work with the tools we already use?',
+    // TODO(confirm): supported CRMs and tools.
+    answer: 'Tell us which CRM, spreadsheet or booking tool you use, and we\'ll confirm how the AI agent can connect to it.',
+  },
+  {
+    question: 'How do we get started?',
+    // TODO(confirm): pilot offering.
+    answer: 'Book a demo. We\'ll understand your needs, show you how an AI agent would handle your customers, and suggest a small first step on one channel.',
+  },
 ];

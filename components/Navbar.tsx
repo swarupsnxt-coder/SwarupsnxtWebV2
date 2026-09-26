@@ -11,8 +11,6 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const whatsappLink = "https://wa.me/917550007208?text=Hello%20Swarups%20NXT,%20I'm%20interested%20in%20a%20demo!";
-
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
@@ -49,7 +47,7 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme }) => {
               <Logo />
             </a>
             
-            <div className="hidden md:flex items-center space-x-6">
+            <div className="hidden lg:flex items-center space-x-6">
               {navLinks.map((link) => (
                 <a 
                   key={link.name} 
@@ -71,19 +69,19 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme }) => {
                 <i className={`fa-solid ${theme === Theme.DARK ? 'fa-sun' : 'fa-moon'} transition-transform duration-500 ${theme === Theme.DARK ? 'rotate-[360deg]' : 'rotate-0'}`}></i>
               </button>
               
-              <a 
-                href={whatsappLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hidden lg:block text-xs uppercase tracking-widest font-bold bg-[#2BB6C6] text-[#0f172a] px-6 py-2.5 rounded-lg hover:brightness-110 hover:scale-105 transition-all shadow-lg shadow-[#2BB6C6]/20 text-center"
+              <a
+                href="#contact"
+                onClick={(e) => handleNav(e, 'contact')}
+                className="hidden sm:block text-xs uppercase tracking-widest font-bold bg-[#2BB6C6] text-[#0f172a] px-6 py-2.5 rounded-lg hover:brightness-110 hover:scale-105 transition-all shadow-lg shadow-[#2BB6C6]/20 text-center"
               >
-                Book Demo
+                Book a demo
               </a>
-              
-              <button 
-                className="md:hidden text-2xl text-slate-600 dark:text-slate-300 hover:text-[#2BB6C6] transition-colors p-2 flex items-center justify-center"
+
+              <button
+                className="lg:hidden text-2xl text-slate-600 dark:text-slate-300 hover:text-[#2BB6C6] transition-colors p-2 flex items-center justify-center"
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                aria-label="Toggle Menu"
+                aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
+                aria-expanded={isMobileMenuOpen}
               >
                 <i className={`fa-solid ${isMobileMenuOpen ? 'fa-xmark' : 'fa-bars-staggered'}`}></i>
               </button>
@@ -93,8 +91,9 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme }) => {
       </nav>
 
       {/* Mobile Menu Overlay */}
-      <div 
-        className={`fixed inset-0 z-[45] bg-white/95 dark:bg-[#0f172a]/95 backdrop-blur-lg transition-all duration-500 md:hidden ${
+      <div
+        inert={!isMobileMenuOpen}
+        className={`fixed inset-0 z-[45] bg-white/95 dark:bg-[#0f172a]/95 backdrop-blur-lg transition-all duration-500 lg:hidden ${
           isMobileMenuOpen ? 'opacity-100 pointer-events-auto translate-y-0' : 'opacity-0 pointer-events-none -translate-y-4'
         }`}
       >
@@ -109,14 +108,12 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme }) => {
               {link.name}
             </a>
           ))}
-          <a 
-            href={whatsappLink}
-            target="_blank"
-            rel="noopener noreferrer"
+          <a
+            href="#contact"
             className="w-full max-w-xs py-4 bg-[#2BB6C6] text-[#0f172a] font-bold rounded-xl text-lg uppercase tracking-widest shadow-xl shadow-[#2BB6C6]/20 text-center"
-            onClick={() => setIsMobileMenuOpen(false)}
+            onClick={(e) => handleNav(e, 'contact')}
           >
-            Book Demo Now
+            Book a demo
           </a>
         </div>
       </div>

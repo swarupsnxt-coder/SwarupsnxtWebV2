@@ -1,33 +1,60 @@
-import React from 'react';
+import React, { useEffect, useId, useRef } from 'react';
 
 interface ModalProps {
   onClose: () => void;
 }
 
-const Modal: React.FC<{ children: React.ReactNode; onClose: () => void; title: string }> = ({ children, onClose, title }) => (
-  <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
-    <div className="absolute inset-0 bg-[#0f172a]/95 backdrop-blur-md" onClick={onClose}></div>
-    <div className="glass w-full max-w-2xl max-h-[80vh] overflow-y-auto rounded-[30px] border-white/10 shadow-2xl relative z-10 flex flex-col">
-      <div className="p-8 border-b border-white/5 flex justify-between items-center sticky top-0 bg-[#0f172a] z-20">
-        <h2 className="text-2xl font-bold uppercase tracking-widest">{title}</h2>
-        <button onClick={onClose} className="text-slate-500 hover:text-white transition-colors">
-          <i className="fa-solid fa-xmark text-2xl"></i>
-        </button>
-      </div>
-      <div className="p-8 text-slate-400 text-sm leading-relaxed space-y-8">
-        {children}
+// Always uses the dark palette so text stays readable in light mode too.
+const Modal: React.FC<{ children: React.ReactNode; onClose: () => void; title: string }> = ({ children, onClose, title }) => {
+  const titleId = useId();
+  const closeRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    const previouslyFocused = document.activeElement as HTMLElement | null;
+    closeRef.current?.focus();
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    document.addEventListener('keydown', onKey);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.body.style.overflow = prevOverflow;
+      previouslyFocused?.focus();
+    };
+  }, [onClose]);
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
+      <div className="absolute inset-0 bg-[#0f172a]/95 backdrop-blur-md" onClick={onClose} aria-hidden="true"></div>
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        className="w-full max-w-2xl max-h-[80vh] overflow-y-auto rounded-[30px] border border-white/10 bg-[#0f172a] shadow-2xl relative z-10 flex flex-col"
+      >
+        <div className="p-6 sm:p-8 border-b border-white/5 flex justify-between items-center gap-4 sticky top-0 bg-[#0f172a] z-20">
+          <h2 id={titleId} className="text-xl sm:text-2xl font-bold uppercase tracking-widest text-white">{title}</h2>
+          <button ref={closeRef} onClick={onClose} aria-label="Close" className="text-slate-400 hover:text-white transition-colors">
+            <i className="fa-solid fa-xmark text-2xl" aria-hidden="true"></i>
+          </button>
+        </div>
+        <div className="p-6 sm:p-8 text-slate-300 text-sm leading-relaxed space-y-8">
+          {children}
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
+// TODO(confirm): legal review of both documents (see AUDIT.md). Only statements that no longer
+// match the website (cookies, vendors, certifications) were corrected in Phase A2.
 export const PrivacyModal: React.FC<ModalProps> = ({ onClose }) => (
-  <Modal title="Privacy Protocol" onClose={onClose}>
+  <Modal title="Privacy Policy" onClose={onClose}>
     <div className="space-y-6">
       <section>
         <div className="text-[#2BB6C6] font-black text-xs mb-2 tracking-widest uppercase">01. Entity Status</div>
         <h3 className="text-white font-bold text-lg mb-2">Proprietorship Overview</h3>
-        <p>Swarups NXT is an Indian Sole Proprietorship specializing in the reselling and integration of high-performance Artificial Intelligence SaaS tools. This Privacy Protocol outlines our commitment to your data security and transparency in accordance with the Digital Personal Data Protection (DPDP) Act 2023.</p>
+        <p>Swarups NXT is an Indian Sole Proprietorship specializing in the reselling and integration of high-performance Artificial Intelligence SaaS tools. This Privacy Policy outlines our commitment to your data security and transparency in accordance with the Digital Personal Data Protection (DPDP) Act 2023.</p>
       </section>
 
       <section>
@@ -43,26 +70,16 @@ export const PrivacyModal: React.FC<ModalProps> = ({ onClose }) => (
       </section>
 
       <section>
-        <div className="text-[#2BB6C6] font-black text-xs mb-2 tracking-widest uppercase">03. Cookie Protocol</div>
-        <h3 className="text-white font-bold text-lg mb-2">Strictly Necessary Logic</h3>
-        <p className="mb-4">Our web interface utilizes only Strictly Necessary Cookies. These are essential for core platform functionality, specifically regarding:</p>
-        <div className="grid sm:grid-cols-2 gap-4">
-          <div className="bg-white/5 p-4 rounded-2xl border border-white/5">
-            <h4 className="text-white font-bold text-sm mb-1">Security Node</h4>
-            <p className="text-xs">Auth tokens and CSRF protection to prevent unauthorized session access.</p>
-          </div>
-          <div className="bg-white/5 p-4 rounded-2xl border border-white/5">
-            <h4 className="text-white font-bold text-sm mb-1">UI Integrity</h4>
-            <p className="text-xs">Theme preferences (Dark/Light mode) and tour completion status.</p>
-          </div>
-        </div>
-        <p className="mt-4 text-xs italic opacity-70">Note: We do not utilize third-party advertising or cross-site tracking cookies.</p>
+        <div className="text-[#2BB6C6] font-black text-xs mb-2 tracking-widest uppercase">03. Cookies &amp; Browser Storage</div>
+        <h3 className="text-white font-bold text-lg mb-2">No Tracking Cookies</h3>
+        <p>This website does not set cookies. It stores only your light/dark theme preference in your browser's local storage, which you can clear at any time.</p>
+        <p className="mt-4 text-xs italic opacity-70">We do not use third-party advertising or cross-site tracking.</p>
       </section>
 
       <section>
         <div className="text-[#2BB6C6] font-black text-xs mb-2 tracking-widest uppercase">04. Partner Ecosystem</div>
         <h3 className="text-white font-bold text-lg mb-2">Data Sharing Protocols</h3>
-        <p className="mb-4">Data is shared exclusively with our vetted SaaS vendors (e.g., Google GenAI, Vapi, Retell) solely to facilitate the core AI services you consume. Each partner is selected based on rigorous SOC2 and enterprise-grade privacy compliance.</p>
+        <p className="mb-4">Data is shared only with the third-party AI and communication platforms we use to deliver the services you sign up for, and only to the extent needed to provide those services.</p>
         
         <div className="mt-8 pt-6 border-t border-white/5">
           <h3 className="text-white font-bold mb-2">Grievance Officer</h3>
@@ -78,7 +95,7 @@ export const PrivacyModal: React.FC<ModalProps> = ({ onClose }) => (
 );
 
 export const SecurityModal: React.FC<ModalProps> = ({ onClose }) => (
-  <Modal title="Security Terms" onClose={onClose}>
+  <Modal title="Terms of Service" onClose={onClose}>
     <div className="space-y-6">
       <section>
         <div className="text-[#2BB6C6] font-black text-xs mb-2 tracking-widest uppercase">01. Scope of Service</div>

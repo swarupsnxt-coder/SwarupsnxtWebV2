@@ -5,13 +5,12 @@ import Integrations from './components/Integrations';
 import NxtLab from './components/NxtLab';
 import Products from './components/Products';
 import HowItWorks from './components/HowItWorks';
-import ComparisonTable from './components/ComparisonTable';
 import WhyUs from './components/WhyUs';
 import Industries from './components/Industries';
 import FAQ from './components/FAQ';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
-import ChatWidget from './components/ChatWidget';
+import WhatsAppButton from './components/WhatsAppButton';
 import { PrivacyModal, SecurityModal } from './components/Modals';
 import { Theme } from './types';
 
@@ -42,27 +41,25 @@ const App: React.FC = () => {
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-[#0f172a] text-slate-900 dark:text-white transition-colors duration-500">
       <Navbar theme={theme} toggleTheme={toggleTheme} />
-      
+
       <main>
         <Hero />
         <Integrations />
         <NxtLab />
         <Products />
         <HowItWorks />
-        <ComparisonTable />
         <WhyUs />
         <Industries />
         <FAQ />
         <Contact />
       </main>
 
-      <Footer 
-        onPrivacyClick={() => setShowPrivacy(true)} 
-        onSecurityClick={() => setShowSecurity(true)} 
+      <Footer
+        onPrivacyClick={() => setShowPrivacy(true)}
+        onSecurityClick={() => setShowSecurity(true)}
       />
 
-      {/* Modern Floating Chat Widget */}
-      <ChatWidget />
+      <WhatsAppButton />
 
       {/* Modals */}
       {showPrivacy && <PrivacyModal onClose={() => setShowPrivacy(false)} />}

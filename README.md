@@ -1,20 +1,23 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Swarups NXT website
 
-# Run and deploy your AI Studio app
+Marketing site for [swarupsnxt.com](https://swarupsnxt.com): AI voice agents, chatbots and automation for Indian businesses.
 
-This contains everything you need to run your app locally.
+Built with React, TypeScript and Vite. Hosted on Cloudflare Pages (`main` = production, other branches = preview deployments).
 
-View your app in AI Studio: https://ai.studio/apps/drive/1-DvJFeQiFlHWYSYY2mIRIpPxuO4YlX8n
+## Run locally
 
-## Run Locally
+Prerequisite: Node.js 20+
 
-**Prerequisites:**  Node.js
+```bash
+npm install
+npm run dev      # http://localhost:3000
+npm run build    # production build into dist/
+```
 
+No API keys are needed to run the site.
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+## Project notes
+
+- Project rules and facts for contributors (and Claude Code): [CLAUDE.md](CLAUDE.md)
+- Upgrade plan, phase by phase: [docs/PROMPTS.md](docs/PROMPTS.md)
+- Latest audit: [AUDIT.md](AUDIT.md)
