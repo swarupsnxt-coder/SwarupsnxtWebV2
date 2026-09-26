@@ -204,8 +204,7 @@ export const CHANNELS = [
 export const FAQS = [
   {
     question: 'Which languages do your AI agents speak?',
-    // TODO(confirm): language coverage per product/channel.
-    answer: 'English and all major Indian languages: Hindi, Bengali, Marathi, Telugu, Tamil, Gujarati, Kannada, Malayalam, Punjabi and Odia. They also understand everyday Hinglish.',
+    answer: 'English and common Indian languages, including everyday Hinglish. Tell us which languages your customers speak and we\'ll confirm the coverage for your product and channel.',
   },
   {
     question: 'Which channels do you support?',
@@ -221,8 +220,7 @@ export const FAQS = [
   },
   {
     question: 'What happens when the AI can\'t answer?',
-    // TODO(confirm): handover method (call transfer / chat handover / notification).
-    answer: 'It hands the conversation over to your team, so the customer is never left without an answer.',
+    answer: 'It follows the handover workflow we set up with you, such as transferring the call, passing the chat to your team or alerting the right person, so the customer is never left without an answer.',
   },
   {
     question: 'Do I need a technical team?',
@@ -230,8 +228,7 @@ export const FAQS = [
   },
   {
     question: 'How is my customer data handled?',
-    // TODO(confirm): data storage and processing details.
-    answer: 'Your business information is used only to set up and run your AI agent. We walk you through exactly how your data is handled during the discovery call.',
+    answer: 'It depends on your use case. Before going live, we agree with you what data the AI agent uses, where it is stored and who can access it.',
   },
   {
     question: 'Can it work with the tools we already use?',
@@ -239,7 +236,6 @@ export const FAQS = [
   },
   {
     question: 'How do we get started?',
-    // TODO(confirm): pilot offering.
-    answer: 'Book a demo. We\'ll understand your needs, show you how an AI agent would handle your customers, and suggest a small first step on one channel.',
+    answer: 'Book a demo. We\'ll understand your needs and show you how an AI agent would handle your customers. Depending on your use case, we can start small, for example on one channel.',
   },
 ];

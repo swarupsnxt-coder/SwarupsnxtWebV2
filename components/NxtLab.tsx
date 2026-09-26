@@ -110,7 +110,7 @@ const NxtLab: React.FC = () => {
           </div>
           <h2 className="text-4xl md:text-6xl font-bold mb-4 text-slate-900 dark:text-white">The NXT Lab</h2>
           <p className="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto font-medium">
-            Chat with our AI assistant to see how an AI chatbot answers your customers. Sample voice-agent calls are coming soon.
+            See how our AI assistant and voice agents work. Live demos are being rolled out — talk to us for a personal demo built around your business.
           </p>
         </div>
 

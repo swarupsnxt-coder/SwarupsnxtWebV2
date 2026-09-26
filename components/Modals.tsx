@@ -1,4 +1,5 @@
 import React, { useEffect, useId, useRef } from 'react';
+import { CONTACT, mailtoLink } from '../constants';
 
 interface ModalProps {
   onClose: () => void;
@@ -46,50 +47,72 @@ const Modal: React.FC<{ children: React.ReactNode; onClose: () => void; title: s
   );
 };
 
-// TODO(confirm): legal review of both documents (see AUDIT.md). Only statements that no longer
-// match the website (cookies, vendors, certifications) were corrected in Phase A2.
+const LAST_UPDATED = '26 September 2026';
+
+// Plain-English policy text, checked for accuracy against how the website works (Sept 2026).
+// Have a lawyer confirm it before relying on it in client contracts.
+const Section: React.FC<{ n: string; title: string; children: React.ReactNode }> = ({ n, title, children }) => (
+  <section>
+    <div className="text-[#2BB6C6] font-black text-xs mb-2 tracking-widest uppercase">{n}</div>
+    <h3 className="text-white font-bold text-lg mb-2">{title}</h3>
+    <div className="space-y-3">{children}</div>
+  </section>
+);
+
 export const PrivacyModal: React.FC<ModalProps> = ({ onClose }) => (
   <Modal title="Privacy Policy" onClose={onClose}>
     <div className="space-y-6">
-      <section>
-        <div className="text-[#2BB6C6] font-black text-xs mb-2 tracking-widest uppercase">01. Entity Status</div>
-        <h3 className="text-white font-bold text-lg mb-2">Proprietorship Overview</h3>
-        <p>Swarups NXT is an Indian Sole Proprietorship specializing in the reselling and integration of high-performance Artificial Intelligence SaaS tools. This Privacy Policy outlines our commitment to your data security and transparency in accordance with the Digital Personal Data Protection (DPDP) Act 2023.</p>
-      </section>
+      <p className="text-xs text-slate-400">Last updated: {LAST_UPDATED}</p>
 
-      <section>
-        <div className="text-[#2BB6C6] font-black text-xs mb-2 tracking-widest uppercase">02. Transmission Architecture</div>
-        <h3 className="text-white font-bold text-lg mb-2">The Zero-Storage Policy</h3>
-        <p className="mb-3">Swarups NXT operates as a Neural Interface Layer. We explicitly state that:</p>
+      <Section n="01" title="Who we are">
+        <p>Swarups NXT is a sole proprietorship based in Chennai, Tamil Nadu, India. We are an integration partner: we set up, customise and support AI and communication platforms from third-party providers for businesses. This policy explains how we handle personal data when you visit swarupsnxt.com or contact us, under India's Digital Personal Data Protection Act, 2023.</p>
+      </Section>
+
+      <Section n="02" title="What we collect on this website">
         <ul className="list-disc pl-5 space-y-2">
-          <li>We do not store, record, or log any voice or chat data processed through our agents.</li>
-          <li>All data flows via secure, encrypted channels directly to our primary SaaS partners.</li>
-          <li>We do not sell, trade, or analyze your business conversation metadata.</li>
-          <li>Real-time interactions are ephemeral and exist only during the active session duration.</li>
+          <li><strong className="text-white">When you contact us</strong> by WhatsApp, phone or email: your name, phone number or email address, and whatever you choose to tell us. There is no contact form on this website.</li>
+          <li><strong className="text-white">Website chat assistant</strong> (when available): the messages you type are sent to Cloudflare Workers AI to generate replies, and Cloudflare Turnstile checks that you are not a bot. Please do not share sensitive personal information in the chat.</li>
+          <li><strong className="text-white">Technical data</strong>: like any website, our hosting provider (Cloudflare) and the services that deliver our fonts, icons and images (Google Fonts, cdnjs, Unsplash) receive your IP address and basic browser information when a page loads.</li>
+          <li><strong className="text-white">Browser storage</strong>: we store only your light/dark theme choice in your browser's local storage. We do not use advertising or cross-site tracking cookies.</li>
         </ul>
-      </section>
+      </Section>
 
-      <section>
-        <div className="text-[#2BB6C6] font-black text-xs mb-2 tracking-widest uppercase">03. Cookies &amp; Browser Storage</div>
-        <h3 className="text-white font-bold text-lg mb-2">No Tracking Cookies</h3>
-        <p>This website does not set cookies. It stores only your light/dark theme preference in your browser's local storage, which you can clear at any time.</p>
-        <p className="mt-4 text-xs italic opacity-70">We do not use third-party advertising or cross-site tracking.</p>
-      </section>
+      <Section n="03" title="How we use it">
+        <p>We use your information to reply to you, arrange demos, provide and support the services you ask for, and keep the website secure and free from abuse. We do not sell your personal data.</p>
+      </Section>
 
-      <section>
-        <div className="text-[#2BB6C6] font-black text-xs mb-2 tracking-widest uppercase">04. Partner Ecosystem</div>
-        <h3 className="text-white font-bold text-lg mb-2">Data Sharing Protocols</h3>
-        <p className="mb-4">Data is shared only with the third-party AI and communication platforms we use to deliver the services you sign up for, and only to the extent needed to provide those services.</p>
-        
-        <div className="mt-8 pt-6 border-t border-white/5">
-          <h3 className="text-white font-bold mb-2">Grievance Officer</h3>
-          <p className="mb-4">In compliance with the DPDP Act 2023, for any privacy concerns or data requests, please contact our designated officer:</p>
-          <div className="flex items-center gap-3 text-[#2BB6C6] font-bold">
-            <i className="fa-solid fa-shield-halved"></i>
-            <a href="mailto:grievance@swarupsnxt.com" className="hover:underline">grievance@swarupsnxt.com</a>
-          </div>
+      <Section n="04" title="Data we handle for our clients">
+        <p>When we set up an AI agent for a business, it may process personal data of that business's customers (for example, callers or chat users). How that data is used, where it is stored and who can access it depends on the use case, and is agreed with the client in writing before go-live. The client decides the purpose; we process the data on their behalf and only as agreed.</p>
+      </Section>
+
+      <Section n="05" title="Who we share it with">
+        <p>Only with the service providers we need to run this website and deliver our services (such as Cloudflare, WhatsApp and our email provider), with the AI and communication platforms used for a client's project as agreed with that client, or when required by law.</p>
+      </Section>
+
+      <Section n="06" title="How long we keep it">
+        <p>We keep enquiry information for as long as we need it to respond to you and to maintain our business records, and delete it when it is no longer needed, unless the law requires us to keep it longer.</p>
+      </Section>
+
+      <Section n="07" title="Your rights">
+        <p>You can ask us what personal data we hold about you, ask us to correct, complete, update or erase it, or withdraw any consent you have given. You can also nominate someone to exercise these rights on your behalf. To do any of this, email us (see below). If you are not satisfied with our response, you may complain to the Data Protection Board of India.</p>
+      </Section>
+
+      <Section n="08" title="Children">
+        <p>This website and our services are meant for businesses and are not directed at children.</p>
+      </Section>
+
+      <Section n="09" title="Changes to this policy">
+        <p>We may update this policy from time to time. The date at the top shows when it was last changed.</p>
+      </Section>
+
+      <Section n="10" title="Contact and grievances">
+        <p>For privacy questions, requests or complaints, contact us at:</p>
+        <div className="flex items-center gap-3 text-[#2BB6C6] font-bold">
+          <i className="fa-solid fa-envelope" aria-hidden="true"></i>
+          <a href={mailtoLink('Privacy request')} className="hover:underline">{CONTACT.email}</a>
         </div>
-      </section>
+        <p>Swarups NXT, Chennai, Tamil Nadu, India</p>
+      </Section>
     </div>
   </Modal>
 );
@@ -97,46 +120,47 @@ export const PrivacyModal: React.FC<ModalProps> = ({ onClose }) => (
 export const SecurityModal: React.FC<ModalProps> = ({ onClose }) => (
   <Modal title="Terms of Service" onClose={onClose}>
     <div className="space-y-6">
-      <section>
-        <div className="text-[#2BB6C6] font-black text-xs mb-2 tracking-widest uppercase">01. Scope of Service</div>
-        <h3 className="text-white font-bold text-lg mb-2">Reseller Framework</h3>
-        <p>Swarups NXT operates as an independent reseller and integrator of Artificial Intelligence SaaS products. By utilizing our services, the Client acknowledges that Swarups NXT facilitates access to technology developed by third-party vendors (hereinafter referred to as "Original Vendors").</p>
-      </section>
+      <p className="text-xs text-slate-400">Last updated: {LAST_UPDATED}</p>
 
-      <section>
-        <div className="text-[#2BB6C6] font-black text-xs mb-2 tracking-widest uppercase">02. AI Autonomy Disclaimer</div>
-        <h3 className="text-white font-bold text-lg mb-2">Algorithm Behavior</h3>
-        <p className="mb-2 font-bold text-white/80">AI "Hallucinations" & Response Quality</p>
-        <p>The Client acknowledges that AI models can occasionally produce inaccurate information, known as "hallucinations," or responses that may not align with expectations. Swarups NXT shall not be held responsible for the factual accuracy, sentiment, or quality of responses generated by the third-party AI bots.</p>
-      </section>
+      <Section n="01" title="About these terms">
+        <p>These terms apply to your use of swarupsnxt.com and to the services Swarups NXT provides. If you sign a separate written agreement with us, that agreement takes priority wherever it differs from these terms.</p>
+      </Section>
 
-      <section>
-        <div className="text-[#2BB6C6] font-black text-xs mb-2 tracking-widest uppercase">03. Liability Limitations</div>
-        <h3 className="text-white font-bold text-lg mb-2">Aggregate Liability Cap</h3>
-        <p>To the maximum extent permitted by Indian Law, the total cumulative liability of Swarups NXT for any and all claims arising out of or related to these terms or the services, whether in contract, tort, or otherwise, shall not exceed the amount actually paid by the Client to Swarups NXT in the three (3) months immediately preceding the event giving rise to the claim.</p>
-      </section>
+      <Section n="02" title="Our role">
+        <p>Swarups NXT is an independent integration partner. We set up, customise and support AI and communication platforms developed by third-party providers ("Platform Providers"). Your use of those platforms may also be subject to the Platform Providers' own terms.</p>
+      </Section>
 
-      <section>
-        <div className="text-[#2BB6C6] font-black text-xs mb-2 tracking-widest uppercase">04. Support Protocol</div>
-        <h3 className="text-white font-bold text-lg mb-2">Maintenance SLA</h3>
-        <p className="mb-2">Swarups NXT provides technical support during the following window:</p>
+      <Section n="03" title="Website information">
+        <p>Content on this website is general information about our services. It is not an offer or a quote. The scope, timelines and pricing of any project are agreed with you in writing.</p>
+      </Section>
+
+      <Section n="04" title="AI responses">
+        <p>AI systems can sometimes produce inaccurate or unexpected responses. We design, train and test each AI agent carefully, but Swarups NXT is not responsible for the factual accuracy or quality of individual responses generated by third-party AI models. You remain responsible for decisions you make based on them.</p>
+      </Section>
+
+      <Section n="05" title="Limitation of liability">
+        <p>To the maximum extent permitted by Indian law, the total liability of Swarups NXT for all claims arising out of or related to these terms or our services, whether in contract, tort or otherwise, shall not exceed the amount you actually paid to Swarups NXT in the three (3) months immediately before the event giving rise to the claim.</p>
+      </Section>
+
+      <Section n="06" title="Support hours">
+        <p>We provide technical support during:</p>
         <div className="bg-white/5 p-4 rounded-2xl border border-white/5 inline-block">
           <p className="text-white font-mono font-bold">10:00 AM — 06:00 PM IST</p>
-          <p className="text-xs">Monday to Friday (Excl. Public Holidays)</p>
+          <p className="text-xs">Monday to Friday (excluding public holidays)</p>
         </div>
-      </section>
+      </Section>
 
-      <section>
-        <div className="text-[#2BB6C6] font-black text-xs mb-2 tracking-widest uppercase">05. System Integrity</div>
-        <h3 className="text-white font-bold text-lg mb-2">No Uptime Guarantee</h3>
-        <p>As a reseller, Swarups NXT does not control the underlying server infrastructure. Platform uptime and software stability are the sole responsibility of the Original Vendors. Swarups NXT makes no warranties regarding continuous availability.</p>
-      </section>
+      <Section n="07" title="Availability">
+        <p>The underlying infrastructure is operated by the Platform Providers, so Swarups NXT does not guarantee uninterrupted availability of any platform or of this website.</p>
+      </Section>
 
-      <section>
-        <div className="text-[#2BB6C6] font-black text-xs mb-2 tracking-widest uppercase">06. Legal Jurisdiction</div>
-        <h3 className="text-white font-bold text-lg mb-2">Governing Law</h3>
-        <p>These terms shall be governed by and construed in accordance with the laws of India. Any dispute arising out of or in connection with these terms, including any question regarding its existence, validity, or termination, shall be subject to the exclusive jurisdiction of the Courts in Chennai, Tamil Nadu, India.</p>
-      </section>
+      <Section n="08" title="Governing law">
+        <p>These terms are governed by the laws of India. Any dispute arising out of or in connection with them is subject to the exclusive jurisdiction of the courts in Chennai, Tamil Nadu, India.</p>
+      </Section>
+
+      <Section n="09" title="Contact">
+        <p>Questions about these terms: <a href={mailtoLink('Terms of Service')} className="text-[#2BB6C6] font-bold hover:underline">{CONTACT.email}</a></p>
+      </Section>
     </div>
   </Modal>
 );

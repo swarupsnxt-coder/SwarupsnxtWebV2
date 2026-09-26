@@ -5,8 +5,7 @@ const WhyUs: React.FC = () => {
     {
       icon: 'fa-solid fa-language',
       title: 'Speaks your customers\' language',
-      // TODO(confirm): language coverage per product/channel.
-      desc: 'English, Hindi and other major Indian languages, including the everyday Hinglish your customers actually use.',
+      desc: 'English and common Indian languages, including the everyday Hinglish your customers actually use.',
     },
     {
       icon: 'fa-solid fa-screwdriver-wrench',
@@ -21,8 +20,7 @@ const WhyUs: React.FC = () => {
     {
       icon: 'fa-solid fa-people-arrows',
       title: 'Human handover',
-      // TODO(confirm): handover method (call transfer / chat handover / notification).
-      desc: 'When a conversation needs a person, the AI passes it to your team, so no customer is left without an answer.',
+      desc: 'When a conversation needs a person, the AI follows the handover workflow we set up with you, so no customer is left without an answer.',
     },
   ];
 

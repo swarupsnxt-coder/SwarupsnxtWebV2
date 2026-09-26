@@ -198,7 +198,7 @@ const PhoneDemo: React.FC = () => {
             </div>
             <div>
               <p className="text-[15px] font-bold text-slate-900 dark:text-white">Swarups NXT Assistant</p>
-              <span className="text-[11px] text-[#2BB6C6] font-bold">{unavailable ? 'Offline — contact us below' : 'AI assistant'}</span>
+              <span className="text-[11px] text-[#2BB6C6] font-bold">{!TURNSTILE_SITE_KEY ? 'Coming soon' : unavailable ? 'Offline — contact us below' : 'AI assistant'}</span>
             </div>
           </div>
 
@@ -252,7 +252,7 @@ const PhoneDemo: React.FC = () => {
                 <ContactFallback
                   compact
                   whatsappText={whatsappText}
-                  title={unavailable ? 'The assistant is unavailable right now' : 'Talk to our team'}
+                  title={!TURNSTILE_SITE_KEY ? 'Live chat demo coming soon' : unavailable ? 'The assistant is unavailable right now' : 'Talk to our team'}
                   message={unavailable ? "Reach us directly and we'll answer your questions." : 'Pick whichever is easiest for you.'}
                 />
               </div>
@@ -269,7 +269,7 @@ const PhoneDemo: React.FC = () => {
                 onChange={(e) => setInput(e.target.value)}
                 maxLength={MAX_CHARS}
                 disabled={inputDisabled}
-                placeholder={unavailable ? 'Assistant unavailable' : limitReached ? 'Chat limit reached' : 'Ask about our AI solutions…'}
+                placeholder={!TURNSTILE_SITE_KEY ? 'Live demo coming soon' : unavailable ? 'Assistant unavailable' : limitReached ? 'Chat limit reached' : 'Ask about our AI solutions…'}
                 className="flex-grow min-w-0 bg-[#f2f2f7] dark:bg-slate-800 dark:text-white border border-slate-200 dark:border-white/5 rounded-full px-4 py-2 text-[14px] outline-none focus:border-[#2BB6C6] disabled:opacity-60 disabled:cursor-not-allowed"
               />
               <button

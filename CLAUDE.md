@@ -26,6 +26,9 @@ standing instructions.
 - Integrations: none claimed. Show channels (phone, WhatsApp, website chat, Instagram, Facebook),
   not third-party tool logos, until the owner confirms a specific integration.
 - Typical setup time: "a few weeks", depending on scope.
+- Product language coverage: "English and common Indian languages" (confirmed per product/channel).
+- Human handover follows the workflow agreed with each client. Data handling and pilots depend
+  on each use case (agreed before go-live). Don't promise specifics beyond this.
 
 ## Tech stack
 - React 19 + TypeScript, built with Vite 6 (output: `dist/`)
