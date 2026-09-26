@@ -40,8 +40,9 @@ Produce AUDIT.md in the repo root with these sections:
 3. Broken or risky things: dead code, console errors you can predict from reading, unused
    dependencies, outdated packages with known issues, broken links, missing alt text,
    hard-coded secrets, anything that fails silently. Include at least:
-   - functions/api/contact.ts does NOT deliver leads: it only logs the email and returns
-     "success". Visitors think they reached us; nobody is notified.
+   - Contact section (components/Contact.tsx) has WhatsApp and Email but no Call (tel:)
+     option, and claims like "Current Response Time: < 2 Hours" / "Architects Online" that
+     may not be true. There is intentionally no contact form.
    - Fabricated stats and claims (CLAUDE.md rules 1 and 3), e.g. "80% fewer missed calls",
      "40% Revenue Boost", "0% Lead Leakage" (Products.tsx, WhyUs.tsx, FAQ.tsx,
      ROICalculator.tsx), "99.9% / 99.98% uptime" (WhyUs.tsx, Footer.tsx), "99.92%"
@@ -76,22 +77,12 @@ for me and wait for my approval.
 Apply the MUST FIX and SHOULD FIX items from AUDIT.md that I approved: {{LIST_OR "all"}}.
 
 Also:
-- FIRST, fix lead delivery in functions/api/contact.ts (MUST FIX). Restore Zoho CRM lead
-  creation + Resend email notification. A working version exists in the old repo's history:
-  `git show old-main:functions/api/contact.ts`. Env vars: RESEND_API_KEY, OWNER_EMAIL,
-  ZOHO_CLIENT_ID, ZOHO_CLIENT_SECRET, ZOHO_REFRESH_TOKEN, ZOHO_ACCOUNTS_URL, ZOHO_API_URL.
-  HTML-escape every user field before putting it in the email. Keep the honeypot check and
-  server-side validation. Return an error (not "success") if neither Zoho nor email succeeded,
-  so the form can show the WhatsApp/Call/Email fallback. Make sure components/Contact.tsx
-  actually posts to /api/contact and handles the error. List the env vars I must add in
-  Cloudflare.
 - Remove all Gemini / @google/genai / AI Studio code and dependencies (CLAUDE.md rule 12):
   * the `process.env.API_KEY` / `process.env.GEMINI_API_KEY` defines in vite.config.ts
   * the esm.sh import map (Vite bundles React itself) and the `window.process` shim in index.html
   * `@google/genai` in package.json (then reinstall and commit package-lock.json)
   * services/geminiService.ts, and the Gemini calls behind functions/api/chat.ts and
     functions/api/speech.ts (make both return a structured fallback until Phase C)
-  * the API_KEY shim in functions/api/contact.ts
   * the /api/chat and /api/speech usage in components/PhoneDemo.tsx and
     components/VoiceStudio.tsx
   * the AI Studio text and GEMINI_API_KEY step in README.md (rewrite it for this project)
@@ -105,8 +96,11 @@ Also:
 - Make CTAs consistent site-wide: primary = "Book a demo" (→ #contact), secondary = WhatsApp.
   Add a floating WhatsApp button (bottom-right, mobile-safe, with a pre-filled message
   "Hi Swarups NXT, I'd like to know more about your AI solutions").
-- Contact section: Book a demo (scrolls to the contact form, with the subject pre-selected as
-  "Book a demo" if the form has a subject field), WhatsApp, Call (tel:), Email (mailto:).
+- Contact section (#contact, the target of every "Book a demo" CTA): NO form. Show three
+  clear actions: WhatsApp (prefilled "Hi Swarups NXT, I'd like to book a demo"),
+  Call (tel:+917550007208), Email (mailto:hello@swarupsnxt.com?subject=Book%20a%20demo).
+  Add the missing Call option. Remove unverifiable claims like "< 2 Hours" / "Architects
+  Online" unless I confirm them.
 - Add these content sections if they don't exist (all without fake proof):
   * "How it works" — 3 steps: Discovery call → Custom setup & training → Go live & optimise.
   * "Use cases by industry" — short cards: real estate, healthcare/clinics, education,

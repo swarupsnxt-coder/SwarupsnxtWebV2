@@ -14,8 +14,9 @@ standing instructions.
 - Business WhatsApp: 917550007208
 - Business email: hello@swarupsnxt.com
 - Business phone for calls: +91 7550007208
-- Book a demo: links to the on-page Contact section (`#contact`) and its form. There is no
-  external booking tool.
+- Book a demo: links to the on-page Contact section (`#contact`), which offers WhatsApp, Call
+  and Email. There is NO contact form and no external booking tool; do not add either
+  without asking.
 - Languages (chatbot and voice demo): English (Indian) + all major Indian languages:
   Hindi, Bengali, Marathi, Telugu, Tamil, Gujarati, Kannada, Malayalam, Punjabi, Odia.
 - Canonical domain: https://swarupsnxt.com (non-www)
@@ -25,7 +26,7 @@ standing instructions.
 - Tailwind CSS via the Play CDN script in `index.html` (theme config and custom keyframes are
   inline there; there is no `tailwind.config.js`). Font Awesome and Google Fonts (Inter,
   Suez One) are loaded from CDNs in `index.html`.
-- Cloudflare Pages Functions in `functions/api/` (`chat.ts`, `speech.ts`, `contact.ts`)
+- Cloudflare Pages Functions in `functions/api/` (`chat.ts`, `speech.ts`)
 - GitHub repo: swarupsnxt-coder/SwarupsnxtWebV2 (connected to Cloudflare Pages)
 
 ## Key files
@@ -34,7 +35,7 @@ standing instructions.
   HowItWorks, FAQ, Contact, ChatWidget, PhoneDemo, VoiceStudio, NxtLab, Modals, ...)
 - `constants.tsx`: shared content data (e.g. FAQ entries); `types.ts`: shared types
 - `services/geminiService.ts`: legacy Gemini calls (to be removed, see rule 12)
-- `functions/api/contact.ts`: contact form backend
+- `components/Contact.tsx`: `#contact` section (WhatsApp / Call / Email, no form)
 - `index.html`: meta/OG tags, Tailwind CDN config, global styles
 
 ## Commands
