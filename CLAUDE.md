@@ -20,6 +20,12 @@ standing instructions.
 - Languages (chatbot and voice demo): English (Indian) + all major Indian languages:
   Hindi, Bengali, Marathi, Telugu, Tamil, Gujarati, Kannada, Malayalam, Punjabi, Odia.
 - Canonical domain: https://swarupsnxt.com (non-www)
+- Company name: "Swarups NXT" (use everywhere, including legal/footer and structured data).
+- Positioning: integration partner. We set up, customise and support leading AI platforms for
+  each business. Do not claim proprietary/own-built AI technology.
+- Integrations: none claimed. Show channels (phone, WhatsApp, website chat, Instagram, Facebook),
+  not third-party tool logos, until the owner confirms a specific integration.
+- Typical setup time: "a few weeks", depending on scope.
 
 ## Tech stack
 - React 19 + TypeScript, built with Vite 6 (output: `dist/`)

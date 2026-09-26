@@ -28,7 +28,7 @@ export const PRODUCTS = [
     tag: 'Voice',
     desc: 'Answer inbound calls and make follow-up calls 24x7, in English, Hindi and other Indian languages. The agent hands over to your team when a person is needed.',
     bestFor: 'Missed calls, after-hours enquiries, follow-ups',
-    image: 'https://images.unsplash.com/photo-1589254065878-42c9da997008?auto=format&fit=crop&q=80&w=800',
+    image: 'https://images.unsplash.com/photo-1553775282-20af80779df7?auto=format&fit=crop&q=80&w=800',
     ctaLabel: 'Ask about voice agents',
     ctaText: "Hi, I'm interested in AI Voice Agents",
   },
@@ -177,7 +177,7 @@ export const INDUSTRIES: IndustrySector[] = [
   },
 ];
 
-// Channels (not third-party integrations) — see AUDIT.md TODO on confirming integrations.
+// Channels we work on. No third-party tool integrations are claimed (confirmed Sept 2026).
 export const CHANNELS = [
   { name: 'Phone Calls', icon: 'fa-solid fa-phone' },
   { name: 'WhatsApp', icon: 'fa-brands fa-whatsapp' },
@@ -198,8 +198,7 @@ export const FAQS = [
   },
   {
     question: 'How long does setup take?',
-    // TODO(confirm): typical timeline ("1 week" vs "a few weeks").
-    answer: 'It depends on the channels and how much your agent needs to know. After a short discovery call, we share a clear timeline for your setup.',
+    answer: 'Typically a few weeks, depending on the channels and how much your agent needs to know. After a short discovery call, we share a clear timeline for your setup.',
   },
   {
     question: 'Will the AI replace my staff?',
@@ -221,7 +220,6 @@ export const FAQS = [
   },
   {
     question: 'Can it work with the tools we already use?',
-    // TODO(confirm): supported CRMs and tools.
     answer: 'Tell us which CRM, spreadsheet or booking tool you use, and we\'ll confirm how the AI agent can connect to it.',
   },
   {

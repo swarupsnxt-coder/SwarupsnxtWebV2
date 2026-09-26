@@ -1,7 +1,7 @@
 import React from 'react';
 import { CHANNELS } from '../constants';
 
-// TODO(confirm): add third-party CRM/tool logos here only for integrations we actually deliver.
+// Channels only: no third-party tool integrations are claimed (confirmed Sept 2026).
 const Integrations: React.FC = () => {
   return (
     <section className="py-20 bg-white dark:bg-[#0f172a] border-y border-slate-200 dark:border-white/5 overflow-hidden transition-colors duration-500">

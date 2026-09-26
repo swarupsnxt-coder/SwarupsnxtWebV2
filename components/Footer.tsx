@@ -18,7 +18,7 @@ const Footer: React.FC<FooterProps> = ({ onPrivacyClick, onSecurityClick }) => {
           <div className="col-span-1 md:col-span-2">
             <Logo className="mb-6" />
             <p className="text-slate-600 dark:text-slate-400 max-w-sm mb-8 leading-relaxed">
-              AI voice agents, chatbots and automation for Indian businesses — set up and supported by our team.
+              AI voice agents, chatbots and automation for Indian businesses. We set up, customise and support leading AI platforms for you.
             </p>
             <div className="space-y-4 mb-8">
               <div className="flex items-center gap-3 text-slate-600 dark:text-slate-400">
@@ -53,8 +53,7 @@ const Footer: React.FC<FooterProps> = ({ onPrivacyClick, onSecurityClick }) => {
         </div>
 
         <div className="pt-8 border-t border-slate-200 dark:border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-[11px] uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">
-          {/* TODO(confirm): legal company name ("Swarups NXT" vs "Swarups NXT Intelligence"). */}
-          <p>© {new Date().getFullYear()} Swarups NXT Intelligence. All Rights Reserved.</p>
+          <p>© {new Date().getFullYear()} Swarups NXT. All Rights Reserved.</p>
           <span>Chennai, Tamil Nadu, India</span>
         </div>
       </div>
