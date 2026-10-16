@@ -5,6 +5,7 @@ export const CONTACT = {
   phone: '+917550007208',
   phoneDisplay: '+91 7550007208',
   email: 'hello@swarupsnxt.com',
+  grievanceEmail: 'grievance@swarupsnxt.com',
   whatsappNumber: '917550007208',
   supportHours: { time: '10:00 AM – 6:00 PM IST', days: 'Monday to Friday (excluding public holidays)' },
 };

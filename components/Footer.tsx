@@ -5,10 +5,10 @@ import { CONTACT, mailtoLink, telLink } from '../constants';
 
 interface FooterProps {
   onPrivacyClick: () => void;
-  onSecurityClick: () => void;
+  onTermsClick: () => void;
 }
 
-const Footer: React.FC<FooterProps> = ({ onPrivacyClick, onSecurityClick }) => {
+const Footer: React.FC<FooterProps> = ({ onPrivacyClick, onTermsClick }) => {
   const linkClass = "hover:text-[#2BB6C6] transition-colors";
 
   return (
@@ -47,7 +47,7 @@ const Footer: React.FC<FooterProps> = ({ onPrivacyClick, onSecurityClick }) => {
             <ul className="space-y-4 text-sm text-slate-600 dark:text-slate-400">
               <li><a href="#contact" data-book-demo className={linkClass}>Book a demo</a></li>
               <li><button onClick={onPrivacyClick} className={`${linkClass} text-left`}>Privacy Policy</button></li>
-              <li><button onClick={onSecurityClick} className={`${linkClass} text-left`}>Terms of Service</button></li>
+              <li><button onClick={onTermsClick} className={`${linkClass} text-left`}>Terms of Service</button></li>
             </ul>
           </nav>
         </div>

@@ -11,7 +11,7 @@ import FAQ from './components/FAQ';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import WhatsAppButton from './components/WhatsAppButton';
-import { LeadFormModal, PrivacyModal, SecurityModal } from './components/Modals';
+import { LeadFormModal, PrivacyModal, TermsModal } from './components/Modals';
 import { Theme } from './types';
 
 const App: React.FC = () => {
@@ -22,7 +22,7 @@ const App: React.FC = () => {
   );
 
   const [showPrivacy, setShowPrivacy] = useState(false);
-  const [showSecurity, setShowSecurity] = useState(false);
+  const [showTerms, setShowTerms] = useState(false);
   const [showLeadForm, setShowLeadForm] = useState(false);
 
   useEffect(() => {
@@ -43,6 +43,7 @@ const App: React.FC = () => {
   }, []);
 
   const openPrivacy = useCallback(() => setShowPrivacy(true), []);
+  const closePrivacy = useCallback(() => setShowPrivacy(false), []);
   const closeLeadForm = useCallback(() => setShowLeadForm(false), []);
 
   const toggleTheme = () => {
@@ -71,15 +72,15 @@ const App: React.FC = () => {
 
       <Footer
         onPrivacyClick={openPrivacy}
-        onSecurityClick={() => setShowSecurity(true)}
+        onTermsClick={() => setShowTerms(true)}
       />
 
       <WhatsAppButton />
 
       {/* Modals */}
       {showLeadForm && <LeadFormModal onClose={closeLeadForm} onPrivacyClick={openPrivacy} />}
-      {showPrivacy && <PrivacyModal onClose={() => setShowPrivacy(false)} />}
-      {showSecurity && <SecurityModal onClose={() => setShowSecurity(false)} />}
+      {showPrivacy && <PrivacyModal onClose={closePrivacy} />}
+      {showTerms && <TermsModal onClose={() => setShowTerms(false)} />}
     </div>
   );
 };
