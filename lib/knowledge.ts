@@ -30,7 +30,7 @@ FAQ
 ${faqs}
 
 CONTACT
-- Book a demo: the Contact section of this website.
+- Book a demo: the short form in the Contact section of this website (or any "Book a demo" button).
 - WhatsApp or call: ${CONTACT.phoneDisplay}
 - Email: ${CONTACT.email}
 

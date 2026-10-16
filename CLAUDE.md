@@ -8,15 +8,22 @@ Originally generated with Google Gemini / AI Studio. Hosted on Cloudflare Pages,
 from GitHub (main = production; other branches = preview deployments).
 
 Phase-by-phase upgrade prompts live in `docs/PROMPTS.md`. Paste them one at a time; they are not
-standing instructions.
+standing instructions. They predate the enquiry form: where they say "no contact form", this
+file wins.
 
 ## Project facts
 - Business WhatsApp: 917550007208
 - Business email: hello@swarupsnxt.com
+- Privacy grievance email: grievance@swarupsnxt.com (Privacy Policy contact)
+- Support hours: 10:00 AM – 6:00 PM IST, Monday to Friday (`CONTACT.supportHours`)
 - Business phone for calls: +91 7550007208
-- Book a demo: links to the on-page Contact section (`#contact`), which offers WhatsApp, Call
-  and Email. There is NO contact form and no external booking tool; do not add either
-  without asking.
+- Book a demo: links to the on-page Contact section (`#contact`), which has an enquiry form
+  (name, phone, optional email/company/product/message, consent) plus WhatsApp, Call and Email.
+  "Book a demo" links carry `data-book-demo` and open the same form in a popup (`App.tsx`).
+  Form leads go to Zoho CRM Free (India DC) via `functions/api/lead.ts`; setup: `SETUP-ZOHO.md`.
+  No external booking tool; don't add one, or change the form fields, without asking.
+- Business model: integration partner and reseller; platforms may be white-labelled under our
+  or the client's brand. The Terms of Service cover this; keep site copy consistent with it.
 - Languages (chatbot and voice demo): English (Indian) + all major Indian languages:
   Hindi, Bengali, Marathi, Telugu, Tamil, Gujarati, Kannada, Malayalam, Punjabi, Odia.
 - Canonical domain: https://swarupsnxt.com (non-www)
@@ -42,8 +49,10 @@ standing instructions.
 - SEO files in `public/`: `robots.txt`, `sitemap.xml`, `llms.txt`, `og-image.png`, icons.
   Post-launch steps: `POST-LAUNCH-SEO.md`.
 - Cloudflare Pages Functions in `functions/api/` (`chat.ts`: website assistant on Workers AI via
-  the `AI` binding, protected by Turnstile). Shared server code in `lib/` (`llm.ts`,
-  `knowledge.ts`, `session.ts`). Setup steps: `SETUP-AI.md`.
+  the `AI` binding, protected by Turnstile; `lead.ts`: enquiry form -> Zoho CRM, also
+  Turnstile-protected). Shared code in `lib/` (`llm.ts`, `knowledge.ts`, `session.ts`,
+  `turnstile.ts`, `zoho.ts`, `lead.ts` = form validation used by both client and server).
+  Setup steps: `SETUP-AI.md`, `SETUP-ZOHO.md`.
 - GitHub repo: swarupsnxt-coder/SwarupsnxtWebV2 (connected to Cloudflare Pages)
 
 ## Key files
@@ -52,7 +61,9 @@ standing instructions.
   HowItWorks, FAQ, Contact, ChatWidget, PhoneDemo, VoiceStudio, NxtLab, Modals, ...)
 - `constants.tsx`: contact details, products, industries, FAQ — used by the page AND the
   chatbot's knowledge (`lib/knowledge.ts`), so edit content there; `types.ts`: shared types
-- `components/Contact.tsx`: `#contact` section (WhatsApp / Call / Email, no form)
+- `components/Contact.tsx`: `#contact` section (enquiry form + WhatsApp / Call / Email)
+- `components/LeadForm.tsx`: the enquiry form (used in Contact and in `LeadFormModal`)
+- `components/Modals.tsx`: Privacy Policy, Terms of Service, Book-a-demo popup
 - `index.html`: meta/OG tags, Tailwind CDN config, global styles
 
 ## Commands
