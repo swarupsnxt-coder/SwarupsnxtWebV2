@@ -5,6 +5,7 @@
 import { AiBinding, ChatMessage, generateReply } from '../../lib/llm';
 import { CONTACT_MARKER, SYSTEM_PROMPT } from '../../lib/knowledge';
 import { SESSION_TTL_MS, signSession, verifySession } from '../../lib/session';
+import { verifyTurnstile } from '../../lib/turnstile';
 
 interface Env {
   AI?: AiBinding;
@@ -30,16 +31,6 @@ const json = (body: unknown, status = 200) =>
 
 const fallback = (reason: string, extra: Record<string, unknown> = {}) =>
   json({ fallback: true, reason, showContact: true, ...extra });
-
-async function verifyTurnstile(token: string, secret: string, ip: string | null): Promise<boolean> {
-  const form = new FormData();
-  form.append('secret', secret);
-  form.append('response', token);
-  if (ip) form.append('remoteip', ip);
-  const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', { method: 'POST', body: form });
-  const data = await res.json() as { success?: boolean };
-  return data.success === true;
-}
 
 // The UI can't render markdown; flatten anything the model sends anyway.
 const toPlainText = (text: string) =>
