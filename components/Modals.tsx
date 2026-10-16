@@ -1,9 +1,13 @@
 import React, { useEffect, useId, useRef } from 'react';
-import { CONTACT, mailtoLink } from '../constants';
+import { CONTACT, mailtoLink, telLink, whatsappLink, WHATSAPP_DEMO_TEXT } from '../constants';
+import LeadForm from './LeadForm';
 
 interface ModalProps {
   onClose: () => void;
 }
+
+// Open modals, newest last, so Escape closes only the top one (e.g. Privacy opened from the demo form).
+const openModals: string[] = [];
 
 // Always uses the dark palette so text stays readable in light mode too.
 const Modal: React.FC<{ children: React.ReactNode; onClose: () => void; title: string }> = ({ children, onClose, title }) => {
@@ -13,16 +17,20 @@ const Modal: React.FC<{ children: React.ReactNode; onClose: () => void; title: s
   useEffect(() => {
     const previouslyFocused = document.activeElement as HTMLElement | null;
     closeRef.current?.focus();
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    openModals.push(titleId);
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && openModals[openModals.length - 1] === titleId) onClose();
+    };
     document.addEventListener('keydown', onKey);
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
     return () => {
       document.removeEventListener('keydown', onKey);
+      openModals.splice(openModals.indexOf(titleId), 1);
       document.body.style.overflow = prevOverflow;
       previouslyFocused?.focus();
     };
-  }, [onClose]);
+  }, [onClose, titleId]);
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
@@ -46,6 +54,22 @@ const Modal: React.FC<{ children: React.ReactNode; onClose: () => void; title: s
     </div>
   );
 };
+
+// "Book a demo" popup. The `dark` wrapper makes the form use its dark styles on the dark modal.
+export const LeadFormModal: React.FC<ModalProps & { onPrivacyClick: () => void }> = ({ onClose, onPrivacyClick }) => (
+  <Modal title="Book a demo" onClose={onClose}>
+    <div className="dark space-y-6">
+      <p className="text-slate-300">
+        Share a few details and we'll get back to you to arrange a short demo built around your business.
+        Prefer to talk now?{' '}
+        <a href={whatsappLink(WHATSAPP_DEMO_TEXT)} target="_blank" rel="noopener noreferrer" className="font-bold text-[#2BB6C6] hover:underline">WhatsApp</a>
+        {' '}or{' '}
+        <a href={telLink} className="font-bold text-[#2BB6C6] hover:underline">call {CONTACT.phoneDisplay}</a>.
+      </p>
+      <LeadForm onPrivacyClick={onPrivacyClick} />
+    </div>
+  </Modal>
+);
 
 const LAST_UPDATED = '26 September 2026';
 

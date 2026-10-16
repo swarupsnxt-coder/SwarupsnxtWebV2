@@ -92,6 +92,7 @@ const Products: React.FC = () => {
           <p className="text-slate-500 dark:text-slate-400 text-sm font-medium mb-8">Not sure which product fits your business?</p>
           <a
             href="#contact"
+            data-book-demo
             className="inline-flex items-center gap-3 text-[#2BB6C6] font-bold uppercase tracking-widest text-xs hover:gap-5 transition-all"
           >
             <span>Book a demo</span>

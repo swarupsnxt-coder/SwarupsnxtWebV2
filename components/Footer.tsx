@@ -45,7 +45,7 @@ const Footer: React.FC<FooterProps> = ({ onPrivacyClick, onSecurityClick }) => {
           <nav aria-labelledby="footer-company">
             <h2 id="footer-company" className="text-sm font-bold uppercase tracking-widest text-slate-900 dark:text-white mb-6">Company</h2>
             <ul className="space-y-4 text-sm text-slate-600 dark:text-slate-400">
-              <li><a href="#contact" className={linkClass}>Book a demo</a></li>
+              <li><a href="#contact" data-book-demo className={linkClass}>Book a demo</a></li>
               <li><button onClick={onPrivacyClick} className={`${linkClass} text-left`}>Privacy Policy</button></li>
               <li><button onClick={onSecurityClick} className={`${linkClass} text-left`}>Terms of Service</button></li>
             </ul>

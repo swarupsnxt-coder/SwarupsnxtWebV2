@@ -108,14 +108,6 @@ const Hero: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleNav = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
-    e.preventDefault();
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
   return (
     <section id="hero" className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden bg-slate-50 dark:bg-[#0f172a] transition-colors duration-500">
       <NeuralCanvas scrollOffset={scrollY} />
@@ -156,7 +148,7 @@ const Hero: React.FC = () => {
         <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-16">
           <a
             href="#contact"
-            onClick={(e) => handleNav(e, 'contact')}
+            data-book-demo
             className="w-full sm:w-auto px-12 py-5 bg-[#2BB6C6] text-[#0f172a] font-black rounded-2xl text-xl hover:scale-110 active:scale-95 transition-all shadow-2xl shadow-[#2BB6C6]/40 flex items-center justify-center gap-3 no-underline"
           >
             <span>Book a demo</span>

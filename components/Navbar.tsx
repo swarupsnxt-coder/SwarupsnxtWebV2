@@ -73,7 +73,8 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme }) => {
               
               <a
                 href="#contact"
-                onClick={(e) => handleNav(e, 'contact')}
+                data-book-demo
+                onClick={() => setIsMobileMenuOpen(false)}
                 className="hidden sm:block text-xs uppercase tracking-widest font-bold bg-[#2BB6C6] text-[#0f172a] px-6 py-2.5 rounded-lg hover:brightness-110 hover:scale-105 transition-all shadow-lg shadow-[#2BB6C6]/20 text-center"
               >
                 Book a demo
@@ -112,8 +113,9 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme }) => {
           ))}
           <a
             href="#contact"
+            data-book-demo
             className="w-full max-w-xs py-4 bg-[#2BB6C6] text-[#0f172a] font-bold rounded-xl text-lg uppercase tracking-widest shadow-xl shadow-[#2BB6C6]/20 text-center"
-            onClick={(e) => handleNav(e, 'contact')}
+            onClick={() => setIsMobileMenuOpen(false)}
           >
             Book a demo
           </a>

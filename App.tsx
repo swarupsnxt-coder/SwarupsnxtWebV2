@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Integrations from './components/Integrations';
@@ -11,7 +11,7 @@ import FAQ from './components/FAQ';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import WhatsAppButton from './components/WhatsAppButton';
-import { PrivacyModal, SecurityModal } from './components/Modals';
+import { LeadFormModal, PrivacyModal, SecurityModal } from './components/Modals';
 import { Theme } from './types';
 
 const App: React.FC = () => {
@@ -23,10 +23,27 @@ const App: React.FC = () => {
 
   const [showPrivacy, setShowPrivacy] = useState(false);
   const [showSecurity, setShowSecurity] = useState(false);
+  const [showLeadForm, setShowLeadForm] = useState(false);
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', theme === Theme.DARK);
   }, [theme]);
+
+  // "Book a demo" links (marked data-book-demo) open the form popup. They keep href="#contact",
+  // so without JavaScript, or with a modifier key held, they still go to the Contact section.
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      if (!(e.target instanceof Element) || !e.target.closest('[data-book-demo]')) return;
+      e.preventDefault();
+      setShowLeadForm(true);
+    };
+    document.addEventListener('click', onClick);
+    return () => document.removeEventListener('click', onClick);
+  }, []);
+
+  const openPrivacy = useCallback(() => setShowPrivacy(true), []);
+  const closeLeadForm = useCallback(() => setShowLeadForm(false), []);
 
   const toggleTheme = () => {
     setTheme(prev => {
@@ -49,17 +66,18 @@ const App: React.FC = () => {
         <WhyUs />
         <Industries />
         <FAQ />
-        <Contact />
+        <Contact onPrivacyClick={openPrivacy} />
       </main>
 
       <Footer
-        onPrivacyClick={() => setShowPrivacy(true)}
+        onPrivacyClick={openPrivacy}
         onSecurityClick={() => setShowSecurity(true)}
       />
 
       <WhatsAppButton />
 
       {/* Modals */}
+      {showLeadForm && <LeadFormModal onClose={closeLeadForm} onPrivacyClick={openPrivacy} />}
       {showPrivacy && <PrivacyModal onClose={() => setShowPrivacy(false)} />}
       {showSecurity && <SecurityModal onClose={() => setShowSecurity(false)} />}
     </div>
