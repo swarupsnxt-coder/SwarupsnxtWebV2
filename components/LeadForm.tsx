@@ -51,8 +51,18 @@ const LeadForm: React.FC<LeadFormProps> = ({ onPrivacyClick, initialProduct = ''
   const update = <K extends LeadField>(field: K, value: LeadInput[K]) => {
     const next = { ...values, [field]: value };
     setValues(next);
-    // After the first submit, re-check as the visitor fixes things.
-    if (attempted) setErrors(validateLead(next as unknown as Record<string, unknown>).errors);
+    // After the first submit, re-check as the visitor fixes things; before it, clear a
+    // field's error as soon as it's fixed.
+    const found = validateLead(next as unknown as Record<string, unknown>).errors;
+    if (attempted) setErrors(found);
+    else if (errors[field]) setErrors(prev => ({ ...prev, [field]: found[field] }));
+  };
+
+  // Check a field when the visitor leaves it (skipped while it's still empty).
+  const checkField = (field: LeadField) => {
+    if (attempted || !String(values[field]).trim()) return;
+    const found = validateLead(values as unknown as Record<string, unknown>).errors;
+    setErrors(prev => ({ ...prev, [field]: found[field] }));
   };
 
   const onSubmit = async (e: React.FormEvent) => {
@@ -173,19 +183,19 @@ const LeadForm: React.FC<LeadFormProps> = ({ onPrivacyClick, initialProduct = ''
           <div>
             {label('name', 'Name')}
             <input {...a11y('name')} type="text" autoComplete="name" maxLength={LEAD_LIMITS.name} required
-              value={values.name} onChange={e => update('name', e.target.value)} className={inputClass(!!errors.name)} />
+              value={values.name} onChange={e => update('name', e.target.value)} onBlur={() => checkField('name')} className={inputClass(!!errors.name)} />
             {errorFor('name')}
           </div>
           <div>
             {label('phone', 'Phone / WhatsApp')}
-            <input {...a11y('phone')} type="tel" autoComplete="tel" inputMode="tel" maxLength={20} required placeholder="+91"
-              value={values.phone} onChange={e => update('phone', e.target.value)} className={inputClass(!!errors.phone)} />
+            <input {...a11y('phone')} type="tel" autoComplete="tel" inputMode="tel" maxLength={20} required placeholder="+91 10-digit mobile number"
+              value={values.phone} onChange={e => update('phone', e.target.value)} onBlur={() => checkField('phone')} className={inputClass(!!errors.phone)} />
             {errorFor('phone')}
           </div>
           <div>
             {label('email', 'Email', true)}
             <input {...a11y('email')} type="email" autoComplete="email" maxLength={LEAD_LIMITS.email}
-              value={values.email} onChange={e => update('email', e.target.value)} className={inputClass(!!errors.email)} />
+              value={values.email} onChange={e => update('email', e.target.value)} onBlur={() => checkField('email')} className={inputClass(!!errors.email)} />
             {errorFor('email')}
           </div>
           <div>
