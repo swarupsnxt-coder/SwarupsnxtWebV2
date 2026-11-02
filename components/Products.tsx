@@ -14,19 +14,20 @@ const Products: React.FC = () => {
             <span className="text-[11px] font-bold uppercase tracking-widest text-[#2BB6C6]">Products</span>
           </div>
           <h2 className="text-4xl md:text-6xl font-bold mb-6 text-slate-900 dark:text-white">
-            AI that works <br />
+            Messaging and AI <br />
             <span className="gradient-text italic">on every channel.</span>
           </h2>
           <p className="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto text-lg font-medium">
-            Start with one product or combine them. We set everything up and train it on your business.
+            Start with bulk WhatsApp or SMS, then add AI agents that handle the replies. We set everything up for your business.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-8">
+        <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-8">
           {PRODUCTS.map((product) => (
             <div
-              key={product.title}
-              className="group rounded-[2.5rem] bg-slate-50 dark:bg-white/[0.02] border border-slate-200 dark:border-white/5 hover:border-[#2BB6C6]/50 transition-all duration-500 hover:-translate-y-2 flex flex-col h-full overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-[#2BB6C6]/10"
+              key={product.id}
+              id={product.id}
+              className="scroll-mt-28 group rounded-[2.5rem] bg-slate-50 dark:bg-white/[0.02] border border-slate-200 dark:border-white/5 hover:border-[#2BB6C6]/50 transition-all duration-500 hover:-translate-y-2 flex flex-col h-full overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-[#2BB6C6]/10"
             >
               <div className="h-48 overflow-hidden relative">
                 <img

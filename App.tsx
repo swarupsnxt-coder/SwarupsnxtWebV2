@@ -5,6 +5,8 @@ import Integrations from './components/Integrations';
 import NxtLab from './components/NxtLab';
 import Products from './components/Products';
 import HowItWorks from './components/HowItWorks';
+import Infrastructure from './components/Infrastructure';
+import Pricing from './components/Pricing';
 import WhyUs from './components/WhyUs';
 import Industries from './components/Industries';
 import FAQ from './components/FAQ';
@@ -61,8 +63,10 @@ const App: React.FC = () => {
       <main>
         <Hero />
         <Integrations />
-        <NxtLab />
         <Products />
+        <Infrastructure />
+        <Pricing />
+        <NxtLab />
         <HowItWorks />
         <WhyUs />
         <Industries />
