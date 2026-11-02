@@ -71,7 +71,7 @@ export const LeadFormModal: React.FC<ModalProps & { onPrivacyClick: () => void }
   </Modal>
 );
 
-const LAST_UPDATED = '16 October 2026';
+const LAST_UPDATED = '2 November 2026';
 
 // Plain-English policy text, checked for accuracy against how the website works (Oct 2026).
 // Have a lawyer confirm it before relying on it in client contracts.
@@ -168,6 +168,12 @@ const TERMS_SECTIONS: [string, React.ReactNode][] = [
       <li>following the laws, regulations and channel rules that apply to your business and your communications.</li>
     </ul>
     <p>You must not use our services for spam, fraud, phishing, harassment, impersonation, misleading claims, or any unlawful or harmful content. We, or a Platform Provider, may pause or stop a campaign, number or account that appears to break these rules or the Platform Provider's policies, with notice where reasonably possible.</p>
+  </>],
+  ['SMS and TRAI DLT registration', <>
+    <p>Commercial SMS in India must be sent through the DLT (Distributed Ledger Technology) system set up under TRAI rules. You are responsible for registering your business as the principal entity, and for obtaining and keeping current approval of your sender IDs (headers), message templates and consent records on DLT. We can help you prepare these registrations, but they remain in your name and under your control. Messages that do not match an approved header and template may be blocked by telecom operators, and we are not responsible for messages blocked for this reason.</p>
+  </>],
+  ['WhatsApp opt-in and Meta policies', <>
+    <p>You may send WhatsApp messages only to people who have opted in to receive messages from your business on WhatsApp, and you are responsible for collecting and recording that opt-in. You must follow Meta's WhatsApp Business policies, including its rules on message templates, message categories and opt-outs. Meta may limit, pause or block a number, template or account that breaks its policies or receives poor feedback from recipients; we are not responsible for such actions by Meta.</p>
   </>],
   ['Fees, usage charges and payment', <>
     <p>Fees are set out in your written quote, proposal or invoice, plus applicable taxes. Usage-based charges from Platform Providers (for example, call minutes, messaging or conversation fees, phone numbers or credits) may be billed to you as agreed in writing. Invoices are payable within the time stated on them. We may suspend services if payment is overdue, after giving you notice.</p>
