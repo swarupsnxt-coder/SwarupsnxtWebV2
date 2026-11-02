@@ -1,9 +1,10 @@
 # Project: Swarups NXT marketing website (swarupsnxt.com)
 
 ## What this is
-Marketing site for Swarups NXT, an AI solutions company (AI voice agents, AI chatbots, AI contact
-center solution (CCaaS), omnichannel bots, social media bots, WhatsApp campaigns, voice blast,
-SaaS automation) selling to businesses of any industry, pan-India.
+Marketing site for Swarups NXT, positioned (Nov 2026) around high-volume omnichannel messaging plus
+AI, for SMBs and enterprises of any industry, pan-India. Product priority: bulk WhatsApp & RCS,
+enterprise SMS & OTP, AI voice agents, AI chatbots, voice blast, social media bots, SaaS
+automation, AI contact center (CCaaS), omnichannel bots.
 Originally generated with Google Gemini / AI Studio. Hosted on Cloudflare Pages, auto-deployed
 from GitHub (main = production; other branches = preview deployments).
 
@@ -33,6 +34,11 @@ file wins.
 - Integrations: none claimed. Show channels (phone, WhatsApp, website chat, Instagram, Facebook),
   not third-party tool logos, until the owner confirms a specific integration.
 - Typical setup time: "a few weeks", depending on scope.
+- Pricing model (no figures, ever): no fixed plans; custom quote by volume per channel: per message
+  for WhatsApp/RCS and SMS, per seat for CCaaS (`PRICING_MODEL` in `constants.tsx`, `#pricing`).
+- SMS: we help set up DLT sender IDs/templates, but registrations are the client's. Don't claim
+  "DLT compliant", "DPDP compliant", data localisation or uptime percentages (hard rules 1 and 3);
+  the client duties for DLT and WhatsApp opt-in are in the Terms.
 - Product language coverage: "English and common Indian languages" (confirmed per product/channel).
 - Human handover follows the workflow agreed with each client. Data handling and pilots depend
   on each use case (agreed before go-live). Don't promise specifics beyond this.
