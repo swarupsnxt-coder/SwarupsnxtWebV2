@@ -1,6 +1,5 @@
 
 import React, { useEffect, useRef, useState } from 'react';
-import { WHATSAPP_DEFAULT_TEXT, whatsappLink } from '../constants';
 
 const NeuralCanvas: React.FC<{ scrollOffset: number }> = ({ scrollOffset }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -108,14 +107,6 @@ const Hero: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleNav = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
-    e.preventDefault();
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
   return (
     <section id="hero" className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden bg-slate-50 dark:bg-[#0f172a] transition-colors duration-500">
       <NeuralCanvas scrollOffset={scrollY} />
@@ -139,37 +130,35 @@ const Hero: React.FC = () => {
         style={{ transform: `translateY(${scrollY * -0.2}px)`, transition: 'transform 0.05s ease-out' }}
       >
         <div className="inline-block px-5 py-2 mb-8 glass dark:glass rounded-full border border-slate-200 dark:border-white/20 bg-white/40 dark:bg-white/5 shadow-xl cursor-default">
-          <span className="text-[11px] font-black tracking-[0.3em] text-[#2BB6C6] uppercase">AI voice agents &amp; chatbots for Indian businesses</span>
+          <span className="text-[11px] font-black tracking-[0.3em] text-[#2BB6C6] uppercase">WhatsApp, SMS &amp; AI agents for Indian businesses</span>
         </div>
 
         <div className="float-animation">
           <h1 className="text-5xl sm:text-6xl md:text-8xl font-bold mb-8 leading-[0.95] text-slate-900 dark:text-white tracking-tighter">
-            Every call answered.<br />
-            <span className="gradient-text italic">Every lead followed up.</span>
+            Scale Customer Engagement on <br className="hidden md:block" />
+            <span className="gradient-text italic">WhatsApp, SMS, and Voice.</span>
           </h1>
         </div>
 
         <p className="max-w-3xl mx-auto text-lg md:text-2xl text-slate-600 dark:text-slate-400 mb-12 leading-relaxed font-medium px-4">
-          AI agents that talk to your customers on phone, WhatsApp and your website, 24x7, in English, Hindi and other Indian languages. When a person is needed, they hand over to your team.
+          Reach your customers at scale with bulk messaging, and let AI agents handle the replies 24x7. We set up the routing for you, with no coding needed, for Indian businesses.
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-16">
           <a
             href="#contact"
-            onClick={(e) => handleNav(e, 'contact')}
+            data-book-demo
             className="w-full sm:w-auto px-12 py-5 bg-[#2BB6C6] text-[#0f172a] font-black rounded-2xl text-xl hover:scale-110 active:scale-95 transition-all shadow-2xl shadow-[#2BB6C6]/40 flex items-center justify-center gap-3 no-underline"
           >
-            <span>Book a demo</span>
+            <span>Book a Demo</span>
             <i className="fa-solid fa-calendar-check text-sm" aria-hidden="true"></i>
           </a>
           <a
-            href={whatsappLink(WHATSAPP_DEFAULT_TEXT)}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-full sm:w-auto px-12 py-5 bg-white/60 dark:bg-white/5 border border-slate-300 dark:border-white/10 text-slate-900 dark:text-white font-bold rounded-2xl text-xl hover:bg-white dark:hover:bg-white/10 transition-all backdrop-blur-md shadow-lg flex items-center justify-center gap-3 no-underline"
+            href="#pricing"
+            className="w-full sm:w-auto px-12 py-5 bg-transparent border-2 border-[#2BB6C6] text-slate-900 dark:text-white font-bold rounded-2xl text-xl hover:bg-[#2BB6C6]/10 transition-all flex items-center justify-center gap-3 no-underline"
           >
-            <i className="fa-brands fa-whatsapp text-xl text-[#2BB6C6]" aria-hidden="true"></i>
-            <span>WhatsApp us</span>
+            <span>Get Volume Pricing</span>
+            <i className="fa-solid fa-arrow-down text-sm text-[#2BB6C6]" aria-hidden="true"></i>
           </a>
         </div>
 

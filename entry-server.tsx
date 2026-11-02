@@ -26,7 +26,7 @@ export function jsonLd(): string {
       url: SITE,
       logo: { '@type': 'ImageObject', url: `${SITE}logo-512.png`, width: 512, height: 512 },
       image: `${SITE}og-image.png`,
-      description: 'AI integration partner that sets up, customises and supports AI voice agents, chatbots and automation for Indian businesses.',
+      description: 'Integration partner that sets up, customises and supports bulk WhatsApp and RCS, enterprise SMS and OTP, AI voice agents, chatbots and automation for Indian businesses.',
       email: CONTACT.email,
       telephone: CONTACT.phone,
       address: { '@type': 'PostalAddress', addressLocality: 'Chennai', addressRegion: 'Tamil Nadu', addressCountry: 'IN' },
