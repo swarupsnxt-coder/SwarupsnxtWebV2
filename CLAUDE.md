@@ -52,9 +52,9 @@ file wins.
   `entry-server.tsx` + `scripts/prerender.mjs`, which injects the page HTML and schema.org
   JSON-LD into `dist/index.html`. Keep components safe to render without `window`/`document`
   during render (use effects), and don't make markup depend on browser-only state (hydration).
-- SEO files in `public/`: `robots.txt`, `sitemap.xml`, `llms.txt`, `og-image-v2.png`, icons.
+- SEO files in `public/`: `robots.txt`, `sitemap.xml`, `llms.txt`, `og-image-v3.png`, icons.
   The link-preview image (1200x630) is named in `index.html` (og/twitter tags) and
-  `entry-server.tsx`. When it changes, give it a new filename (`og-image-v3.png`, ...) and update
+  `entry-server.tsx`. When it changes, give it a new filename (`og-image-v4.png`, ...) and update
   those references, so WhatsApp/Facebook/LinkedIn don't keep showing the cached old image.
   Post-launch steps: `POST-LAUNCH-SEO.md`.
 - Cloudflare Pages Functions in `functions/api/` (`chat.ts`: website assistant on Workers AI via
