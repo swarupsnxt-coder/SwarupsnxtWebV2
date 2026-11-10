@@ -52,7 +52,10 @@ file wins.
   `entry-server.tsx` + `scripts/prerender.mjs`, which injects the page HTML and schema.org
   JSON-LD into `dist/index.html`. Keep components safe to render without `window`/`document`
   during render (use effects), and don't make markup depend on browser-only state (hydration).
-- SEO files in `public/`: `robots.txt`, `sitemap.xml`, `llms.txt`, `og-image.png`, icons.
+- SEO files in `public/`: `robots.txt`, `sitemap.xml`, `llms.txt`, `og-image-v2.png`, icons.
+  The link-preview image (1200x630) is named in `index.html` (og/twitter tags) and
+  `entry-server.tsx`. When it changes, give it a new filename (`og-image-v3.png`, ...) and update
+  those references, so WhatsApp/Facebook/LinkedIn don't keep showing the cached old image.
   Post-launch steps: `POST-LAUNCH-SEO.md`.
 - Cloudflare Pages Functions in `functions/api/` (`chat.ts`: website assistant on Workers AI via
   the `AI` binding, protected by Turnstile; `lead.ts`: enquiry form -> Zoho CRM, also
@@ -92,8 +95,11 @@ Pages Functions can be tested locally with `npx wrangler pages dev`.
    clients yet. If a section needs proof and none exists, use a different section type
    (how it works, use cases, FAQ, demo) instead. If existing code already contains fabricated
    proof (e.g. "500+ clients", fake testimonials, "98% accuracy"), flag it in your report.
-2. NEVER show pricing, price ranges, or "starting at" figures anywhere.
-3. NEVER add regulatory/compliance claims (TRAI, DLT, Meta policy, GDPR, ISO, etc.).
+2. NEVER show pricing, price ranges, or "starting at" figures anywhere. Explaining the pricing
+   model without figures (per message, per seat, custom quote by volume) is allowed.
+3. NEVER add regulatory/compliance claims (TRAI, DLT, Meta policy, GDPR, ISO, etc.). Stating the
+   client's own duties (DLT registration, WhatsApp opt-in) in the Terms or in factual setup copy
+   is allowed; claiming that we or the service are "compliant" is not.
 4. DO NOT change brand colours, logo, brand fonts, company name, or founder/company details.
    You may fix typos in them only after asking.
 5. NEVER put API keys, secrets, or tokens in frontend code, in `VITE_*`/`NEXT_PUBLIC_*`/
