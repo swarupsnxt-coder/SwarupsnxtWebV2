@@ -1,22 +1,30 @@
 # Project: Swarups NXT marketing website (swarupsnxt.com)
 
 ## What this is
-Marketing site for Swarups NXT, an AI solutions company (AI voice agents, AI chatbots, AI contact
-center solution (CCaaS), omnichannel bots, social media bots, WhatsApp campaigns, voice blast,
-SaaS automation) selling to businesses of any industry, pan-India.
+Marketing site for Swarups NXT, positioned (Nov 2026) around high-volume omnichannel messaging plus
+AI, for SMBs and enterprises of any industry, pan-India. Product priority: bulk WhatsApp & RCS,
+enterprise SMS & OTP, AI voice agents, AI chatbots, voice blast, social media bots, SaaS
+automation, AI contact center (CCaaS), omnichannel bots.
 Originally generated with Google Gemini / AI Studio. Hosted on Cloudflare Pages, auto-deployed
 from GitHub (main = production; other branches = preview deployments).
 
 Phase-by-phase upgrade prompts live in `docs/PROMPTS.md`. Paste them one at a time; they are not
-standing instructions.
+standing instructions. They predate the enquiry form: where they say "no contact form", this
+file wins.
 
 ## Project facts
 - Business WhatsApp: 917550007208
 - Business email: hello@swarupsnxt.com
+- Privacy grievance email: grievance@swarupsnxt.com (Privacy Policy contact)
+- Support hours: 10:00 AM – 6:00 PM IST, Monday to Friday (`CONTACT.supportHours`)
 - Business phone for calls: +91 7550007208
-- Book a demo: links to the on-page Contact section (`#contact`), which offers WhatsApp, Call
-  and Email. There is NO contact form and no external booking tool; do not add either
-  without asking.
+- Book a demo: links to the on-page Contact section (`#contact`), which has an enquiry form
+  (name, phone, optional email/company/product/message, consent) plus WhatsApp, Call and Email.
+  "Book a demo" links carry `data-book-demo` and open the same form in a popup (`App.tsx`).
+  Form leads go to Zoho CRM Free (India DC) via `functions/api/lead.ts`; setup: `SETUP-ZOHO.md`.
+  No external booking tool; don't add one, or change the form fields, without asking.
+- Business model: integration partner and reseller; platforms may be white-labelled under our
+  or the client's brand. The Terms of Service cover this; keep site copy consistent with it.
 - Languages (chatbot and voice demo): English (Indian) + all major Indian languages:
   Hindi, Bengali, Marathi, Telugu, Tamil, Gujarati, Kannada, Malayalam, Punjabi, Odia.
 - Canonical domain: https://swarupsnxt.com (non-www)
@@ -26,6 +34,11 @@ standing instructions.
 - Integrations: none claimed. Show channels (phone, WhatsApp, website chat, Instagram, Facebook),
   not third-party tool logos, until the owner confirms a specific integration.
 - Typical setup time: "a few weeks", depending on scope.
+- Pricing model (no figures, ever): no fixed plans; custom quote by volume per channel: per message
+  for WhatsApp/RCS and SMS, per seat for CCaaS (`PRICING_MODEL` in `constants.tsx`, `#pricing`).
+- SMS: we help set up DLT sender IDs/templates, but registrations are the client's. Don't claim
+  "DLT compliant", "DPDP compliant", data localisation or uptime percentages (hard rules 1 and 3);
+  the client duties for DLT and WhatsApp opt-in are in the Terms.
 - Product language coverage: "English and common Indian languages" (confirmed per product/channel).
 - Human handover follows the workflow agreed with each client. Data handling and pilots depend
   on each use case (agreed before go-live). Don't promise specifics beyond this.
@@ -39,11 +52,16 @@ standing instructions.
   `entry-server.tsx` + `scripts/prerender.mjs`, which injects the page HTML and schema.org
   JSON-LD into `dist/index.html`. Keep components safe to render without `window`/`document`
   during render (use effects), and don't make markup depend on browser-only state (hydration).
-- SEO files in `public/`: `robots.txt`, `sitemap.xml`, `llms.txt`, `og-image.png`, icons.
+- SEO files in `public/`: `robots.txt`, `sitemap.xml`, `llms.txt`, `og-image-v2.png`, icons.
+  The link-preview image (1200x630) is named in `index.html` (og/twitter tags) and
+  `entry-server.tsx`. When it changes, give it a new filename (`og-image-v3.png`, ...) and update
+  those references, so WhatsApp/Facebook/LinkedIn don't keep showing the cached old image.
   Post-launch steps: `POST-LAUNCH-SEO.md`.
 - Cloudflare Pages Functions in `functions/api/` (`chat.ts`: website assistant on Workers AI via
-  the `AI` binding, protected by Turnstile). Shared server code in `lib/` (`llm.ts`,
-  `knowledge.ts`, `session.ts`). Setup steps: `SETUP-AI.md`.
+  the `AI` binding, protected by Turnstile; `lead.ts`: enquiry form -> Zoho CRM, also
+  Turnstile-protected). Shared code in `lib/` (`llm.ts`, `knowledge.ts`, `session.ts`,
+  `turnstile.ts`, `zoho.ts`, `lead.ts` = form validation used by both client and server).
+  Setup steps: `SETUP-AI.md`, `SETUP-ZOHO.md`.
 - GitHub repo: swarupsnxt-coder/SwarupsnxtWebV2 (connected to Cloudflare Pages)
 
 ## Key files
@@ -52,7 +70,9 @@ standing instructions.
   HowItWorks, FAQ, Contact, ChatWidget, PhoneDemo, VoiceStudio, NxtLab, Modals, ...)
 - `constants.tsx`: contact details, products, industries, FAQ — used by the page AND the
   chatbot's knowledge (`lib/knowledge.ts`), so edit content there; `types.ts`: shared types
-- `components/Contact.tsx`: `#contact` section (WhatsApp / Call / Email, no form)
+- `components/Contact.tsx`: `#contact` section (enquiry form + WhatsApp / Call / Email)
+- `components/LeadForm.tsx`: the enquiry form (used in Contact and in `LeadFormModal`)
+- `components/Modals.tsx`: Privacy Policy, Terms of Service, Book-a-demo popup
 - `index.html`: meta/OG tags, Tailwind CDN config, global styles
 
 ## Commands
@@ -75,8 +95,11 @@ Pages Functions can be tested locally with `npx wrangler pages dev`.
    clients yet. If a section needs proof and none exists, use a different section type
    (how it works, use cases, FAQ, demo) instead. If existing code already contains fabricated
    proof (e.g. "500+ clients", fake testimonials, "98% accuracy"), flag it in your report.
-2. NEVER show pricing, price ranges, or "starting at" figures anywhere.
-3. NEVER add regulatory/compliance claims (TRAI, DLT, Meta policy, GDPR, ISO, etc.).
+2. NEVER show pricing, price ranges, or "starting at" figures anywhere. Explaining the pricing
+   model without figures (per message, per seat, custom quote by volume) is allowed.
+3. NEVER add regulatory/compliance claims (TRAI, DLT, Meta policy, GDPR, ISO, etc.). Stating the
+   client's own duties (DLT registration, WhatsApp opt-in) in the Terms or in factual setup copy
+   is allowed; claiming that we or the service are "compliant" is not.
 4. DO NOT change brand colours, logo, brand fonts, company name, or founder/company details.
    You may fix typos in them only after asking.
 5. NEVER put API keys, secrets, or tokens in frontend code, in `VITE_*`/`NEXT_PUBLIC_*`/

@@ -5,7 +5,9 @@ export const CONTACT = {
   phone: '+917550007208',
   phoneDisplay: '+91 7550007208',
   email: 'hello@swarupsnxt.com',
+  grievanceEmail: 'grievance@swarupsnxt.com',
   whatsappNumber: '917550007208',
+  supportHours: { time: '10:00 AM – 6:00 PM IST', days: 'Monday to Friday (excluding public holidays)' },
 };
 
 export const whatsappLink = (text: string) =>
@@ -19,14 +21,42 @@ export const telLink = `tel:${CONTACT.phone}`;
 export const WHATSAPP_DEFAULT_TEXT = "Hi Swarups NXT, I'd like to know more about your AI solutions";
 export const WHATSAPP_DEMO_TEXT = "Hi Swarups NXT, I'd like to book a demo";
 
-// Product list follows CLAUDE.md "What this is". Every card links to WhatsApp with a product-specific message.
+// Product list follows CLAUDE.md "What this is", in the order of business priority (Nov 2026).
+// Every card links to WhatsApp with a product-specific message; `id` is the card's anchor (nav dropdown).
 export const PRODUCTS = [
   {
+    id: 'bulk-whatsapp-rcs',
+    icon: 'fa-whatsapp',
+    iconType: 'fa-brands',
+    title: 'Bulk WhatsApp & RCS Engine',
+    tag: 'Bulk messaging',
+    desc: 'Reach customers where they already are. Send bulk WhatsApp and RCS messages: offers, reminders and updates to opted-in contacts with images, videos, documents and buttons — personalised, with AI answering replies 24x7 and reports on delivered, read and replied.',
+    bestFor: 'Festive offers, reminders, order updates, lead follow-ups, win-back',
+    image: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&q=80&w=800',
+    details: "Campaigns go only to customers who have opted in, and each message can be personalised with their name or order details. When customers reply, the AI chatbot answers straight away, so interest from a campaign turns into real conversations instead of unread messages. RCS adds rich, branded messages in the default messaging app on supported Android phones.",
+    ctaLabel: 'Plan a bulk campaign',
+    ctaText: "Hi, I'm interested in bulk WhatsApp & RCS messaging",
+  },
+  {
+    id: 'sms-otp',
+    icon: 'fa-comment-sms',
+    iconType: 'fa-solid',
+    title: 'Enterprise SMS & OTP',
+    tag: 'SMS',
+    desc: 'Send OTPs, transaction alerts and promotional SMS at volume. Time-sensitive messages like OTPs go on transactional routes, and you see delivery status for every message.',
+    bestFor: 'Login and payment OTPs, order and account alerts, promotions',
+    image: 'https://images.unsplash.com/photo-1556656793-08538906a9f8?auto=format&fit=crop&q=80&w=800',
+    details: "SMS reaches every phone, with or without internet or apps. We help you set up your DLT-registered sender IDs and message templates (the registrations stay in your business's name), connect sending to your website or app, and set up delivery reports so you can see what reached each customer.",
+    ctaLabel: 'Ask about SMS & OTP',
+    ctaText: "Hi, I'm interested in Enterprise SMS & OTP",
+  },
+  {
+    id: 'ai-voice-agents',
     icon: 'fa-microphone-lines',
     iconType: 'fa-solid',
     title: 'AI Voice Agents',
     tag: 'Voice',
-    desc: 'Answer inbound calls and make follow-up calls 24x7, in English, Hindi and other Indian languages. The agent hands over to your team when a person is needed.',
+    desc: 'The intelligent upgrade for your phone line. Answer inbound calls and make follow-up calls 24x7, in English, Hindi and other Indian languages. The agent hands over to your team when a person is needed.',
     bestFor: 'Missed calls, after-hours enquiries, follow-ups',
     image: 'https://images.unsplash.com/photo-1553775282-20af80779df7?auto=format&fit=crop&q=80&w=800',
     details: "Your AI voice agent picks up every call, understands what the caller needs and replies naturally in their language. It answers common questions, qualifies new leads, books appointments and calls back people who enquired. Calls that need a person are passed to your staff, so customers are never stuck with a bot.",
@@ -34,6 +64,20 @@ export const PRODUCTS = [
     ctaText: "Hi, I'm interested in AI Voice Agents",
   },
   {
+    id: 'ai-chatbots',
+    icon: 'fa-comments',
+    iconType: 'fa-solid',
+    title: 'AI Chatbots',
+    tag: 'Chat',
+    desc: 'Turn replies to your campaigns into conversations. Answer questions, capture leads and book appointments on WhatsApp and your website — instantly, day or night.',
+    bestFor: 'Lead capture, FAQs, appointment booking',
+    image: 'https://images.unsplash.com/photo-1611746872915-64382b5c76da?auto=format&fit=crop&q=80&w=800',
+    details: "The chatbot is trained on your products, services and FAQs, so its answers match your business. It collects each visitor's name and requirement, books appointments, and hands the conversation to your team when a person is needed — on your website and on WhatsApp.",
+    ctaLabel: 'Ask about chatbots',
+    ctaText: "Hi, I'm interested in AI Chatbots",
+  },
+  {
+    id: 'voice-blast',
     icon: 'fa-bullhorn',
     iconType: 'fa-solid',
     title: 'Voice Blast',
@@ -46,54 +90,7 @@ export const PRODUCTS = [
     ctaText: "Hi, I'm interested in Voice Blast",
   },
   {
-    icon: 'fa-comments',
-    iconType: 'fa-solid',
-    title: 'AI Chatbots',
-    tag: 'Chat',
-    desc: 'Answer questions, capture leads and book appointments on WhatsApp and your website — instantly, day or night.',
-    bestFor: 'Lead capture, FAQs, appointment booking',
-    image: 'https://images.unsplash.com/photo-1611746872915-64382b5c76da?auto=format&fit=crop&q=80&w=800',
-    details: "The chatbot is trained on your products, services and FAQs, so its answers match your business. It collects each visitor's name and requirement, books appointments, and hands the conversation to your team when a person is needed — on your website and on WhatsApp.",
-    ctaLabel: 'Ask about chatbots',
-    ctaText: "Hi, I'm interested in AI Chatbots",
-  },
-  {
-    icon: 'fa-whatsapp',
-    iconType: 'fa-brands',
-    title: 'WhatsApp Campaigns',
-    tag: 'Campaigns',
-    desc: 'Reach customers where they already are. Broadcast offers, reminders and updates to opted-in contacts with images, videos, documents and buttons — personalised, with AI answering replies 24x7 and reports on delivered, read and replied.',
-    bestFor: 'Festive offers, reminders, order updates, lead follow-ups, win-back',
-    image: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&q=80&w=800',
-    details: "Campaigns go only to customers who have opted in, and each message can be personalised with their name or order details. When customers reply, the AI chatbot answers straight away, so interest from a campaign turns into real conversations instead of unread messages.",
-    ctaLabel: 'Plan a WhatsApp campaign',
-    ctaText: "Hi, I'm interested in WhatsApp campaigns",
-  },
-  {
-    icon: 'fa-headset',
-    iconType: 'fa-solid',
-    title: 'AI Contact Center',
-    tag: 'Contact center',
-    desc: 'AI handles routine calls and chats, while your agents take the conversations that need a person. Fewer queues, less repetitive work.',
-    bestFor: 'High call volumes, support teams',
-    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800',
-    details: "Set it up for inbound support lines or outbound calling teams. The AI takes first-level queries, collects the details and routes each conversation to the right person, so your agents spend their time on the calls that need their judgement.",
-    ctaLabel: 'Ask about the contact center',
-    ctaText: "Hi, I'm interested in the AI Contact Center",
-  },
-  {
-    icon: 'fa-layer-group',
-    iconType: 'fa-solid',
-    title: 'Omnichannel Bots',
-    tag: 'Omnichannel',
-    desc: 'One AI assistant across phone, WhatsApp, website chat and social media, so customers get the same helpful answers wherever they reach you.',
-    bestFor: 'Businesses active on many channels',
-    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800',
-    details: "Instead of a separate bot for every channel, you get one assistant trained once on your business. Whether customers reach you on Instagram, WhatsApp, your website or by phone, they get consistent answers, and your team handles the conversations that need a person.",
-    ctaLabel: 'Ask about omnichannel bots',
-    ctaText: "Hi, I'm interested in Omnichannel Bots",
-  },
-  {
+    id: 'social-media-bots',
     icon: 'fa-share-nodes',
     iconType: 'fa-solid',
     title: 'Social Media Bots',
@@ -106,6 +103,7 @@ export const PRODUCTS = [
     ctaText: "Hi, I'm interested in Social Media Bots",
   },
   {
+    id: 'saas-automation',
     icon: 'fa-gears',
     iconType: 'fa-solid',
     title: 'SaaS Automation',
@@ -116,6 +114,32 @@ export const PRODUCTS = [
     details: "We look at the repetitive steps your team does every day — copying enquiries into a sheet, sending reminders, updating customers on status — and automate them. We confirm what is possible with the tools you use today before we start.",
     ctaLabel: 'Ask about automation',
     ctaText: "Hi, I'm interested in SaaS Automation",
+  },
+  {
+    id: 'ai-contact-center',
+    icon: 'fa-headset',
+    iconType: 'fa-solid',
+    title: 'AI Contact Center',
+    tag: 'Contact center',
+    desc: 'AI handles routine calls and chats, while your agents take the conversations that need a person. Fewer queues, less repetitive work.',
+    bestFor: 'High call volumes, support teams',
+    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800',
+    details: "Set it up for inbound support lines or outbound calling teams. The AI takes first-level queries, collects the details and routes each conversation to the right person, so your agents spend their time on the calls that need their judgement.",
+    ctaLabel: 'Ask about the contact center',
+    ctaText: "Hi, I'm interested in the AI Contact Center",
+  },
+  {
+    id: 'omnichannel-bots',
+    icon: 'fa-layer-group',
+    iconType: 'fa-solid',
+    title: 'Omnichannel Bots',
+    tag: 'Omnichannel',
+    desc: 'One AI assistant across phone, WhatsApp, website chat and social media, so customers get the same helpful answers wherever they reach you.',
+    bestFor: 'Businesses active on many channels',
+    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800',
+    details: "Instead of a separate bot for every channel, you get one assistant trained once on your business. Whether customers reach you on Instagram, WhatsApp, your website or by phone, they get consistent answers, and your team handles the conversations that need a person.",
+    ctaLabel: 'Ask about omnichannel bots',
+    ctaText: "Hi, I'm interested in Omnichannel Bots",
   }
 ];
 
@@ -196,6 +220,7 @@ export const INDUSTRIES: IndustrySector[] = [
 export const CHANNELS = [
   { name: 'Phone Calls', icon: 'fa-solid fa-phone' },
   { name: 'WhatsApp', icon: 'fa-brands fa-whatsapp' },
+  { name: 'SMS', icon: 'fa-solid fa-comment-sms' },
   { name: 'Website Chat', icon: 'fa-solid fa-comments' },
   { name: 'Instagram', icon: 'fa-brands fa-instagram' },
   { name: 'Facebook', icon: 'fa-brands fa-facebook-messenger' },
@@ -208,7 +233,7 @@ export const FAQS = [
   },
   {
     question: 'Which channels do you support?',
-    answer: 'Phone calls, WhatsApp, website chat, and social media such as Instagram and Facebook. You can start with one channel and add more later.',
+    answer: 'WhatsApp, SMS, phone calls, website chat, and social media such as Instagram and Facebook. You can start with one channel and add more later.',
   },
   {
     question: 'How long does setup take?',
@@ -238,4 +263,12 @@ export const FAQS = [
     question: 'How do we get started?',
     answer: 'Book a demo. We\'ll understand your needs and show you how an AI agent would handle your customers. Depending on your use case, we can start small, for example on one channel.',
   },
+];
+
+// How pricing works, per channel. No figures anywhere (CLAUDE.md hard rule 2).
+// WhatsApp is billed per message by category since Meta's July 2025 change, not per conversation.
+export const PRICING_MODEL = [
+  { channel: 'WhatsApp & RCS', icon: 'fa-brands fa-whatsapp', unit: 'Per message', desc: 'You pay for the messages you send, by message type (marketing, utility or authentication), plus the platform charges agreed in your quote.' },
+  { channel: 'SMS & OTP', icon: 'fa-solid fa-comment-sms', unit: 'Per message', desc: 'You pay for each SMS sent, so OTPs, alerts and promotions are billed only as you use them.' },
+  { channel: 'Contact center (CCaaS)', icon: 'fa-solid fa-headset', unit: 'Per seat', desc: 'You pay for each agent seat your team uses, with AI handling routine calls and chats alongside them.' },
 ];

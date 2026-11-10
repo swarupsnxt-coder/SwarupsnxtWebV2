@@ -1,8 +1,10 @@
 import React from 'react';
 import { CONTACT, WHATSAPP_DEMO_TEXT, mailtoLink, telLink, whatsappLink } from '../constants';
+import LeadForm from './LeadForm';
 
-// No contact form by design (see CLAUDE.md). "Book a demo" CTAs across the site land here.
-const Contact: React.FC = () => {
+// Enquiry form (-> Zoho CRM, see SETUP-ZOHO.md) beside WhatsApp / Call / Email. "Book a demo" CTAs
+// open the same form in a popup (App.tsx) and fall back to this section without JavaScript.
+const Contact: React.FC<{ onPrivacyClick: () => void }> = ({ onPrivacyClick }) => {
   const channels = [
     { icon: 'fa-brands fa-whatsapp', title: 'WhatsApp', value: CONTACT.phoneDisplay, href: whatsappLink(WHATSAPP_DEMO_TEXT), external: true },
     { icon: 'fa-solid fa-phone', title: 'Call', value: CONTACT.phoneDisplay, href: telLink },
@@ -44,52 +46,24 @@ const Contact: React.FC = () => {
                 </div>
               ))}
             </div>
+            <p className="flex items-center gap-3 text-sm text-slate-600 dark:text-slate-400">
+              <i className="fa-regular fa-clock text-[#2BB6C6]" aria-hidden="true"></i>
+              <span>Support hours: {CONTACT.supportHours.time}, {CONTACT.supportHours.days}</span>
+            </p>
           </div>
 
           <div className="relative">
             <div className="absolute -inset-4 bg-gradient-to-tr from-[#2BB6C6]/20 to-[#1e266e]/20 blur-[60px] opacity-30 pointer-events-none"></div>
-            <div className="relative bg-white dark:bg-slate-900/40 backdrop-blur-2xl p-8 md:p-12 rounded-[3rem] border border-slate-200 dark:border-white/10 shadow-2xl space-y-8 text-center">
-              <div className="w-20 h-20 bg-[#2BB6C6]/10 text-[#2BB6C6] rounded-3xl flex items-center justify-center mx-auto mb-2 text-3xl shadow-inner border border-[#2BB6C6]/20">
-                <i className="fa-solid fa-calendar-check" aria-hidden="true"></i>
-              </div>
-
-              <div className="space-y-4">
+            <div className="relative bg-white dark:bg-slate-900/40 backdrop-blur-2xl p-6 sm:p-8 md:p-10 rounded-[2rem] md:rounded-[3rem] border border-slate-200 dark:border-white/10 shadow-2xl space-y-8">
+              <div className="space-y-2 text-center">
                 <h3 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white leading-tight">
-                  Book your <br />
-                  <span className="text-[#2BB6C6]">demo</span>
+                  Book your <span className="text-[#2BB6C6]">demo</span>
                 </h3>
-                <p className="text-slate-600 dark:text-slate-400 text-sm font-medium leading-relaxed px-4">
-                  Pick whichever is easiest for you. There's no form to fill.
+                <p className="text-slate-600 dark:text-slate-400 text-sm font-medium leading-relaxed">
+                  Share a few details and we'll get back to you to arrange it.
                 </p>
               </div>
-
-              <div className="flex flex-col gap-4 pt-4">
-                <a
-                  href={whatsappLink(WHATSAPP_DEMO_TEXT)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full py-5 bg-[#2BB6C6] text-[#0f172a] font-black rounded-2xl text-lg hover:scale-[1.02] active:scale-95 transition-all shadow-xl shadow-[#2BB6C6]/30 flex items-center justify-center gap-3"
-                >
-                  <i className="fa-brands fa-whatsapp text-xl" aria-hidden="true"></i>
-                  <span>Book on WhatsApp</span>
-                </a>
-
-                <a
-                  href={telLink}
-                  className="w-full py-5 bg-white/50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white font-bold rounded-2xl text-lg hover:bg-white dark:hover:bg-white/10 transition-all flex items-center justify-center gap-3"
-                >
-                  <i className="fa-solid fa-phone" aria-hidden="true"></i>
-                  <span>Call {CONTACT.phoneDisplay}</span>
-                </a>
-
-                <a
-                  href={mailtoLink('Book a demo')}
-                  className="w-full py-5 bg-white/50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white font-bold rounded-2xl text-lg hover:bg-white dark:hover:bg-white/10 transition-all flex items-center justify-center gap-3"
-                >
-                  <i className="fa-solid fa-envelope" aria-hidden="true"></i>
-                  <span>Email us</span>
-                </a>
-              </div>
+              <LeadForm onPrivacyClick={onPrivacyClick} />
             </div>
           </div>
         </div>

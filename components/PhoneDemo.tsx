@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import ContactFallback from './ContactFallback';
+import { TURNSTILE_SITE_KEY, getTurnstileToken as runTurnstile, removeTurnstile } from './turnstile';
 
 // Website assistant (Phase C1). Talks to /api/chat (Cloudflare Pages Function + Workers AI).
 // Turnstile runs once before the first message; the server then issues a 30-minute session.
@@ -7,20 +8,6 @@ import ContactFallback from './ContactFallback';
 type Role = 'user' | 'assistant';
 interface Message { role: Role; content: string }
 
-declare global {
-  interface Window {
-    turnstile?: {
-      render: (el: HTMLElement, opts: Record<string, unknown>) => string;
-      reset: (id?: string) => void;
-      remove: (id?: string) => void;
-    };
-  }
-}
-
-// Public site key (safe in the frontend). Falls back to Cloudflare's always-pass test key in local dev only.
-const TURNSTILE_SITE_KEY: string =
-  import.meta.env.VITE_TURNSTILE_SITE_KEY || (import.meta.env.DEV ? '1x00000000000000000000BB' : '');
-const TURNSTILE_SCRIPT = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
 const MAX_CHARS = 500;
 
 const GREETING: Message = {
@@ -34,22 +21,6 @@ const STARTERS = [
   'Do you support Tamil and Hindi?',
   'How do we get started?',
 ];
-
-let turnstileScript: Promise<void> | null = null;
-const loadTurnstile = () => {
-  if (window.turnstile) return Promise.resolve();
-  if (!turnstileScript) {
-    turnstileScript = new Promise((resolve, reject) => {
-      const s = document.createElement('script');
-      s.src = TURNSTILE_SCRIPT;
-      s.async = true;
-      s.onload = () => resolve();
-      s.onerror = () => { turnstileScript = null; reject(new Error('Turnstile failed to load')); };
-      document.head.appendChild(s);
-    });
-  }
-  return turnstileScript;
-};
 
 const PhoneDemo: React.FC = () => {
   const [currentTime, setCurrentTime] = useState('');
@@ -80,29 +51,9 @@ const PhoneDemo: React.FC = () => {
     if (el) el.scrollTop = el.scrollHeight;
   }, [messages, sending, showContact]);
 
-  useEffect(() => () => {
-    if (widgetIdRef.current) window.turnstile?.remove(widgetIdRef.current);
-  }, []);
+  useEffect(() => () => removeTurnstile(widgetIdRef), []);
 
-  // Runs the Turnstile widget (usually invisible; shows a checkbox only if needed) and returns a token.
-  const getTurnstileToken = async (): Promise<string> => {
-    await loadTurnstile();
-    const host = widgetHostRef.current;
-    if (!window.turnstile || !host) throw new Error('Turnstile unavailable');
-    if (widgetIdRef.current) window.turnstile.remove(widgetIdRef.current);
-
-    return new Promise((resolve, reject) => {
-      const timer = setTimeout(() => reject(new Error('Verification timed out')), 30000);
-      widgetIdRef.current = window.turnstile!.render(host, {
-        sitekey: TURNSTILE_SITE_KEY,
-        appearance: 'interaction-only',
-        size: 'flexible',
-        callback: (token: string) => { clearTimeout(timer); resolve(token); },
-        'error-callback': () => { clearTimeout(timer); reject(new Error('Verification failed')); },
-        'expired-callback': () => { clearTimeout(timer); reject(new Error('Verification expired')); },
-      });
-    });
-  };
+  const getTurnstileToken = () => runTurnstile(widgetHostRef.current, widgetIdRef);
 
   const firstQuestion = messages.find(m => m.role === 'user')?.content;
   const whatsappText = firstQuestion
@@ -158,10 +109,7 @@ const PhoneDemo: React.FC = () => {
       setUnavailable(true);
     } finally {
       setSending(false);
-      if (widgetIdRef.current) {
-        window.turnstile?.remove(widgetIdRef.current);
-        widgetIdRef.current = null;
-      }
+      removeTurnstile(widgetIdRef);
     }
   };
 

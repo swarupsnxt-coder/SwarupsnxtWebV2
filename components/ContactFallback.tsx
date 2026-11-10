@@ -34,6 +34,7 @@ const ContactFallback: React.FC<ContactFallbackProps> = ({
             key={a.label}
             href={a.href}
             {...(a.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+            {...(a.primary ? { 'data-book-demo': true } : {})}
             className={`flex items-center justify-center gap-2 rounded-xl font-bold transition-all hover:scale-[1.03] active:scale-95 ${compact ? 'py-2 text-xs' : 'py-3 text-sm'} ${
               a.primary
                 ? 'bg-[#2BB6C6] text-[#0f172a] shadow-lg shadow-[#2BB6C6]/20'

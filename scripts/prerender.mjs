@@ -21,7 +21,7 @@ const html = template
   .replace('<!--app-jsonld-->', `<script type="application/ld+json">${jsonLd()}</script>`);
 
 // Sanity checks: key content must be in the static HTML.
-for (const must of ['<h1', 'Every call answered.', 'WhatsApp Campaigns', 'Voice Blast', 'Frequently Asked Questions', '"@type":"FAQPage"']) {
+for (const must of ['<h1', 'Scale Customer Engagement', 'Bulk WhatsApp &amp; RCS Engine', 'Voice Blast', 'Frequently Asked Questions', '"@type":"FAQPage"']) {
   if (!html.includes(must)) throw new Error(`prerender: expected "${must}" in output`);
 }
 
