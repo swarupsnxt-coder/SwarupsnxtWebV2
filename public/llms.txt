@@ -6,11 +6,11 @@ Swarups NXT handles the setup, training and ongoing support; clients do not need
 
 ## Products
 
-- Bulk WhatsApp & RCS Engine: bulk messages to opted-in contacts with rich media and personalisation; AI answers replies; delivered/read/replied reporting.
-- Enterprise SMS & OTP: OTPs, transaction alerts and promotional SMS at volume, with delivery reports; help setting up the client's DLT sender IDs and templates.
-- AI Voice Agents: answer inbound calls and make follow-up calls 24x7 in Indian languages; hand over to staff when a person is needed.
-- AI Chatbots: answer questions, capture leads and book appointments on WhatsApp and websites.
-- Voice Blast: send a recorded or AI-voiced message to many phones at once, with press-a-key (IVR) responses and call reports.
+- [Bulk WhatsApp & RCS Engine](https://swarupsnxt.com/bulk-whatsapp-rcs/): bulk messages to opted-in contacts with rich media and personalisation; AI answers replies; delivered/read/replied reporting.
+- [Enterprise SMS & OTP](https://swarupsnxt.com/sms-otp/): OTPs, transaction alerts and promotional SMS at volume, with delivery reports; help setting up the client's DLT sender IDs and templates.
+- [AI Voice Agents](https://swarupsnxt.com/ai-voice-agents/): answer inbound calls and make follow-up calls 24x7 in Indian languages; hand over to staff when a person is needed.
+- [AI Chatbots](https://swarupsnxt.com/ai-chatbots/): answer questions, capture leads and book appointments on WhatsApp and websites.
+- [Voice Blast](https://swarupsnxt.com/voice-blast/): send a recorded or AI-voiced message to many phones at once, with press-a-key (IVR) responses and call reports.
 - AI Contact Center: AI handles routine calls and chats; human agents take the conversations that need a person.
 - Omnichannel Bots: one AI assistant across phone, WhatsApp, website chat and social media.
 - Social Media Bots: automatic replies to Instagram and Facebook comments and DMs; turns interested followers into leads.

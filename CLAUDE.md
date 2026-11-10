@@ -50,8 +50,14 @@ file wins.
   CDNs in `index.html`.
 - Pre-rendered at build time: `npm run build` = client build + SSR build of
   `entry-server.tsx` + `scripts/prerender.mjs`, which injects the page HTML and schema.org
-  JSON-LD into `dist/index.html`. Keep components safe to render without `window`/`document`
+  JSON-LD into `dist/index.html`, and writes `dist/<product>/index.html` for each product page
+  (`routes` in `entry-server.tsx`) with its own title, description, canonical URL and JSON-LD.
+  Keep components safe to render without `window`/`document`
   during render (use effects), and don't make markup depend on browser-only state (hydration).
+- Product pages: `/bulk-whatsapp-rcs/`, `/sms-otp/`, `/ai-voice-agents/`, `/ai-chatbots/`,
+  `/voice-blast/` (trailing slash = canonical). Content in `PRODUCT_PAGES` (`constants.tsx`),
+  layout in `components/ProductPage.tsx`; `App` picks the page from its `path` prop. Adding one:
+  add an entry to `PRODUCT_PAGES`, then add its URL to `public/sitemap.xml` and `public/llms.txt`.
 - SEO files in `public/`: `robots.txt`, `sitemap.xml`, `llms.txt`, `og-image-v3.png`, icons.
   The link-preview image (1200x630) is named in `index.html` (og/twitter tags) and
   `entry-server.tsx`. When it changes, give it a new filename (`og-image-v4.png`, ...) and update
