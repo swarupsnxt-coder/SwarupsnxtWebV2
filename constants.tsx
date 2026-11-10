@@ -1,4 +1,4 @@
-import { IndustrySector } from './types';
+import { IndustrySector, ProductPage } from './types';
 
 // Single source of truth for contact details and prefilled messages.
 export const CONTACT = {
@@ -272,3 +272,167 @@ export const PRICING_MODEL = [
   { channel: 'SMS & OTP', icon: 'fa-solid fa-comment-sms', unit: 'Per message', desc: 'You pay for each SMS sent, so OTPs, alerts and promotions are billed only as you use them.' },
   { channel: 'Contact center (CCaaS)', icon: 'fa-solid fa-headset', unit: 'Per seat', desc: 'You pay for each agent seat your team uses, with AI handling routine calls and chats alongside them.' },
 ];
+
+// Shared answers reused on product pages, so they stay identical to the home page FAQ.
+const sharedFaq = (questionStart: string) => {
+  const faq = FAQS.find((f) => f.question.startsWith(questionStart));
+  if (!faq) throw new Error(`FAQ not found: ${questionStart}`);
+  return faq;
+};
+
+// One page per main product at /<productId>/ (pre-rendered by scripts/prerender.mjs).
+// Content only restates confirmed facts from PRODUCTS, FAQS and PRICING_MODEL; no figures or proof.
+export const PRODUCT_PAGES: ProductPage[] = [
+  {
+    productId: 'bulk-whatsapp-rcs',
+    seoTitle: 'Bulk WhatsApp & RCS Messaging in India | Swarups NXT',
+    metaDescription: 'Send bulk WhatsApp and RCS campaigns to opted-in customers, with images, buttons and personalisation, and AI answering replies 24x7. Book a demo.',
+    h1: 'Bulk WhatsApp & RCS messaging, with AI handling the replies',
+    features: [
+      'Campaigns to opted-in customers: offers, reminders, order updates and lead follow-ups',
+      'Rich messages with images, videos, documents and buttons',
+      "Personalised with each customer's name or order details",
+      'An AI chatbot that answers replies straight away, 24x7',
+      'Reports on delivered, read and replied',
+      'RCS: rich, branded messages in the default messaging app on supported Android phones',
+    ],
+    industryIds: [],
+    faqs: [
+      {
+        question: 'Who can I send bulk WhatsApp messages to?',
+        answer: "Only customers who have opted in to receive messages from your business. Collecting and keeping that opt-in is your business's responsibility, as set out in our Terms of Service.",
+      },
+      {
+        question: 'What is RCS messaging?',
+        answer: 'RCS (Rich Communication Services) is the upgrade to SMS. On supported Android phones, your messages arrive in the default messaging app with your brand name, images and buttons, without the customer installing anything.',
+      },
+      {
+        question: 'What happens when customers reply to a campaign?',
+        answer: 'The AI chatbot answers straight away, using what it knows about your products and services. When a person is needed, the conversation goes to your team, following the handover workflow agreed with you.',
+      },
+      {
+        question: 'How is bulk WhatsApp and RCS messaging priced?',
+        answer: "You pay for the messages you send, by message type (marketing, utility or authentication), plus the platform charges agreed in your quote. Tell us your monthly volume and we'll share a custom quote.",
+      },
+      sharedFaq('How long does setup take?'),
+    ],
+  },
+  {
+    productId: 'sms-otp',
+    seoTitle: 'Enterprise SMS & OTP Service in India | Swarups NXT',
+    metaDescription: 'Send OTPs, transaction alerts and promotional SMS at volume, with delivery status for every message. Set up and supported by Swarups NXT. Book a demo.',
+    h1: 'Enterprise SMS & OTP, set up for your business',
+    features: [
+      'Login and payment OTPs sent on transactional routes',
+      'Order, account and transaction alerts',
+      'Promotional SMS campaigns',
+      'Delivery status for every message',
+      'Sending connected to your website or app',
+      "Help setting up DLT sender IDs and templates, registered in your business's name",
+    ],
+    industryIds: [],
+    faqs: [
+      {
+        question: 'Why use SMS when customers have WhatsApp?',
+        answer: 'SMS reaches every phone, with or without internet or apps, so it is the dependable choice for OTPs and important alerts. Many businesses use SMS and WhatsApp together.',
+      },
+      {
+        question: 'Do I need DLT registration to send business SMS in India?',
+        answer: "Yes. Business SMS in India is sent using sender IDs and message templates registered on DLT. We help you set them up, and the registrations stay in your business's name.",
+      },
+      {
+        question: 'Can you connect OTPs and alerts to my website or app?',
+        answer: 'Yes. We connect sending to your website or app, and set up delivery reports so you can see what reached each customer.',
+      },
+      {
+        question: 'How is SMS priced?',
+        answer: "You pay for each SMS sent, so OTPs, alerts and promotions are billed only as you use them. Tell us your monthly volume and we'll share a custom quote.",
+      },
+      sharedFaq('How long does setup take?'),
+    ],
+  },
+  {
+    productId: 'ai-voice-agents',
+    seoTitle: 'AI Voice Agents for Indian Businesses | Swarups NXT',
+    metaDescription: 'AI voice agents that answer calls and make follow-up calls 24x7 in English, Hindi and other Indian languages, and hand over to your team. Book a demo.',
+    h1: 'AI voice agents that answer every call, 24x7',
+    features: [
+      'Answers inbound calls day and night, including after hours',
+      'Calls back people who enquired and follows up with leads',
+      'Answers common questions and qualifies new leads',
+      'Books appointments',
+      'Speaks English, Hindi and other Indian languages',
+      'Passes calls to your staff when a person is needed',
+    ],
+    industryIds: ['real-estate', 'healthcare', 'education', 'finance', 'automobile'],
+    faqs: [
+      sharedFaq('Which languages'),
+      {
+        question: 'Can the voice agent make outbound calls?',
+        answer: 'Yes. It can call back people who enquired, follow up with leads and make reminder calls, for example for appointments or EMIs.',
+      },
+      sharedFaq('What happens when the AI'),
+      sharedFaq('Will the AI replace'),
+      sharedFaq('How long does setup take?'),
+    ],
+  },
+  {
+    productId: 'ai-chatbots',
+    seoTitle: 'AI Chatbots for WhatsApp & Websites | Swarups NXT',
+    metaDescription: 'AI chatbots trained on your business that answer questions, capture leads and book appointments on WhatsApp and your website, 24x7. Book a demo.',
+    h1: 'AI chatbots for WhatsApp and your website',
+    features: [
+      'Trained on your products, services and FAQs',
+      'Answers questions instantly, day or night',
+      "Collects each visitor's name and requirement",
+      'Books appointments',
+      'Turns replies to your WhatsApp campaigns into conversations',
+      'Hands the conversation to your team when a person is needed',
+    ],
+    industryIds: ['real-estate', 'healthcare', 'education', 'ecommerce', 'automobile'],
+    faqs: [
+      {
+        question: 'Which channels can the chatbot work on?',
+        answer: 'Your website and WhatsApp. For Instagram and Facebook comments and DMs, see Social Media Bots; for one assistant across every channel, see Omnichannel Bots.',
+      },
+      sharedFaq('Which languages'),
+      sharedFaq('What happens when the AI'),
+      sharedFaq('Do I need a technical team?'),
+      sharedFaq('How long does setup take?'),
+    ],
+  },
+  {
+    productId: 'voice-blast',
+    seoTitle: 'Voice Blast & Voice Broadcast Service | Swarups NXT',
+    metaDescription: "Send a recorded or AI-voiced message to thousands of phones at once, in your customers' language, with press-a-key responses and call reports.",
+    h1: 'Voice blast: one message, thousands of calls',
+    features: [
+      'A recorded voice or an AI-generated one',
+      'Messages in the languages your customers speak',
+      'Press-a-key (IVR) options, for example to ask for a callback',
+      'Reports on who answered, missed the call or pressed a key',
+      'Suits announcements, reminders, promotions and surveys',
+    ],
+    industryIds: [],
+    faqs: [
+      {
+        question: 'What is a voice blast?',
+        answer: 'A voice blast, also called a voice broadcast, sends the same recorded or AI-voiced message to many phone numbers at once. It suits announcements, reminders and offers that many customers need to hear quickly.',
+      },
+      {
+        question: 'Can customers respond to a voice blast?',
+        answer: 'Yes. Add press-a-key options so interested customers can, for example, ask for a callback. You then see who answered, missed the call or pressed a key.',
+      },
+      sharedFaq('Which languages'),
+      sharedFaq('How long does setup take?'),
+    ],
+  },
+];
+
+export const productPagePath = (productId: string) => `/${productId}/`;
+
+// Finds the product page for a URL path such as "/sms-otp" or "/sms-otp/"; null = home page.
+export const findProductPage = (path: string) => {
+  const slug = path.replace(/^\/+|\/+$/g, '');
+  return PRODUCT_PAGES.find((p) => p.productId === slug) ?? null;
+};

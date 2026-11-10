@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
 import { FAQS, whatsappLink } from '../constants';
 
-const FAQ: React.FC = () => {
+interface FAQProps {
+  items?: { question: string; answer: string }[];
+  subtitle?: string;
+}
+
+// Home page shows FAQS; product pages pass their own questions.
+const FAQ: React.FC<FAQProps> = ({ items = FAQS, subtitle = 'Straight answers to the questions business owners ask us most.' }) => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   const toggleFAQ = (index: number) => {
@@ -14,11 +20,11 @@ const FAQ: React.FC = () => {
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-4 text-slate-900 dark:text-white">Frequently Asked Questions</h2>
-            <p className="text-slate-600 dark:text-slate-400">Straight answers to the questions business owners ask us most.</p>
+            <p className="text-slate-600 dark:text-slate-400">{subtitle}</p>
           </div>
 
           <div className="space-y-4">
-            {FAQS.map((faq, index) => {
+            {items.map((faq, index) => {
               const isOpen = openIndex === index;
               return (
                 <div

@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Logo from './Logo';
 import { Theme } from '../types';
+import { findProductPage, productPagePath } from '../constants';
 
 interface NavbarProps {
   theme?: Theme;
   toggleTheme?: () => void;
+  isHome?: boolean;
 }
 
 interface NavItem {
@@ -13,7 +15,8 @@ interface NavItem {
   children?: { name: string; href: string }[];
 }
 
-// Products dropdown order = business priority; each entry scrolls to its product card.
+// Products dropdown order = business priority; entries open the product's own page when it has
+// one (PRODUCT_PAGES), otherwise scroll to its card on the home page.
 // Resources keeps the sections that left the top level (NXT Lab, Why Us, Process) reachable.
 const NAV_ITEMS: NavItem[] = [
   {
@@ -44,7 +47,7 @@ const NAV_ITEMS: NavItem[] = [
 
 const linkClass = "text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-300 hover:text-[#2BB6C6] dark:hover:text-[#2BB6C6] transition-colors";
 
-const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme }) => {
+const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme, isHome = true }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
@@ -73,14 +76,19 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme }) => {
     };
   }, [openDropdown]);
 
+  // Section ids live on the home page; from a product page, link back to them.
+  const hrefFor = (id: string) =>
+    findProductPage(id) ? productPagePath(id) : isHome ? `#${id}` : `/#${id}`;
+
+  // Scrolls to the section when it is on this page; otherwise the link is followed normally.
   const handleNav = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
-    e.preventDefault();
     setIsMobileMenuOpen(false);
     setOpenDropdown(null);
+    if (findProductPage(id)) return;
     const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+    if (!element) return;
+    e.preventDefault();
+    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
   return (
@@ -88,7 +96,7 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme }) => {
       <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'py-2' : 'py-6'}`}>
         <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8`}>
           <div className={`glass rounded-2xl px-6 py-3 flex items-center justify-between shadow-xl dark:shadow-2xl transition-all duration-500`}>
-            <a href="#hero" className="flex items-center" onClick={(e) => handleNav(e, 'hero')}>
+            <a href={isHome ? '#hero' : '/'} className="flex items-center" onClick={isHome ? (e) => handleNav(e, 'hero') : undefined}>
               <Logo />
             </a>
 
@@ -113,7 +121,7 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme }) => {
                     {item.children.map((child, i) => (
                       <li key={child.href}>
                         <a
-                          href={`#${child.href}`}
+                          href={hrefFor(child.href)}
                           onClick={(e) => handleNav(e, child.href)}
                           className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-[#2BB6C6]/10 hover:text-[#2BB6C6] transition-colors"
                         >
@@ -127,7 +135,7 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme }) => {
               ) : (
                 <a
                   key={item.name}
-                  href={`#${item.href}`}
+                  href={hrefFor(item.href)}
                   onClick={(e) => handleNav(e, item.href)}
                   className={linkClass}
                 >
@@ -180,7 +188,7 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme }) => {
           {NAV_ITEMS.map((item) => (
             <div key={item.name} className="flex flex-col items-center gap-3 text-center">
               <a
-                href={`#${item.href}`}
+                href={hrefFor(item.href)}
                 className="text-2xl font-bold text-slate-900 dark:text-white hover:text-[#2BB6C6] transition-colors tracking-widest uppercase"
                 onClick={(e) => handleNav(e, item.href)}
               >
@@ -189,7 +197,7 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme }) => {
               {item.children?.map((child) => (
                 <a
                   key={child.href}
-                  href={`#${child.href}`}
+                  href={hrefFor(child.href)}
                   className="text-sm font-semibold text-slate-600 dark:text-slate-400 hover:text-[#2BB6C6] transition-colors"
                   onClick={(e) => handleNav(e, child.href)}
                 >

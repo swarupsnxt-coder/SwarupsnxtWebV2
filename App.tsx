@@ -14,9 +14,15 @@ import Contact from './components/Contact';
 import Footer from './components/Footer';
 import WhatsAppButton from './components/WhatsAppButton';
 import { LeadFormModal, PrivacyModal, TermsModal } from './components/Modals';
+import ProductPage from './components/ProductPage';
+import { findProductPage } from './constants';
 import { Theme } from './types';
 
-const App: React.FC = () => {
+// `path` is the URL path: window.location.pathname in the browser, the route being
+// pre-rendered at build time (entry-server.tsx). Product paths render a ProductPage.
+const App: React.FC<{ path: string }> = ({ path }) => {
+  const productPage = findProductPage(path);
+
   // The inline script in index.html applies the saved/system theme before first paint;
   // read it back from the <html> class (server render defaults to light).
   const [theme, setTheme] = useState<Theme>(() =>
@@ -58,23 +64,30 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-[#0f172a] text-slate-900 dark:text-white transition-colors duration-500">
-      <Navbar theme={theme} toggleTheme={toggleTheme} />
+      <Navbar theme={theme} toggleTheme={toggleTheme} isHome={!productPage} />
 
       <main>
-        <Hero />
-        <Integrations />
-        <Products />
-        <Infrastructure />
-        <Pricing />
-        <NxtLab />
-        <HowItWorks />
-        <WhyUs />
-        <Industries />
-        <FAQ />
-        <Contact onPrivacyClick={openPrivacy} />
+        {productPage ? (
+          <ProductPage page={productPage} onPrivacyClick={openPrivacy} />
+        ) : (
+          <>
+            <Hero />
+            <Integrations />
+            <Products />
+            <Infrastructure />
+            <Pricing />
+            <NxtLab />
+            <HowItWorks />
+            <WhyUs />
+            <Industries />
+            <FAQ />
+            <Contact onPrivacyClick={openPrivacy} />
+          </>
+        )}
       </main>
 
       <Footer
+        isHome={!productPage}
         onPrivacyClick={openPrivacy}
         onTermsClick={() => setShowTerms(true)}
       />

@@ -1,5 +1,5 @@
 import React from 'react';
-import { PRODUCTS, whatsappLink } from '../constants';
+import { PRODUCTS, findProductPage, productPagePath, whatsappLink } from '../constants';
 
 
 const Products: React.FC = () => {
@@ -74,16 +74,27 @@ const Products: React.FC = () => {
                   <div className="text-sm font-bold text-slate-900 dark:text-white">{product.bestFor}</div>
                 </div>
 
-                <a
-                  href={whatsappLink(product.ctaText)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-[#2BB6C6] hover:gap-3 transition-all"
-                >
-                  <i className="fa-brands fa-whatsapp" aria-hidden="true"></i>
-                  <span>{product.ctaLabel}</span>
-                  <i className="fa-solid fa-arrow-right-long text-xs" aria-hidden="true"></i>
-                </a>
+                <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3">
+                  {findProductPage(product.id) && (
+                    <a
+                      href={productPagePath(product.id)}
+                      className="inline-flex items-center gap-2 text-sm font-bold text-slate-900 dark:text-white hover:text-[#2BB6C6] hover:gap-3 transition-all"
+                    >
+                      <span>Learn more<span className="sr-only"> about {product.title}</span></span>
+                      <i className="fa-solid fa-arrow-right-long text-xs" aria-hidden="true"></i>
+                    </a>
+                  )}
+                  <a
+                    href={whatsappLink(product.ctaText)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 text-sm font-bold text-[#2BB6C6] hover:gap-3 transition-all"
+                  >
+                    <i className="fa-brands fa-whatsapp" aria-hidden="true"></i>
+                    <span>{product.ctaLabel}</span>
+                    <i className="fa-solid fa-arrow-right-long text-xs" aria-hidden="true"></i>
+                  </a>
+                </div>
               </div>
             </div>
           ))}
