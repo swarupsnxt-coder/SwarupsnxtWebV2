@@ -15,13 +15,14 @@ import Footer from './components/Footer';
 import WhatsAppButton from './components/WhatsAppButton';
 import { LeadFormModal, PrivacyModal, TermsModal } from './components/Modals';
 import ProductPage from './components/ProductPage';
-import { findProductPage } from './constants';
+import { resolveRoute } from './routes';
 import { Theme } from './types';
 
 // `path` is the URL path: window.location.pathname in the browser, the route being
-// pre-rendered at build time (entry-server.tsx). Product paths render a ProductPage.
+// pre-rendered at build time (entry-server.tsx). `resolveRoute` picks the page to render.
 const App: React.FC<{ path: string }> = ({ path }) => {
-  const productPage = findProductPage(path);
+  const route = resolveRoute(path);
+  const isHome = route.kind === 'home';
 
   // The inline script in index.html applies the saved/system theme before first paint;
   // read it back from the <html> class (server render defaults to light).
@@ -64,11 +65,11 @@ const App: React.FC<{ path: string }> = ({ path }) => {
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-[#0f172a] text-slate-900 dark:text-white transition-colors duration-500">
-      <Navbar theme={theme} toggleTheme={toggleTheme} isHome={!productPage} />
+      <Navbar theme={theme} toggleTheme={toggleTheme} isHome={isHome} />
 
       <main>
-        {productPage ? (
-          <ProductPage page={productPage} onPrivacyClick={openPrivacy} />
+        {route.kind === 'product' ? (
+          <ProductPage page={route.page} onPrivacyClick={openPrivacy} />
         ) : (
           <>
             <Hero />
@@ -87,7 +88,7 @@ const App: React.FC<{ path: string }> = ({ path }) => {
       </main>
 
       <Footer
-        isHome={!productPage}
+        isHome={isHome}
         onPrivacyClick={openPrivacy}
         onTermsClick={() => setShowTerms(true)}
       />

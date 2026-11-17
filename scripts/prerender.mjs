@@ -1,5 +1,6 @@
-// Injects the server-rendered page and JSON-LD into dist/index.html after `vite build`, and writes
-// one dist/<product>/index.html per product page with its own title, description and canonical URL.
+// Injects the server-rendered page and JSON-LD into dist/index.html after `vite build`, writes
+// one dist/<path>/index.html per route (entry-server.tsx `routes`) with its own title, description
+// and canonical URL, and generates dist/sitemap.xml from the same list.
 // Run via `npm run build` (see package.json). Fails the build if anything is missing.
 import { readFileSync, writeFileSync, mkdirSync, rmSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -9,7 +10,7 @@ const root = fileURLToPath(new URL('..', import.meta.url));
 const distDir = resolve(root, 'dist');
 const ssrDir = resolve(root, '.ssr');
 
-const { render, jsonLd, routes } = await import(pathToFileURL(resolve(ssrDir, 'entry-server.js')).href);
+const { render, jsonLd, routes, SITE } = await import(pathToFileURL(resolve(ssrDir, 'entry-server.js')).href);
 
 const template = readFileSync(resolve(distDir, 'index.html'), 'utf8');
 if (!template.includes('<!--app-html-->') || !template.includes('<!--app-jsonld-->')) {
@@ -59,5 +60,18 @@ for (const { path, meta } of routes) {
   writeFileSync(resolve(outDir, 'index.html'), html);
   console.log(`prerender: wrote ${path}index.html (${(html.length / 1024).toFixed(1)} kB)`);
 }
+
+// Sitemap = every pre-rendered route, so new pages can't be left out.
+const lastmod = new Date().toISOString().slice(0, 10);
+const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${routes.map(({ path }) => `  <url>
+    <loc>${SITE}${path.slice(1)}</loc>
+    <lastmod>${lastmod}</lastmod>
+  </url>`).join('\n')}
+</urlset>
+`;
+writeFileSync(resolve(distDir, 'sitemap.xml'), sitemap);
+console.log(`prerender: wrote sitemap.xml (${routes.length} URLs)`);
 
 rmSync(ssrDir, { recursive: true, force: true });

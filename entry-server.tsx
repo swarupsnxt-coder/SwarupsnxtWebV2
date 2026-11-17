@@ -5,7 +5,7 @@ import { renderToString } from 'react-dom/server';
 import App from './App';
 import { CONTACT, FAQS, PRODUCTS, PRODUCT_PAGES, findProductPage, productPagePath } from './constants';
 
-const SITE = 'https://swarupsnxt.com/';
+export const SITE = 'https://swarupsnxt.com/';
 const ORG_ID = `${SITE}#organization`;
 const pageUrl = (productId: string) => `${SITE}${productPagePath(productId).slice(1)}`;
 
