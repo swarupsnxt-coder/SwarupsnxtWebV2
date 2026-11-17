@@ -18,6 +18,17 @@ export const mailtoLink = (subject: string) =>
 
 export const telLink = `tel:${CONTACT.phone}`;
 
+// Official profiles (confirmed by the owner, Nov 2026). Shown in the footer; `inSameAs` ones are
+// also listed as `sameAs` on the Organization JSON-LD (entry-server.tsx).
+export const SOCIAL_PROFILES = [
+  { name: 'LinkedIn', icon: 'fa-brands fa-linkedin-in', url: 'https://www.linkedin.com/in/swarupsnxt/', inSameAs: true },
+  { name: 'Instagram', icon: 'fa-brands fa-instagram', url: 'https://www.instagram.com/swarupsnxt/', inSameAs: true },
+  { name: 'Facebook', icon: 'fa-brands fa-facebook-f', url: 'https://www.facebook.com/swarupsnxt/', inSameAs: true },
+  { name: 'YouTube', icon: 'fa-brands fa-youtube', url: 'https://www.youtube.com/@SwarupsNXT', inSameAs: true },
+  // Short share link that redirects to the Google Business Profile, so it stays out of sameAs.
+  { name: 'Google Maps', icon: 'fa-solid fa-location-dot', url: 'https://maps.app.goo.gl/fw57zneDShmFSzBNA', inSameAs: false },
+];
+
 export const WHATSAPP_DEFAULT_TEXT = "Hi Swarups NXT, I'd like to know more about your AI solutions";
 export const WHATSAPP_DEMO_TEXT = "Hi Swarups NXT, I'd like to book a demo";
 

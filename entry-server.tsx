@@ -3,7 +3,7 @@
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import App from './App';
-import { CONTACT, FAQS, INDUSTRIES, PRODUCTS, PRODUCT_PAGES, industryPagePath, productPagePath } from './constants';
+import { CONTACT, FAQS, INDUSTRIES, PRODUCTS, PRODUCT_PAGES, SOCIAL_PROFILES, industryPagePath, productPagePath } from './constants';
 import { resolveRoute } from './routes';
 import { GUIDES, GUIDES_PATH, guidePath, guideShortTitle } from './content/guides';
 
@@ -66,6 +66,7 @@ const organization = {
     email: CONTACT.email,
     areaServed: 'IN',
   }],
+  sameAs: SOCIAL_PROFILES.filter((p) => p.inSameAs).map((p) => p.url),
 };
 
 const service = (p: typeof PRODUCTS[number]) => ({

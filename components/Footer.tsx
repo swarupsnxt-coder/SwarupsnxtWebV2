@@ -1,7 +1,7 @@
 
 import React from 'react';
 import Logo from './Logo';
-import { CONTACT, INDUSTRIES, PRODUCTS, PRODUCT_PAGES, industryPagePath, mailtoLink, productPagePath, telLink } from '../constants';
+import { CONTACT, INDUSTRIES, PRODUCTS, PRODUCT_PAGES, SOCIAL_PROFILES, industryPagePath, mailtoLink, productPagePath, telLink } from '../constants';
 import { GUIDES, GUIDES_PATH, guidePath, guideShortTitle } from '../content/guides';
 
 interface FooterProps {
@@ -34,6 +34,22 @@ const Footer: React.FC<FooterProps> = ({ isHome = true, onPrivacyClick, onTermsC
                 <a href={telLink} className={linkClass}>{CONTACT.phoneDisplay}</a>
               </div>
             </div>
+            <ul className="flex flex-wrap gap-3" aria-label="Swarups NXT on social media and Google Maps">
+              {SOCIAL_PROFILES.map((p) => (
+                <li key={p.name}>
+                  <a
+                    href={p.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`Swarups NXT on ${p.name}`}
+                    title={p.name}
+                    className="w-10 h-10 flex items-center justify-center rounded-full border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-400 hover:border-[#2BB6C6] hover:text-[#2BB6C6] transition-colors"
+                  >
+                    <i className={p.icon} aria-hidden="true"></i>
+                  </a>
+                </li>
+              ))}
+            </ul>
           </div>
 
           <nav aria-labelledby="footer-products">

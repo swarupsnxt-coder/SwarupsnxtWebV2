@@ -50,7 +50,7 @@ for (const { path, meta } of routes) {
   // Sanity checks: key content must be in the static HTML.
   const pageMusts = ['<h1', 'Frequently Asked Questions', 'id="contact"', '"@type":"FAQPage"', '"@type":"BreadcrumbList"'];
   const musts = path === '/'
-    ? ['<h1', 'Scale Customer Engagement', 'Bulk WhatsApp &amp; RCS Engine', 'Voice Blast', 'What do you', 'Frequently Asked Questions', '"@type":"FAQPage"']
+    ? ['"sameAs":[', 'Swarups NXT on LinkedIn', '<h1','Scale Customer Engagement', 'Bulk WhatsApp &amp; RCS Engine', 'Voice Blast', 'What do you', 'Frequently Asked Questions', '"@type":"FAQPage"']
     : path === '/guides/'
       ? ['<h1', 'id="contact"', '"@type":"CollectionPage"', '"@type":"BreadcrumbList"', `<link rel="canonical" href="${meta.url}"`]
       : path.startsWith('/guides/')

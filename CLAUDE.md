@@ -18,6 +18,8 @@ file wins.
 - Privacy grievance email: grievance@swarupsnxt.com (Privacy Policy contact)
 - Support hours: 10:00 AM – 6:00 PM IST, Monday to Friday (`CONTACT.supportHours`)
 - Business phone for calls: +91 7550007208
+- Social profiles (LinkedIn, Instagram, Facebook, YouTube, Google Maps): `SOCIAL_PROFILES` in
+  `constants.tsx` (footer icons + Organization `sameAs`), also listed in `public/llms.txt`.
 - Book a demo: links to the on-page Contact section (`#contact`), which has an enquiry form
   (name, phone, optional email/company/product/message, consent) plus WhatsApp, Call and Email.
   "Book a demo" links carry `data-book-demo` and open the same form in a popup (`App.tsx`).
