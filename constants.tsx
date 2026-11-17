@@ -216,89 +216,6 @@ export const CHANNEL_COMPARISON: {
   ],
 };
 
-export const INDUSTRIES: IndustrySector[] = [
-  {
-    id: 'real-estate',
-    title: 'Real Estate',
-    problem: 'Property enquiries arrive at all hours, and leads go cold before a salesperson calls back.',
-    solution: 'Answers every enquiry instantly, qualifies budget and location, and books site visits into your team\'s calendar.',
-    details: "Works for builders, brokers and property consultants. Use it for new-project launches, enquiries from property portals and ads, site-visit reminders, and follow-ups with prospects who went quiet — in English, Hindi and regional languages.",
-    product: 'AI Voice Agents + AI Chatbots',
-    image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&q=80&w=800',
-    imageAlt: 'Modern residential building exterior',
-  },
-  {
-    id: 'healthcare',
-    title: 'Healthcare & Clinics',
-    problem: 'Front-desk staff are busy with patients, so appointment calls go unanswered and no-shows pile up.',
-    solution: 'Books and reschedules appointments by phone or WhatsApp, and sends reminders before each visit.',
-    details: "Suits clinics, diagnostic centres and hospitals. Patients can book, reschedule or cancel without waiting on hold, get reminders before their visit, and ask routine questions about timings and services, while your front desk focuses on the patients in front of them.",
-    product: 'AI Voice Agents + WhatsApp chatbot',
-    image: 'https://images.unsplash.com/photo-1504813184591-01572f98c85f?auto=format&fit=crop&q=80&w=800',
-    imageAlt: 'Hospital corridor',
-  },
-  {
-    id: 'education',
-    title: 'Education',
-    problem: 'Admission season brings more calls and messages from parents than the team can handle.',
-    solution: 'Answers admission and fee-structure questions, shares brochures, and schedules campus visits or counselling calls.',
-    details: "Useful for schools, colleges, coaching centres and ed-tech companies. Parents and students get quick answers on courses, eligibility and admission steps at any hour, and your counsellors receive enquiries that are ready for a conversation.",
-    product: 'AI Chatbots + AI Voice Agents',
-    image: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=800',
-    imageAlt: 'Students working together',
-  },
-  {
-    id: 'ecommerce',
-    title: 'E-commerce & D2C',
-    problem: 'Customers keep asking "where is my order?", and unconfirmed COD orders get returned.',
-    solution: 'Shares order status, confirms COD orders before dispatch, and answers product questions on WhatsApp and chat.',
-    details: "Built for online stores and D2C brands. Customers get instant order updates, COD orders are confirmed before they ship, and product questions are answered while the buyer is still interested — on WhatsApp, your website and social media.",
-    product: 'AI Chatbots + Omnichannel Bots',
-    image: 'https://images.unsplash.com/photo-1557821552-17105176677c?auto=format&fit=crop&q=80&w=800',
-    imageAlt: 'Online shopping on a laptop',
-  },
-  {
-    id: 'finance',
-    title: 'Finance & NBFC Collections',
-    problem: 'Calling every borrower about upcoming or missed EMIs takes a large team and a lot of time.',
-    solution: 'Makes polite EMI reminder calls in the borrower\'s language, captures a promise-to-pay date, and flags cases for your team.',
-    details: "Designed for NBFCs, lenders and collection teams. Reminder calls stay polite and consistent, happen in the borrower's preferred language, and record the response, so your team can focus on the accounts that need personal attention.",
-    product: 'AI Voice Agents',
-    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800',
-    imageAlt: 'Financial charts on a screen',
-  },
-  {
-    id: 'automobile',
-    title: 'Automobile Dealers',
-    problem: 'Test-drive and service enquiries come in after hours, and follow-ups depend on busy staff.',
-    solution: 'Books test drives and service appointments, sends service reminders, and follows up with interested buyers.',
-    details: "For car and two-wheeler dealerships. The AI agent handles test-drive requests, service bookings and reminders, and follows up with walk-in and online leads, so no interested buyer is forgotten after a showroom visit.",
-    product: 'AI Voice Agents + WhatsApp chatbot',
-    image: 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&q=80&w=800',
-    imageAlt: 'Car parked on a road',
-  },
-  {
-    id: 'hospitality',
-    title: 'Hospitality',
-    problem: 'Booking and availability questions arrive around the clock, across phone, WhatsApp and social media.',
-    solution: 'Answers room availability and amenity questions, takes booking requests, and hands special requests to your staff.',
-    details: "For hotels, resorts and restaurants. Guests get quick answers about rooms, availability and amenities on the channel they prefer, booking requests are captured any time of day, and special requests reach your staff.",
-    product: 'Omnichannel Bots + AI Contact Center',
-    image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80&w=800',
-    imageAlt: 'Hotel with a swimming pool',
-  },
-];
-
-// Channels we work on. No third-party tool integrations are claimed (confirmed Sept 2026).
-export const CHANNELS = [
-  { name: 'Phone Calls', icon: 'fa-solid fa-phone' },
-  { name: 'WhatsApp', icon: 'fa-brands fa-whatsapp' },
-  { name: 'SMS', icon: 'fa-solid fa-comment-sms' },
-  { name: 'Website Chat', icon: 'fa-solid fa-comments' },
-  { name: 'Instagram', icon: 'fa-brands fa-instagram' },
-  { name: 'Facebook', icon: 'fa-brands fa-facebook-messenger' },
-];
-
 export const FAQS = [
   {
     question: 'Which languages do your AI agents speak?',
@@ -338,6 +255,248 @@ export const FAQS = [
   },
 ];
 
+// Shared answers reused on product and industry pages, so they stay identical to the home page FAQ.
+const sharedFaq = (questionStart: string) => {
+  const faq = FAQS.find((f) => f.question.startsWith(questionStart));
+  if (!faq) throw new Error(`FAQ not found: ${questionStart}`);
+  return faq;
+};
+
+export const INDUSTRIES: IndustrySector[] = [
+  {
+    id: 'real-estate',
+    title: 'Real Estate',
+    problem: 'Property enquiries arrive at all hours, and leads go cold before a salesperson calls back.',
+    solution: 'Answers every enquiry instantly, qualifies budget and location, and books site visits into your team\'s calendar.',
+    details: "Works for builders, brokers and property consultants. Use it for new-project launches, enquiries from property portals and ads, site-visit reminders, and follow-ups with prospects who went quiet — in English, Hindi and regional languages.",
+    productIds: ['bulk-whatsapp-rcs', 'ai-voice-agents', 'ai-chatbots'],
+    seoTitle: "WhatsApp & AI Calling for Real Estate | Swarups NXT",
+    metaDescription: "Answer property enquiries instantly, follow up portal leads, send new-launch campaigns on WhatsApp and book site visits, in English and Indian languages.",
+    h1: "WhatsApp campaigns and AI agents for real estate",
+    useCases: [
+      { title: "New-project launch campaigns", desc: "Send launch details, brochures and site-visit invites on WhatsApp to buyers who have opted in.", productId: 'bulk-whatsapp-rcs' },
+      { title: "Instant replies to portal and ad enquiries", desc: "The AI agent calls new leads back straight away and qualifies their budget and location.", productId: 'ai-voice-agents' },
+      { title: "Site-visit booking and reminders", desc: "Buyers book a site visit on WhatsApp or your website, and get a reminder before they come.", productId: 'ai-chatbots' },
+      { title: "Follow-ups with prospects who went quiet", desc: "Follow-up calls to people who enquired, so no interested buyer is forgotten.", productId: 'ai-voice-agents' },
+    ],
+    faqs: [
+      {
+        question: "Can the AI agent qualify property leads?",
+        answer: "Yes. It asks about budget, location and requirement, and passes interested buyers to your sales team with the details collected.",
+      },
+      {
+        question: "Does it work for leads from property portals and ads?",
+        answer: "Yes. Use it for enquiries from property portals and ads, new-project launches, site-visit reminders and follow-ups with prospects who went quiet.",
+      },
+      sharedFaq("Which languages"),
+      sharedFaq("How long does setup take?"),
+    ],
+    ctaText: "Hi, I run a real estate business and I'd like to know how Swarups NXT can help",
+    image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&q=80&w=800',
+    imageAlt: 'Modern residential building exterior',
+  },
+  {
+    id: 'healthcare',
+    title: 'Healthcare & Clinics',
+    problem: 'Front-desk staff are busy with patients, so appointment calls go unanswered and no-shows pile up.',
+    solution: 'Books and reschedules appointments by phone or WhatsApp, and sends reminders before each visit.',
+    details: "Suits clinics, diagnostic centres and hospitals. Patients can book, reschedule or cancel without waiting on hold, get reminders before their visit, and ask routine questions about timings and services, while your front desk focuses on the patients in front of them.",
+    productIds: ['ai-voice-agents', 'ai-chatbots', 'bulk-whatsapp-rcs'],
+    seoTitle: "AI Receptionist & Reminders for Clinics | Swarups NXT",
+    metaDescription: "Let patients book, reschedule and get reminders by phone or WhatsApp, 24x7, in their language, while your front desk looks after patients in the clinic.",
+    h1: "AI receptionists and reminders for clinics and hospitals",
+    useCases: [
+      { title: "Appointment booking by phone", desc: "The AI voice agent answers calls, and books or reschedules appointments, even when the front desk is busy.", productId: 'ai-voice-agents' },
+      { title: "Booking on WhatsApp", desc: "Patients book, reschedule or cancel on WhatsApp without waiting on hold.", productId: 'ai-chatbots' },
+      { title: "Reminders before each visit", desc: "Patients get a reminder on WhatsApp before their appointment.", productId: 'bulk-whatsapp-rcs' },
+      { title: "Announcements to many patients", desc: "Holiday closures, health camps or new services, announced by voice call in the patient's language.", productId: 'voice-blast' },
+    ],
+    faqs: [
+      {
+        question: "Can patients reschedule or cancel appointments themselves?",
+        answer: "Yes. Patients can book, reschedule or cancel by phone or WhatsApp without waiting on hold, and ask routine questions about timings and services.",
+      },
+      sharedFaq("How is my customer data handled?"),
+      sharedFaq("What happens when the AI"),
+      sharedFaq("Which languages"),
+    ],
+    ctaText: "Hi, I run a clinic / hospital and I'd like to know how Swarups NXT can help",
+    image: 'https://images.unsplash.com/photo-1504813184591-01572f98c85f?auto=format&fit=crop&q=80&w=800',
+    imageAlt: 'Hospital corridor',
+  },
+  {
+    id: 'education',
+    title: 'Education',
+    problem: 'Admission season brings more calls and messages from parents than the team can handle.',
+    solution: 'Answers admission and fee-structure questions, shares brochures, and schedules campus visits or counselling calls.',
+    details: "Useful for schools, colleges, coaching centres and ed-tech companies. Parents and students get quick answers on courses, eligibility and admission steps at any hour, and your counsellors receive enquiries that are ready for a conversation.",
+    productIds: ['ai-chatbots', 'ai-voice-agents', 'bulk-whatsapp-rcs'],
+    seoTitle: "AI Admission Enquiry Handling for Education | Swarups NXT",
+    metaDescription: "Answer admission and fee questions 24x7, share brochures, book campus visits and send admission-season campaigns on WhatsApp, in Indian languages.",
+    h1: "Handle admission season without missing an enquiry",
+    useCases: [
+      { title: "Admission and fee questions", desc: "Parents and students get answers on courses, eligibility, fees and admission steps at any hour.", productId: 'ai-chatbots' },
+      { title: "Call-backs and counselling calls", desc: "The AI agent calls back parents who enquired and schedules campus visits or counselling calls.", productId: 'ai-voice-agents' },
+      { title: "Admission-season campaigns", desc: "Admission dates, open-day invites and reminders on WhatsApp, to parents who have opted in.", productId: 'bulk-whatsapp-rcs' },
+      { title: "Fee and exam alerts", desc: "SMS alerts for fee due dates and exam schedules.", productId: 'sms-otp' },
+    ],
+    faqs: [
+      {
+        question: "Can it share brochures and fee details?",
+        answer: "Yes. It answers questions on courses, eligibility, fees and admission steps, and shares your brochures, at any hour.",
+      },
+      {
+        question: "Who handles serious enquiries?",
+        answer: "Your counsellors. The AI collects the details and passes on enquiries that are ready for a conversation.",
+      },
+      sharedFaq("Which languages"),
+      sharedFaq("How long does setup take?"),
+    ],
+    ctaText: "Hi, I run an educational institution and I'd like to know how Swarups NXT can help",
+    image: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=800',
+    imageAlt: 'Students working together',
+  },
+  {
+    id: 'ecommerce',
+    title: 'E-commerce & D2C',
+    problem: 'Customers keep asking "where is my order?", and unconfirmed COD orders get returned.',
+    solution: 'Shares order status, confirms COD orders before dispatch, and answers product questions on WhatsApp and chat.',
+    details: "Built for online stores and D2C brands. Customers get instant order updates, COD orders are confirmed before they ship, and product questions are answered while the buyer is still interested — on WhatsApp, your website and social media.",
+    productIds: ['bulk-whatsapp-rcs', 'ai-chatbots', 'social-media-bots'],
+    seoTitle: "WhatsApp Order Updates & COD Confirmation | Swarups NXT",
+    metaDescription: "Share order status, confirm COD orders before dispatch, send offers to opted-in customers and answer product questions on WhatsApp, chat and social media.",
+    h1: "WhatsApp, SMS and AI for online stores and D2C brands",
+    useCases: [
+      { title: "Order updates", desc: "Customers get order status updates on WhatsApp, and the chatbot answers \"where is my order?\".", productId: 'bulk-whatsapp-rcs' },
+      { title: "COD confirmation", desc: "Cash-on-delivery orders are confirmed with the customer before they ship.", productId: 'ai-chatbots' },
+      { title: "Offers and win-back campaigns", desc: "Festive offers and win-back messages to customers who have opted in, with AI answering the replies.", productId: 'bulk-whatsapp-rcs' },
+      { title: "Product questions on Instagram and Facebook", desc: "Comments and DMs on your posts and ads are answered while the buyer is still interested.", productId: 'social-media-bots' },
+      { title: "Login and payment OTPs", desc: "OTPs and transaction alerts by SMS, which reach every phone.", productId: 'sms-otp' },
+    ],
+    faqs: [
+      {
+        question: "Can it confirm cash-on-delivery orders?",
+        answer: "Yes. COD orders are confirmed with the customer before they ship, on WhatsApp or chat.",
+      },
+      {
+        question: "Can it answer product questions on Instagram and Facebook?",
+        answer: "Yes. Social Media Bots reply to comments and DMs on your posts and ads, and pass serious enquiries to your team.",
+      },
+      sharedFaq("Can it work with the tools"),
+      sharedFaq("How long does setup take?"),
+    ],
+    ctaText: "Hi, I run an online store and I'd like to know how Swarups NXT can help",
+    image: 'https://images.unsplash.com/photo-1557821552-17105176677c?auto=format&fit=crop&q=80&w=800',
+    imageAlt: 'Online shopping on a laptop',
+  },
+  {
+    id: 'finance',
+    title: 'Finance & NBFC Collections',
+    problem: 'Calling every borrower about upcoming or missed EMIs takes a large team and a lot of time.',
+    solution: 'Makes polite EMI reminder calls in the borrower\'s language, captures a promise-to-pay date, and flags cases for your team.',
+    details: "Designed for NBFCs, lenders and collection teams. Reminder calls stay polite and consistent, happen in the borrower's preferred language, and record the response, so your team can focus on the accounts that need personal attention.",
+    productIds: ['ai-voice-agents', 'sms-otp', 'voice-blast'],
+    seoTitle: "AI EMI Reminder Calls for NBFCs & Lenders | Swarups NXT",
+    metaDescription: "Polite EMI reminder calls in the borrower's language, promise-to-pay capture and SMS alerts, so your collection team can focus on the accounts that need them.",
+    h1: "EMI reminders and collections support for NBFCs and lenders",
+    useCases: [
+      { title: "EMI reminder calls", desc: "Polite, consistent reminder calls about upcoming or missed EMIs, in the borrower's language.", productId: 'ai-voice-agents' },
+      { title: "Promise-to-pay capture", desc: "The agent records the borrower's response and a promise-to-pay date, and flags cases for your team.", productId: 'ai-voice-agents' },
+      { title: "Payment and account alerts", desc: "SMS alerts for due dates and payments, and OTPs for logins and transactions.", productId: 'sms-otp' },
+      { title: "Due-date reminders at scale", desc: "One recorded reminder to many borrowers at once, with a press-a-key option to ask for a callback.", productId: 'voice-blast' },
+    ],
+    faqs: [
+      {
+        question: "Can the reminder calls be in the borrower's language?",
+        answer: "Yes. Reminder calls are made in the borrower's preferred language, and stay polite and consistent.",
+      },
+      {
+        question: "What happens after a reminder call?",
+        answer: "The agent records the response and any promise-to-pay date, and flags the accounts that need personal attention for your team.",
+      },
+      sharedFaq("How is my customer data handled?"),
+      sharedFaq("How long does setup take?"),
+    ],
+    ctaText: "Hi, I work with an NBFC / lender and I'd like to know how Swarups NXT can help",
+    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800',
+    imageAlt: 'Financial charts on a screen',
+  },
+  {
+    id: 'automobile',
+    title: 'Automobile Dealers',
+    problem: 'Test-drive and service enquiries come in after hours, and follow-ups depend on busy staff.',
+    solution: 'Books test drives and service appointments, sends service reminders, and follows up with interested buyers.',
+    details: "For car and two-wheeler dealerships. The AI agent handles test-drive requests, service bookings and reminders, and follows up with walk-in and online leads, so no interested buyer is forgotten after a showroom visit.",
+    productIds: ['ai-voice-agents', 'voice-blast', 'bulk-whatsapp-rcs'],
+    seoTitle: "AI Test Drive & Service Booking for Dealers | Swarups NXT",
+    metaDescription: "Book test drives and service appointments, send service reminders and follow up with buyers by phone and WhatsApp, for car and two-wheeler dealers.",
+    h1: "Test drives, service bookings and follow-ups for dealerships",
+    useCases: [
+      { title: "Test-drive requests", desc: "Requests that come in after showroom hours are answered and booked for your team.", productId: 'ai-voice-agents' },
+      { title: "Service reminders", desc: "A recorded service reminder to many customers at once, with \"press 1 to book\".", productId: 'voice-blast' },
+      { title: "Follow-ups with interested buyers", desc: "Walk-in and online leads are followed up on WhatsApp, so no interested buyer is forgotten.", productId: 'bulk-whatsapp-rcs' },
+      { title: "Service bookings by phone", desc: "Customers call to book a service and the AI agent books it, any time of day.", productId: 'ai-voice-agents' },
+    ],
+    faqs: [
+      {
+        question: "Can it handle test-drive requests after showroom hours?",
+        answer: "Yes. The AI agent answers test-drive and service requests at any time, and books them for your team.",
+      },
+      {
+        question: "Can it send service reminders?",
+        answer: "Yes, on WhatsApp or by voice call, with a press-a-key option to book the service.",
+      },
+      sharedFaq("Which languages"),
+      sharedFaq("How long does setup take?"),
+    ],
+    ctaText: "Hi, I run a vehicle dealership and I'd like to know how Swarups NXT can help",
+    image: 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&q=80&w=800',
+    imageAlt: 'Car parked on a road',
+  },
+  {
+    id: 'hospitality',
+    title: 'Hospitality',
+    problem: 'Booking and availability questions arrive around the clock, across phone, WhatsApp and social media.',
+    solution: 'Answers room availability and amenity questions, takes booking requests, and hands special requests to your staff.',
+    details: "For hotels, resorts and restaurants. Guests get quick answers about rooms, availability and amenities on the channel they prefer, booking requests are captured any time of day, and special requests reach your staff.",
+    productIds: ['omnichannel-bots', 'ai-contact-center', 'social-media-bots'],
+    seoTitle: "AI Booking Assistant for Hotels & Restaurants | Swarups NXT",
+    metaDescription: "Answer room availability and amenity questions and take booking requests 24x7 on phone, WhatsApp and social media, with special requests sent to staff.",
+    h1: "Answer every guest, on every channel, around the clock",
+    useCases: [
+      { title: "Availability and amenity questions", desc: "Guests get quick answers about rooms, availability and amenities on the channel they prefer.", productId: 'omnichannel-bots' },
+      { title: "Booking requests at any hour", desc: "Booking requests by phone are captured even late at night.", productId: 'ai-voice-agents' },
+      { title: "Instagram and Facebook enquiries", desc: "Comments and DMs on your posts are answered, and booking enquiries go to your team.", productId: 'social-media-bots' },
+      { title: "Busy-season calls", desc: "AI takes routine calls and chats, so your staff can focus on guests.", productId: 'ai-contact-center' },
+    ],
+    faqs: [
+      {
+        question: "Can guests ask on Instagram, WhatsApp and the phone?",
+        answer: "Yes. With an omnichannel bot, guests get the same answers on phone, WhatsApp, website chat, Instagram and Facebook.",
+      },
+      {
+        question: "What happens with special requests?",
+        answer: "They are passed to your staff, following the handover workflow agreed with you.",
+      },
+      sharedFaq("Which languages"),
+      sharedFaq("How long does setup take?"),
+    ],
+    ctaText: "Hi, I run a hotel / restaurant and I'd like to know how Swarups NXT can help",
+    image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80&w=800',
+    imageAlt: 'Hotel with a swimming pool',
+  },
+];
+
+// Channels we work on. No third-party tool integrations are claimed (confirmed Sept 2026).
+export const CHANNELS = [
+  { name: 'Phone Calls', icon: 'fa-solid fa-phone' },
+  { name: 'WhatsApp', icon: 'fa-brands fa-whatsapp' },
+  { name: 'SMS', icon: 'fa-solid fa-comment-sms' },
+  { name: 'Website Chat', icon: 'fa-solid fa-comments' },
+  { name: 'Instagram', icon: 'fa-brands fa-instagram' },
+  { name: 'Facebook', icon: 'fa-brands fa-facebook-messenger' },
+];
+
 // How pricing works, per channel. No figures anywhere (CLAUDE.md hard rule 2).
 // WhatsApp is billed per message by category since Meta's July 2025 change, not per conversation.
 export const PRICING_MODEL = [
@@ -345,13 +504,6 @@ export const PRICING_MODEL = [
   { channel: 'SMS & OTP', icon: 'fa-solid fa-comment-sms', unit: 'Per message', desc: 'You pay for each SMS sent, so OTPs, alerts and promotions are billed only as you use them.' },
   { channel: 'Contact center (CCaaS)', icon: 'fa-solid fa-headset', unit: 'Per seat', desc: 'You pay for each agent seat your team uses, with AI handling routine calls and chats alongside them.' },
 ];
-
-// Shared answers reused on product pages, so they stay identical to the home page FAQ.
-const sharedFaq = (questionStart: string) => {
-  const faq = FAQS.find((f) => f.question.startsWith(questionStart));
-  if (!faq) throw new Error(`FAQ not found: ${questionStart}`);
-  return faq;
-};
 
 // One page per main product at /<productId>/ (pre-rendered by scripts/prerender.mjs).
 // Content only restates confirmed facts from PRODUCTS, FAQS and PRICING_MODEL; no figures or proof.
@@ -669,6 +821,17 @@ export const PRODUCT_PAGES: ProductPage[] = [
 ];
 
 export const productPagePath = (productId: string) => `/${productId}/`;
+export const industryPagePath = (industryId: string) => `/industries/${industryId}/`;
+
+// Finds the industry for a URL path such as "/industries/healthcare/"; null if none.
+export const findIndustryPage = (path: string) => {
+  const m = path.match(/^\/industries\/([^/]+)\/?$/);
+  return m ? INDUSTRIES.find((i) => i.id === m[1]) ?? null : null;
+};
+
+// Product titles for an industry's best-fit products, e.g. "AI Voice Agents + AI Chatbots".
+export const productTitles = (ids: string[]) =>
+  ids.map((id) => PRODUCTS.find((p) => p.id === id)?.title ?? id).join(' + ');
 
 // Finds the product page for a URL path such as "/sms-otp" or "/sms-otp/"; null = home page.
 export const findProductPage = (path: string) => {

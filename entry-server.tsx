@@ -3,11 +3,13 @@
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import App from './App';
-import { CONTACT, FAQS, PRODUCTS, PRODUCT_PAGES, findProductPage, productPagePath } from './constants';
+import { CONTACT, FAQS, INDUSTRIES, PRODUCTS, PRODUCT_PAGES, industryPagePath, productPagePath } from './constants';
+import { resolveRoute } from './routes';
 
 export const SITE = 'https://swarupsnxt.com/';
 const ORG_ID = `${SITE}#organization`;
 const pageUrl = (productId: string) => `${SITE}${productPagePath(productId).slice(1)}`;
+const industryUrl = (id: string) => `${SITE}${industryPagePath(id).slice(1)}`;
 
 // Every pre-rendered route. Home keeps the title/description written in index.html (meta: null).
 export const routes = [
@@ -15,6 +17,10 @@ export const routes = [
   ...PRODUCT_PAGES.map((p) => ({
     path: productPagePath(p.productId),
     meta: { title: p.seoTitle, description: p.metaDescription, url: pageUrl(p.productId) },
+  })),
+  ...INDUSTRIES.map((i) => ({
+    path: industryPagePath(i.id),
+    meta: { title: i.seoTitle, description: i.metaDescription, url: industryUrl(i.id) },
   })),
 ];
 
@@ -49,12 +55,18 @@ const organization = {
 
 const service = (p: typeof PRODUCTS[number]) => ({
   '@type': 'Service',
+  '@id': `${pageUrl(p.id)}#service`,
   name: p.title,
   serviceType: p.title,
   description: `${p.desc} ${p.details}`,
   provider: { '@id': ORG_ID },
   areaServed: { '@type': 'Country', name: 'India' },
-  url: findProductPage(p.id) ? pageUrl(p.id) : `${SITE}#products`,
+  url: pageUrl(p.id),
+});
+
+const breadcrumbs = (items: { name: string; item: string }[]) => ({
+  '@type': 'BreadcrumbList',
+  itemListElement: items.map((it, i) => ({ '@type': 'ListItem', position: i + 1, ...it })),
 });
 
 const faqPage = (id: string, faqs: { question: string; answer: string }[]) => ({
@@ -69,10 +81,32 @@ const faqPage = (id: string, faqs: { question: string; answer: string }[]) => ({
 
 // schema.org structured data for a route, generated from the same content the page shows.
 export function jsonLd(path: string): string {
-  const page = findProductPage(path);
+  const route = resolveRoute(path);
   let graph: object[];
 
-  if (!page) {
+  if (route.kind === 'industry') {
+    const { industry } = route;
+    const url = industryUrl(industry.id);
+    graph = [
+      organization,
+      {
+        '@type': 'WebPage',
+        '@id': url,
+        url,
+        name: industry.seoTitle,
+        description: industry.metaDescription,
+        inLanguage: 'en-IN',
+        about: industry.productIds.map((id) => ({ '@id': `${pageUrl(id)}#service` })),
+        publisher: { '@id': ORG_ID },
+      },
+      breadcrumbs([
+        { name: 'Home', item: SITE },
+        { name: 'Industries', item: `${SITE}#solutions` },
+        { name: industry.title, item: url },
+      ]),
+      faqPage(`${url}#faq`, industry.faqs),
+    ];
+  } else if (route.kind === 'home') {
     graph = [
       organization,
       {
@@ -87,19 +121,17 @@ export function jsonLd(path: string): string {
       faqPage(`${SITE}#faq`, FAQS),
     ];
   } else {
+    const page = route.page;
     const product = PRODUCTS.find((p) => p.id === page.productId)!;
     const url = pageUrl(page.productId);
     graph = [
       organization,
       service(product),
-      {
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Home', item: SITE },
-          { '@type': 'ListItem', position: 2, name: 'Products', item: `${SITE}#products` },
-          { '@type': 'ListItem', position: 3, name: product.title, item: url },
-        ],
-      },
+      breadcrumbs([
+        { name: 'Home', item: SITE },
+        { name: 'Products', item: `${SITE}#products` },
+        { name: product.title, item: url },
+      ]),
       faqPage(`${url}#faq`, page.faqs),
     ];
   }

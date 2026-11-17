@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { INDUSTRIES } from '../constants';
+import { INDUSTRIES, PRODUCTS, industryPagePath, productPagePath } from '../constants';
 
 const Industries: React.FC = () => {
   const [activeTab, setActiveTab] = useState(INDUSTRIES[0].id);
@@ -14,7 +14,7 @@ const Industries: React.FC = () => {
               Use cases by <br />
               <span className="gradient-text">industry.</span>
             </h2>
-            <p className="text-slate-600 dark:text-slate-400 mb-8 text-lg">See how an AI agent fits the way your industry works.</p>
+            <p className="text-slate-600 dark:text-slate-400 mb-8 text-lg">See how messaging and AI agents fit the way your industry works.</p>
 
             <div className="space-y-4">
               {INDUSTRIES.map((industry) => {
@@ -46,10 +46,17 @@ const Industries: React.FC = () => {
                           <p className="text-sm text-slate-700 dark:text-slate-300">{industry.solution}</p>
                         </div>
                         <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed px-1">{industry.details}</p>
-                        <div className="flex flex-wrap items-center gap-2 text-sm px-1">
+                        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm px-1">
                           <span className="font-bold text-slate-500 dark:text-slate-400">Best fit:</span>
-                          <span className="font-bold text-slate-900 dark:text-white">{industry.product}</span>
+                          {industry.productIds.map((id) => (
+                            <a key={id} href={productPagePath(id)} className="font-bold text-slate-900 dark:text-white hover:text-[#2BB6C6] transition-colors">
+                              {PRODUCTS.find((p) => p.id === id)?.title}
+                            </a>
+                          ))}
                         </div>
+                        <a href={industryPagePath(industry.id)} className="inline-flex items-center gap-2 px-1 pt-1 text-sm font-bold text-[#2BB6C6] hover:gap-3 transition-all">
+                          See all {industry.title.toLowerCase()} use cases <i className="fa-solid fa-arrow-right-long text-xs" aria-hidden="true"></i>
+                        </a>
                       </div>
                   </div>
                 );

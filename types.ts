@@ -39,7 +39,14 @@ export interface IndustrySector {
   problem: string;
   solution: string;
   details: string;
-  product: string;
+  productIds: string[];    // best-fit PRODUCTS[].id, shown as recommended products
   image: string;
   imageAlt: string;
+  // Industry page at /industries/<id>/
+  seoTitle: string;        // max 60 chars
+  metaDescription: string; // max 160 chars
+  h1: string;
+  useCases: { title: string; desc: string; productId: string }[];
+  faqs: { question: string; answer: string }[];
+  ctaText: string;         // prefilled WhatsApp message
 }

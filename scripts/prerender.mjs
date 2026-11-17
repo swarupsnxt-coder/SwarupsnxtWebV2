@@ -48,9 +48,12 @@ for (const { path, meta } of routes) {
   if (meta) html = withMeta(html, meta);
 
   // Sanity checks: key content must be in the static HTML.
+  const pageMusts = ['<h1', 'Frequently Asked Questions', 'id="contact"', '"@type":"FAQPage"', '"@type":"BreadcrumbList"'];
   const musts = path === '/'
-    ? ['<h1', 'Scale Customer Engagement', 'Bulk WhatsApp &amp; RCS Engine', 'Voice Blast', 'Frequently Asked Questions', '"@type":"FAQPage"']
-    : ['<h1', 'What you get', 'Frequently Asked Questions', 'id="contact"', '"@type":"FAQPage"', '"@type":"BreadcrumbList"', `<link rel="canonical" href="${meta.url}"`];
+    ? ['<h1', 'Scale Customer Engagement', 'Bulk WhatsApp &amp; RCS Engine', 'Voice Blast', 'What do you', 'Frequently Asked Questions', '"@type":"FAQPage"']
+    : path.startsWith('/industries/')
+      ? [...pageMusts, 'Use cases', `<link rel="canonical" href="${meta.url}"`]
+      : [...pageMusts, 'What you get', 'How it works', `<link rel="canonical" href="${meta.url}"`];
   for (const must of musts) {
     if (!html.includes(must)) throw new Error(`prerender: expected "${must}" in ${path}`);
   }
