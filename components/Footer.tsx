@@ -1,7 +1,8 @@
 
 import React from 'react';
 import Logo from './Logo';
-import { CONTACT, PRODUCTS, PRODUCT_PAGES, mailtoLink, productPagePath, telLink } from '../constants';
+import { CONTACT, INDUSTRIES, PRODUCTS, PRODUCT_PAGES, industryPagePath, mailtoLink, productPagePath, telLink } from '../constants';
+import { GUIDES, GUIDES_PATH, guidePath, guideShortTitle } from '../content/guides';
 
 interface FooterProps {
   isHome?: boolean;
@@ -17,11 +18,11 @@ const Footer: React.FC<FooterProps> = ({ isHome = true, onPrivacyClick, onTermsC
   return (
     <footer className="bg-slate-50 dark:bg-[#0f172a] pt-24 pb-12 border-t border-slate-200 dark:border-white/5 transition-colors duration-500">
       <div className="container mx-auto px-4">
-        <div className="grid md:grid-cols-5 gap-12 mb-20">
-          <div className="col-span-1 md:col-span-2">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-6 gap-12 mb-20">
+          <div className="sm:col-span-2">
             <Logo className="mb-6" />
             <p className="text-slate-600 dark:text-slate-400 max-w-sm mb-8 leading-relaxed">
-              AI voice agents, chatbots and automation for Indian businesses. We set up, customise and support leading AI platforms for you.
+              Bulk WhatsApp, RCS, SMS and voice messaging, with AI agents that answer the replies. We set up, customise and support leading platforms for businesses across India.
             </p>
             <div className="space-y-4 mb-8">
               <div className="flex items-center gap-3 text-slate-600 dark:text-slate-400">
@@ -34,16 +35,6 @@ const Footer: React.FC<FooterProps> = ({ isHome = true, onPrivacyClick, onTermsC
               </div>
             </div>
           </div>
-
-          <nav aria-labelledby="footer-explore">
-            <h2 id="footer-explore" className="text-sm font-bold uppercase tracking-widest text-slate-900 dark:text-white mb-6">Explore</h2>
-            <ul className="space-y-4 text-sm text-slate-600 dark:text-slate-400">
-              <li><a href={section('products')} className={linkClass}>All products</a></li>
-              <li><a href={section('solutions')} className={linkClass}>Industries</a></li>
-              <li><a href={section('nxt-lab')} className={linkClass}>NXT Lab</a></li>
-              <li><a href={section('faq')} className={linkClass}>FAQ</a></li>
-            </ul>
-          </nav>
 
           <nav aria-labelledby="footer-products">
             <h2 id="footer-products" className="text-sm font-bold uppercase tracking-widest text-slate-900 dark:text-white mb-6">Products</h2>
@@ -58,10 +49,32 @@ const Footer: React.FC<FooterProps> = ({ isHome = true, onPrivacyClick, onTermsC
             </ul>
           </nav>
 
+          <nav aria-labelledby="footer-industries">
+            <h2 id="footer-industries" className="text-sm font-bold uppercase tracking-widest text-slate-900 dark:text-white mb-6">Industries</h2>
+            <ul className="space-y-4 text-sm text-slate-600 dark:text-slate-400">
+              {INDUSTRIES.map((i) => (
+                <li key={i.id}><a href={industryPagePath(i.id)} className={linkClass}>{i.title}</a></li>
+              ))}
+            </ul>
+          </nav>
+
+          <nav aria-labelledby="footer-resources">
+            <h2 id="footer-resources" className="text-sm font-bold uppercase tracking-widest text-slate-900 dark:text-white mb-6">Resources</h2>
+            <ul className="space-y-4 text-sm text-slate-600 dark:text-slate-400">
+              <li><a href={GUIDES_PATH} className={linkClass}>All guides</a></li>
+              {GUIDES.map((g) => (
+                <li key={g.slug}><a href={guidePath(g.slug)} className={linkClass}>{guideShortTitle(g)}</a></li>
+              ))}
+              <li><a href={section('nxt-lab')} className={linkClass}>NXT Lab</a></li>
+              <li><a href={section('faq')} className={linkClass}>FAQ</a></li>
+            </ul>
+          </nav>
+
           <nav aria-labelledby="footer-company">
             <h2 id="footer-company" className="text-sm font-bold uppercase tracking-widest text-slate-900 dark:text-white mb-6">Company</h2>
             <ul className="space-y-4 text-sm text-slate-600 dark:text-slate-400">
               <li><a href="#contact" data-book-demo className={linkClass}>Book a demo</a></li>
+              <li><a href={section('pricing')} className={linkClass}>Pricing</a></li>
               <li><button onClick={onPrivacyClick} className={`${linkClass} text-left`}>Privacy Policy</button></li>
               <li><button onClick={onTermsClick} className={`${linkClass} text-left`}>Terms of Service</button></li>
             </ul>

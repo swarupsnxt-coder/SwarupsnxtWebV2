@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Logo from './Logo';
 import { Theme } from '../types';
-import { findProductPage, productPagePath } from '../constants';
+import { INDUSTRIES, PRODUCTS, PRODUCT_GROUPS, findProductPage, industryPagePath, productPagePath } from '../constants';
+import { GUIDES_PATH } from '../content/guides';
 
 interface NavbarProps {
   theme?: Theme;
@@ -9,35 +10,43 @@ interface NavbarProps {
   isHome?: boolean;
 }
 
+interface NavLink {
+  name: string;
+  href: string;   // a home page section id, a product id, or a path starting with "/"
+  group?: string; // optional heading shown above the first link of each group
+}
+
 interface NavItem {
   name: string;
   href: string;
-  children?: { name: string; href: string }[];
+  children?: NavLink[];
 }
 
-// Products dropdown order = business priority; entries open the product's own page when it has
-// one (PRODUCT_PAGES), otherwise scroll to its card on the home page.
-// Resources keeps the sections that left the top level (NXT Lab, Why Us, Process) reachable.
+// Products dropdown = all products in their home page groups (business priority order); each
+// opens its product page. Industries open their own pages. Resources keeps the home sections
+// that are not top-level links reachable.
 const NAV_ITEMS: NavItem[] = [
   {
     name: 'Products',
     href: 'products',
-    children: [
-      { name: 'Bulk WhatsApp & RCS', href: 'bulk-whatsapp-rcs' },
-      { name: 'Enterprise SMS & OTP', href: 'sms-otp' },
-      { name: 'AI Voicebots', href: 'ai-voice-agents' },
-      { name: 'AI Chatbots', href: 'ai-chatbots' },
-      { name: 'CCaaS & Omnichannel', href: 'ai-contact-center' },
-    ],
+    children: PRODUCT_GROUPS.flatMap((g) =>
+      PRODUCTS.filter((p) => p.group === g.id).map((p, i) => ({ name: p.title, href: p.id, group: i === 0 ? g.title : undefined }))
+    ),
   },
-  { name: 'Solutions', href: 'solutions' },
+  {
+    name: 'Industries',
+    href: 'solutions',
+    children: INDUSTRIES.map((i) => ({ name: i.title, href: industryPagePath(i.id) })),
+  },
   { name: 'Pricing', href: 'pricing' },
   {
     name: 'Resources',
     href: 'faq',
     children: [
-      { name: 'Try the AI demo (NXT Lab)', href: 'nxt-lab' },
+      { name: 'Guides', href: GUIDES_PATH },
       { name: 'How it works', href: 'how-it-works' },
+      { name: 'Compare channels', href: 'compare-channels' },
+      { name: 'Try the AI demo (NXT Lab)', href: 'nxt-lab' },
       { name: 'Getting started', href: 'getting-started' },
       { name: 'Why Swarups NXT', href: 'why-us' },
       { name: 'FAQ', href: 'faq' },
@@ -77,15 +86,15 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme, isHome = true }) =>
     };
   }, [openDropdown]);
 
-  // Section ids live on the home page; from a product page, link back to them.
+  // Paths are used as they are; section ids live on the home page, so other pages link back to them.
   const hrefFor = (id: string) =>
-    findProductPage(id) ? productPagePath(id) : isHome ? `#${id}` : `/#${id}`;
+    id.startsWith('/') ? id : findProductPage(id) ? productPagePath(id) : isHome ? `#${id}` : `/#${id}`;
 
   // Scrolls to the section when it is on this page; otherwise the link is followed normally.
   const handleNav = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     setIsMobileMenuOpen(false);
     setOpenDropdown(null);
-    if (findProductPage(id)) return;
+    if (id.startsWith('/') || findProductPage(id)) return;
     const element = document.getElementById(id);
     if (!element) return;
     e.preventDefault();
@@ -117,16 +126,18 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme, isHome = true }) =>
                   <ul
                     id={`nav-menu-${item.href}`}
                     hidden={openDropdown !== item.name}
-                    className="absolute left-1/2 -translate-x-1/2 top-full mt-4 w-64 p-2 rounded-2xl bg-white dark:bg-[#0f172a] border border-slate-200 dark:border-white/10 shadow-2xl"
+                    className="absolute left-1/2 -translate-x-1/2 top-full mt-4 w-72 max-h-[calc(100vh-7rem)] overflow-y-auto p-2 rounded-2xl bg-white dark:bg-[#0f172a] border border-slate-200 dark:border-white/10 shadow-2xl"
                   >
-                    {item.children.map((child, i) => (
+                    {item.children.map((child) => (
                       <li key={child.href}>
+                        {child.group && (
+                          <div className="px-4 pt-3 pb-1 text-[10px] font-black uppercase tracking-widest text-[#2BB6C6]">{child.group}</div>
+                        )}
                         <a
                           href={hrefFor(child.href)}
                           onClick={(e) => handleNav(e, child.href)}
-                          className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-[#2BB6C6]/10 hover:text-[#2BB6C6] transition-colors"
+                          className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-[#2BB6C6]/10 hover:text-[#2BB6C6] transition-colors"
                         >
-                          {item.name === 'Products' && <span className="text-[10px] font-black text-[#2BB6C6] w-3">{i + 1}</span>}
                           {child.name}
                         </a>
                       </li>

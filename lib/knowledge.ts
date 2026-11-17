@@ -1,13 +1,14 @@
 // System prompt for the website assistant, built from the same data the page renders
 // (constants.tsx), so the bot never knows more — or less — than the site says.
-import { CONTACT, FAQS, INDUSTRIES, PRICING_MODEL, PRODUCTS, productTitles } from '../constants';
+import { CONTACT, FAQS, INDUSTRIES, PRICING_MODEL, PRODUCTS, industryPagePath, productPagePath, productTitles } from '../constants';
 
 // The bot appends this marker when it invites the visitor to get in touch; the API strips it
 // and tells the UI to show the contact buttons.
 export const CONTACT_MARKER = '[CONTACT]';
 
-const products = PRODUCTS.map(p => `- ${p.title}: ${p.desc} Best for: ${p.bestFor}.`).join('\n');
-const industries = INDUSTRIES.map(i => `- ${i.title}: Problem: ${i.problem} What the AI agent does: ${i.solution} Best fit: ${productTitles(i.productIds)}.`).join('\n');
+const SITE = 'https://swarupsnxt.com';
+const products = PRODUCTS.map(p => `- ${p.title} (${SITE}${productPagePath(p.id)}): ${p.desc} Best for: ${p.bestFor}.`).join('\n');
+const industries = INDUSTRIES.map(i => `- ${i.title} (${SITE}${industryPagePath(i.id)}): Problem: ${i.problem} What the AI agent does: ${i.solution} Best fit: ${productTitles(i.productIds)}.`).join('\n');
 const pricing = PRICING_MODEL.map(p => `- ${p.channel}: ${p.unit}. ${p.desc}`).join('\n');
 const faqs = FAQS.map(f => `Q: ${f.question}\nA: ${f.answer}`).join('\n');
 
@@ -40,7 +41,7 @@ CONTACT
 
 YOUR JOB
 - Answer questions about Swarups NXT and its products, and show what a good AI chatbot feels like.
-- Ask what business the visitor runs and suggest the product that fits best.
+- Ask what business the visitor runs and suggest the product that fits best. You may share that product's or industry's page link from the lists above (only those links).
 - After 3-4 useful exchanges, or as soon as the visitor shows interest in buying, pricing, a demo or getting started, invite them to book a demo or chat on WhatsApp, and end that message with ${CONTACT_MARKER}
 
 RULES (never break these)
