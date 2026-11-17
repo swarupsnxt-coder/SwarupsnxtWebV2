@@ -1,4 +1,4 @@
-import { IndustrySector, ProductPage } from './types';
+import { IndustrySector, Product, ProductGroup, ProductPage } from './types';
 
 // Single source of truth for contact details and prefilled messages.
 export const CONTACT = {
@@ -23,13 +23,15 @@ export const WHATSAPP_DEMO_TEXT = "Hi Swarups NXT, I'd like to book a demo";
 
 // Product list follows CLAUDE.md "What this is", in the order of business priority (Nov 2026).
 // Every card links to WhatsApp with a product-specific message; `id` is the card's anchor (nav dropdown).
-export const PRODUCTS = [
+export const PRODUCTS: Product[] = [
   {
     id: 'bulk-whatsapp-rcs',
     icon: 'fa-whatsapp',
     iconType: 'fa-brands',
     title: 'Bulk WhatsApp & RCS Engine',
     tag: 'Bulk messaging',
+    group: 'reach',
+    summary: 'Send offers, reminders and updates to thousands of opted-in customers on WhatsApp and RCS, with AI answering the replies.',
     desc: 'Reach customers where they already are. Send bulk WhatsApp and RCS messages: offers, reminders and updates to opted-in contacts with images, videos, documents and buttons — personalised, with AI answering replies 24x7 and reports on delivered, read and replied.',
     bestFor: 'Festive offers, reminders, order updates, lead follow-ups, win-back',
     image: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&q=80&w=800',
@@ -43,6 +45,8 @@ export const PRODUCTS = [
     iconType: 'fa-solid',
     title: 'Enterprise SMS & OTP',
     tag: 'SMS',
+    group: 'reach',
+    summary: 'OTPs, transaction alerts and promotional SMS at volume, with delivery status for every message.',
     desc: 'Send OTPs, transaction alerts and promotional SMS at volume. Time-sensitive messages like OTPs go on transactional routes, and you see delivery status for every message.',
     bestFor: 'Login and payment OTPs, order and account alerts, promotions',
     image: 'https://images.unsplash.com/photo-1556656793-08538906a9f8?auto=format&fit=crop&q=80&w=800',
@@ -56,6 +60,8 @@ export const PRODUCTS = [
     iconType: 'fa-solid',
     title: 'AI Voice Agents',
     tag: 'Voice',
+    group: 'respond',
+    summary: 'An AI agent that answers and makes calls 24x7 in Indian languages, and hands over to your team.',
     desc: 'The intelligent upgrade for your phone line. Answer inbound calls and make follow-up calls 24x7, in English, Hindi and other Indian languages. The agent hands over to your team when a person is needed.',
     bestFor: 'Missed calls, after-hours enquiries, follow-ups',
     image: 'https://images.unsplash.com/photo-1553775282-20af80779df7?auto=format&fit=crop&q=80&w=800',
@@ -69,6 +75,8 @@ export const PRODUCTS = [
     iconType: 'fa-solid',
     title: 'AI Chatbots',
     tag: 'Chat',
+    group: 'respond',
+    summary: 'Answers questions, captures leads and books appointments on WhatsApp and your website.',
     desc: 'Turn replies to your campaigns into conversations. Answer questions, capture leads and book appointments on WhatsApp and your website — instantly, day or night.',
     bestFor: 'Lead capture, FAQs, appointment booking',
     image: 'https://images.unsplash.com/photo-1611746872915-64382b5c76da?auto=format&fit=crop&q=80&w=800',
@@ -82,6 +90,8 @@ export const PRODUCTS = [
     iconType: 'fa-solid',
     title: 'Voice Blast',
     tag: 'Voice broadcast',
+    group: 'reach',
+    summary: 'One recorded or AI-voiced message to thousands of phones at once, with press-a-key responses.',
     desc: 'Send a recorded or AI-voiced message to thousands of phones at once, in the language your customers speak. Capture interest with press-a-key (IVR) responses and see who answered, missed or pressed a key.',
     bestFor: 'Announcements, appointment and payment reminders, promotions, surveys',
     image: 'https://images.unsplash.com/photo-1556656793-08538906a9f8?auto=format&fit=crop&q=80&w=800',
@@ -95,6 +105,8 @@ export const PRODUCTS = [
     iconType: 'fa-solid',
     title: 'Social Media Bots',
     tag: 'Social',
+    group: 'respond',
+    summary: 'Replies to Instagram and Facebook comments and DMs, and turns interested followers into leads.',
     desc: 'Reply to Instagram and Facebook comments and DMs automatically, and turn interested followers into leads.',
     bestFor: 'Social enquiries, campaign responses',
     image: 'https://images.unsplash.com/photo-1611162618071-b39a2ec055fb?auto=format&fit=crop&q=80&w=800',
@@ -108,6 +120,8 @@ export const PRODUCTS = [
     iconType: 'fa-solid',
     title: 'SaaS Automation',
     tag: 'Automation',
+    group: 'together',
+    summary: 'Automates lead entry, follow-up reminders and status updates, so your team can focus on customers.',
     desc: 'Automate repetitive work between your tools — lead entry, follow-up reminders, status updates — so your team can focus on customers.',
     bestFor: 'Manual data entry, follow-up tasks',
     image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=800',
@@ -121,6 +135,8 @@ export const PRODUCTS = [
     iconType: 'fa-solid',
     title: 'AI Contact Center',
     tag: 'Contact center',
+    group: 'together',
+    summary: 'AI takes routine calls and chats, so your agents handle the conversations that need a person.',
     desc: 'AI handles routine calls and chats, while your agents take the conversations that need a person. Fewer queues, less repetitive work.',
     bestFor: 'High call volumes, support teams',
     image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800',
@@ -134,6 +150,8 @@ export const PRODUCTS = [
     iconType: 'fa-solid',
     title: 'Omnichannel Bots',
     tag: 'Omnichannel',
+    group: 'together',
+    summary: 'One AI assistant across phone, WhatsApp, website chat and social media.',
     desc: 'One AI assistant across phone, WhatsApp, website chat and social media, so customers get the same helpful answers wherever they reach you.',
     bestFor: 'Businesses active on many channels',
     image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800',
@@ -142,6 +160,70 @@ export const PRODUCTS = [
     ctaText: "Hi, I'm interested in Omnichannel Bots",
   }
 ];
+
+// Home page groups for the product cards (Products.tsx), in display order.
+export const PRODUCT_GROUPS: { id: ProductGroup; title: string; desc: string }[] = [
+  { id: 'reach', title: 'Reach customers at scale', desc: 'Bulk messages and calls that reach many customers at once.' },
+  { id: 'respond', title: 'Answer customers with AI', desc: 'AI agents that reply on calls, chat and social media, 24x7.' },
+  { id: 'together', title: 'Run it all together', desc: 'Connect your channels, support team and everyday tasks.' },
+];
+
+// "What do you want to do?" (GoalChooser.tsx): each goal points to the product(s) that fit it.
+export const GOALS: { icon: string; goal: string; productIds: string[] }[] = [
+  { icon: 'fa-solid fa-bullhorn', goal: 'Send offers and updates to thousands of customers', productIds: ['bulk-whatsapp-rcs', 'voice-blast'] },
+  { icon: 'fa-solid fa-key', goal: 'Send OTPs and transaction alerts', productIds: ['sms-otp'] },
+  { icon: 'fa-solid fa-phone-volume', goal: 'Answer every call, even after hours', productIds: ['ai-voice-agents'] },
+  { icon: 'fa-solid fa-comments', goal: 'Reply to website and WhatsApp enquiries instantly', productIds: ['ai-chatbots'] },
+  { icon: 'fa-solid fa-hashtag', goal: 'Reply to Instagram and Facebook comments and DMs', productIds: ['social-media-bots'] },
+  { icon: 'fa-solid fa-headset', goal: 'Shorten support queues for your team', productIds: ['ai-contact-center'] },
+  { icon: 'fa-solid fa-layer-group', goal: 'Give customers one assistant on every channel', productIds: ['omnichannel-bots'] },
+  { icon: 'fa-solid fa-gears', goal: 'Stop copying leads and sending reminders by hand', productIds: ['saas-automation'] },
+];
+
+// "How it works" on the home page (CampaignFlow.tsx): what happens after you send a campaign.
+export const FLOW_STEPS = [
+  { icon: 'fa-solid fa-paper-plane', title: 'You send a campaign', desc: 'WhatsApp, RCS, SMS or a voice blast, to customers who have opted in.' },
+  { icon: 'fa-solid fa-reply', title: 'Customers respond', desc: 'They ask a question, tap a button, press a key or call you back.' },
+  { icon: 'fa-solid fa-robot', title: 'AI answers 24x7', desc: 'In English or their own language, using what it knows about your business.' },
+  { icon: 'fa-solid fa-handshake', title: 'Your team takes over', desc: 'Interested leads and tricky questions go to your team, and you see what was delivered and who replied.' },
+];
+
+// WhatsApp vs RCS vs SMS vs voice blast (ChannelComparison.tsx). Facts only, no figures.
+export type ComparisonChannel = 'whatsapp' | 'rcs' | 'sms' | 'voice';
+
+export const CHANNEL_COMPARISON: {
+  channels: { id: ComparisonChannel; name: string; icon: string; productId: string }[];
+  rows: { label: string; values: Record<ComparisonChannel, string> }[];
+} = {
+  channels: [
+    { id: 'whatsapp', name: 'WhatsApp', icon: 'fa-brands fa-whatsapp', productId: 'bulk-whatsapp-rcs' },
+    { id: 'rcs', name: 'RCS', icon: 'fa-solid fa-message', productId: 'bulk-whatsapp-rcs' },
+    { id: 'sms', name: 'SMS', icon: 'fa-solid fa-comment-sms', productId: 'sms-otp' },
+    { id: 'voice', name: 'Voice blast', icon: 'fa-solid fa-bullhorn', productId: 'voice-blast' },
+  ],
+  rows: [
+    {
+      label: 'Reaches',
+      values: { whatsapp: 'Customers who use WhatsApp and have opted in', rcs: 'Customers on supported Android phones', sms: 'Every mobile phone', voice: 'Any phone that can take a call, including basic phones' },
+    },
+    {
+      label: 'Needs internet or an app?',
+      values: { whatsapp: 'Yes: the WhatsApp app and internet', rcs: 'No app to install: it arrives in the default messaging app', sms: 'No', voice: 'No' },
+    },
+    {
+      label: 'Rich media and buttons',
+      values: { whatsapp: 'Images, videos, documents and buttons', rcs: 'Your brand name, images and buttons', sms: 'Text only', voice: 'A spoken message, recorded or AI-voiced' },
+    },
+    {
+      label: 'Customers can respond',
+      values: { whatsapp: 'Yes, and AI answers replies 24x7', rcs: 'Yes, by tapping buttons or replying', sms: 'Mostly one-way; add a link or number to reply', voice: 'Yes, by pressing a key, for example to ask for a callback' },
+    },
+    {
+      label: 'Best for',
+      values: { whatsapp: 'Offers, reminders, order updates and conversations', rcs: 'Rich, branded promotions to Android users', sms: 'OTPs, transaction alerts and promotions', voice: "Announcements, reminders and surveys, in the customer's language" },
+    },
+  ],
+};
 
 export const INDUSTRIES: IndustrySector[] = [
   {

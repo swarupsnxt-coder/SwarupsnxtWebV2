@@ -4,6 +4,24 @@ export enum Theme {
   DARK = 'dark'
 }
 
+export type ProductGroup = 'reach' | 'respond' | 'together';
+
+export interface Product {
+  id: string;             // anchor on the home page and URL path of its product page
+  icon: string;
+  iconType: string;
+  title: string;
+  tag: string;
+  group: ProductGroup;    // PRODUCT_GROUPS on the home page
+  summary: string;        // one line, used on home page cards
+  desc: string;
+  bestFor: string;
+  image: string;
+  details: string;
+  ctaLabel: string;
+  ctaText: string;
+}
+
 export interface ProductPage {
   productId: string;      // PRODUCTS[].id; also the URL path (/<productId>/)
   seoTitle: string;       // <title> and og:title, max 60 chars

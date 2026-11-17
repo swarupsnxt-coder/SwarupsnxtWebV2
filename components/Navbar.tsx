@@ -38,6 +38,7 @@ const NAV_ITEMS: NavItem[] = [
     children: [
       { name: 'Try the AI demo (NXT Lab)', href: 'nxt-lab' },
       { name: 'How it works', href: 'how-it-works' },
+      { name: 'Getting started', href: 'getting-started' },
       { name: 'Why Swarups NXT', href: 'why-us' },
       { name: 'FAQ', href: 'faq' },
     ],

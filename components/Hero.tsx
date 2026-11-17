@@ -141,7 +141,7 @@ const Hero: React.FC = () => {
         </div>
 
         <p className="max-w-3xl mx-auto text-lg md:text-2xl text-slate-600 dark:text-slate-400 mb-12 leading-relaxed font-medium px-4">
-          Reach your customers at scale with bulk messaging, and let AI agents handle the replies 24x7. We set up the routing for you, with no coding needed, for Indian businesses.
+          Send bulk WhatsApp, SMS, RCS and voice messages to your customers, and let AI agents answer the replies 24x7. We set everything up for you, with no coding needed.
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-16">
