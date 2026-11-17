@@ -19,6 +19,8 @@ import WhatsAppButton from './components/WhatsAppButton';
 import { LeadFormModal, PrivacyModal, TermsModal } from './components/Modals';
 import ProductPage from './components/ProductPage';
 import IndustryPage from './components/IndustryPage';
+import GuidePage from './components/GuidePage';
+import GuidesIndex from './components/GuidesIndex';
 import { resolveRoute } from './routes';
 import { Theme } from './types';
 
@@ -76,6 +78,10 @@ const App: React.FC<{ path: string }> = ({ path }) => {
           <ProductPage page={route.page} onPrivacyClick={openPrivacy} />
         ) : route.kind === 'industry' ? (
           <IndustryPage industry={route.industry} onPrivacyClick={openPrivacy} />
+        ) : route.kind === 'guide' ? (
+          <GuidePage guide={route.guide} onPrivacyClick={openPrivacy} />
+        ) : route.kind === 'guides' ? (
+          <GuidesIndex onPrivacyClick={openPrivacy} />
         ) : (
           <>
             <Hero />

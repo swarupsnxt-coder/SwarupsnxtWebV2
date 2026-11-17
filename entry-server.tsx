@@ -5,11 +5,14 @@ import { renderToString } from 'react-dom/server';
 import App from './App';
 import { CONTACT, FAQS, INDUSTRIES, PRODUCTS, PRODUCT_PAGES, industryPagePath, productPagePath } from './constants';
 import { resolveRoute } from './routes';
+import { GUIDES, GUIDES_PATH, guidePath, guideShortTitle } from './content/guides';
 
 export const SITE = 'https://swarupsnxt.com/';
 const ORG_ID = `${SITE}#organization`;
 const pageUrl = (productId: string) => `${SITE}${productPagePath(productId).slice(1)}`;
 const industryUrl = (id: string) => `${SITE}${industryPagePath(id).slice(1)}`;
+const guideUrl = (slug: string) => `${SITE}${guidePath(slug).slice(1)}`;
+const GUIDES_URL = `${SITE}${GUIDES_PATH.slice(1)}`;
 
 // Every pre-rendered route. Home keeps the title/description written in index.html (meta: null).
 export const routes = [
@@ -21,6 +24,18 @@ export const routes = [
   ...INDUSTRIES.map((i) => ({
     path: industryPagePath(i.id),
     meta: { title: i.seoTitle, description: i.metaDescription, url: industryUrl(i.id) },
+  })),
+  {
+    path: GUIDES_PATH,
+    meta: {
+      title: 'Guides to Business Messaging in India | Swarups NXT',
+      description: 'Plain-English guides to WhatsApp, RCS, SMS and voice blast for Indian businesses: which channel to use, DLT registration, RCS and bulk WhatsApp basics.',
+      url: GUIDES_URL,
+    },
+  },
+  ...GUIDES.map((g) => ({
+    path: guidePath(g.slug),
+    meta: { title: g.seoTitle, description: g.metaDescription, url: guideUrl(g.slug) },
   })),
 ];
 
@@ -84,7 +99,54 @@ export function jsonLd(path: string): string {
   const route = resolveRoute(path);
   let graph: object[];
 
-  if (route.kind === 'industry') {
+  if (route.kind === 'guide') {
+    const { guide } = route;
+    const url = guideUrl(guide.slug);
+    graph = [
+      organization,
+      {
+        '@type': 'Article',
+        '@id': `${url}#article`,
+        headline: guide.h1,
+        description: guide.metaDescription,
+        url,
+        mainEntityOfPage: url,
+        inLanguage: 'en-IN',
+        datePublished: guide.datePublished,
+        dateModified: guide.dateModified,
+        image: `${SITE}og-image-v3.png`,
+        author: { '@id': ORG_ID },
+        publisher: { '@id': ORG_ID },
+        about: guide.relatedProductIds.map((id) => ({ '@id': `${pageUrl(id)}#service` })),
+      },
+      breadcrumbs([
+        { name: 'Home', item: SITE },
+        { name: 'Guides', item: GUIDES_URL },
+        { name: guideShortTitle(guide), item: url },
+      ]),
+      ...(guide.faqs.length ? [faqPage(`${url}#faq`, guide.faqs)] : []),
+    ];
+  } else if (route.kind === 'guides') {
+    graph = [
+      organization,
+      {
+        '@type': 'CollectionPage',
+        '@id': GUIDES_URL,
+        url: GUIDES_URL,
+        name: 'Guides to business messaging in India',
+        inLanguage: 'en-IN',
+        publisher: { '@id': ORG_ID },
+        mainEntity: {
+          '@type': 'ItemList',
+          itemListElement: GUIDES.map((g, i) => ({ '@type': 'ListItem', position: i + 1, url: guideUrl(g.slug), name: g.h1 })),
+        },
+      },
+      breadcrumbs([
+        { name: 'Home', item: SITE },
+        { name: 'Guides', item: GUIDES_URL },
+      ]),
+    ];
+  } else if (route.kind === 'industry') {
     const { industry } = route;
     const url = industryUrl(industry.id);
     graph = [

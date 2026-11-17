@@ -51,9 +51,13 @@ for (const { path, meta } of routes) {
   const pageMusts = ['<h1', 'Frequently Asked Questions', 'id="contact"', '"@type":"FAQPage"', '"@type":"BreadcrumbList"'];
   const musts = path === '/'
     ? ['<h1', 'Scale Customer Engagement', 'Bulk WhatsApp &amp; RCS Engine', 'Voice Blast', 'What do you', 'Frequently Asked Questions', '"@type":"FAQPage"']
-    : path.startsWith('/industries/')
-      ? [...pageMusts, 'Use cases', `<link rel="canonical" href="${meta.url}"`]
-      : [...pageMusts, 'What you get', 'How it works', `<link rel="canonical" href="${meta.url}"`];
+    : path === '/guides/'
+      ? ['<h1', 'id="contact"', '"@type":"CollectionPage"', '"@type":"BreadcrumbList"', `<link rel="canonical" href="${meta.url}"`]
+      : path.startsWith('/guides/')
+        ? [...pageMusts, 'Last updated', '"@type":"Article"', `<link rel="canonical" href="${meta.url}"`]
+        : path.startsWith('/industries/')
+          ? [...pageMusts, 'Use cases', `<link rel="canonical" href="${meta.url}"`]
+          : [...pageMusts, 'What you get', 'How it works', `<link rel="canonical" href="${meta.url}"`];
   for (const must of musts) {
     if (!html.includes(must)) throw new Error(`prerender: expected "${must}" in ${path}`);
   }

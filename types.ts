@@ -50,3 +50,24 @@ export interface IndustrySector {
   faqs: { question: string; answer: string }[];
   ctaText: string;         // prefilled WhatsApp message
 }
+
+// Explainer guide at /guides/<slug>/ (content/guides.ts).
+export interface Guide {
+  slug: string;
+  seoTitle: string;        // max 60 chars
+  metaDescription: string; // max 160 chars
+  h1: string;
+  summary: string;         // one line for the /guides/ list
+  datePublished: string;   // YYYY-MM-DD
+  dateModified: string;    // YYYY-MM-DD; update when the guide changes
+  intro: string;
+  sections: {
+    heading: string;
+    paragraphs: string[];
+    bullets?: string[];
+    embed?: 'channel-comparison';
+  }[];
+  faqs: { question: string; answer: string }[];
+  relatedProductIds: string[];
+  sources: { name: string; url: string }[]; // official references
+}
