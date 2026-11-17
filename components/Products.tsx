@@ -1,5 +1,6 @@
 import React from 'react';
-import { PRODUCTS, PRODUCT_GROUPS, findProductPage, productPagePath, whatsappLink } from '../constants';
+import { PRODUCTS, PRODUCT_GROUPS, productPagePath, whatsappLink } from '../constants';
+import ProductVisual from './visuals/ProductVisual';
 
 // Compact cards in three groups; the full description lives on each product's own page.
 const Products: React.FC = () => {
@@ -36,6 +37,7 @@ const Products: React.FC = () => {
                     id={product.id}
                     className="scroll-mt-28 group rounded-[2rem] bg-white dark:bg-white/[0.02] border border-slate-200 dark:border-white/5 hover:border-[#2BB6C6]/50 transition-all duration-500 hover:-translate-y-1 flex flex-col overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-[#2BB6C6]/10"
                   >
+                    <ProductVisual productId={product.id} size="sm" />
                     <div className="p-7 flex flex-col flex-grow">
                       <div className="flex items-center gap-4 mb-5">
                         <div className="w-12 h-12 shrink-0 rounded-xl bg-white dark:bg-slate-800 flex items-center justify-center text-[#2BB6C6] text-xl shadow-lg border border-slate-100 dark:border-white/5 group-hover:bg-[#2BB6C6] group-hover:text-[#0f172a] transition-all duration-500">
@@ -52,15 +54,13 @@ const Products: React.FC = () => {
                       </div>
 
                       <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3">
-                        {findProductPage(product.id) && (
-                          <a
-                            href={productPagePath(product.id)}
-                            className="inline-flex items-center gap-2 text-sm font-bold text-slate-900 dark:text-white hover:text-[#2BB6C6] hover:gap-3 transition-all"
-                          >
-                            <span>Learn more<span className="sr-only"> about {product.title}</span></span>
-                            <i className="fa-solid fa-arrow-right-long text-xs" aria-hidden="true"></i>
-                          </a>
-                        )}
+                        <a
+                          href={productPagePath(product.id)}
+                          className="inline-flex items-center gap-2 text-sm font-bold text-slate-900 dark:text-white hover:text-[#2BB6C6] hover:gap-3 transition-all"
+                        >
+                          <span>Learn more<span className="sr-only"> about {product.title}</span></span>
+                          <i className="fa-solid fa-arrow-right-long text-xs" aria-hidden="true"></i>
+                        </a>
                         <a
                           href={whatsappLink(product.ctaText)}
                           target="_blank"

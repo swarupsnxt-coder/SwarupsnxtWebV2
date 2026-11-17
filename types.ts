@@ -16,7 +16,6 @@ export interface Product {
   summary: string;        // one line, used on home page cards
   desc: string;
   bestFor: string;
-  image: string;
   details: string;
   ctaLabel: string;
   ctaText: string;
@@ -29,6 +28,8 @@ export interface ProductPage {
   h1: string;
   features: string[];
   industryIds: string[];  // INDUSTRIES[].id shown as examples
+  howItWorks: { title: string; desc: string }[];
+  relatedIds: string[];   // PRODUCTS[].id shown under "Works well with"
   faqs: { question: string; answer: string }[];
 }
 

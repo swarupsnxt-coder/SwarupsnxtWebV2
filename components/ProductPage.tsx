@@ -3,6 +3,7 @@ import { INDUSTRIES, PRODUCTS, PRODUCT_PAGES, productPagePath, whatsappLink } fr
 import { ProductPage as ProductPageData } from '../types';
 import FAQ from './FAQ';
 import Contact from './Contact';
+import ProductVisual from './visuals/ProductVisual';
 
 // Products that the NXT Lab demo on the home page lets visitors try.
 const DEMO_PRODUCTS = ['ai-voice-agents', 'ai-chatbots'];
@@ -18,7 +19,8 @@ const ProductPage: React.FC<ProductPageProps> = ({ page, onPrivacyClick }) => {
   if (!product) return null;
 
   const industries = INDUSTRIES.filter((i) => page.industryIds.includes(i.id));
-  const otherPages = PRODUCT_PAGES.filter((p) => p.productId !== page.productId);
+  const related = page.relatedIds.map((id) => PRODUCTS.find((p) => p.id === id)).filter((p) => p !== undefined);
+  const otherPages = PRODUCT_PAGES.filter((p) => p.productId !== page.productId && !page.relatedIds.includes(p.productId));
   const productTitle = (id: string) => PRODUCTS.find((p) => p.id === id)?.title ?? id;
 
   return (
@@ -73,9 +75,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ page, onPrivacyClick }) => {
               )}
             </div>
 
-            <div className="rounded-[2.5rem] overflow-hidden border border-slate-200 dark:border-white/10 shadow-2xl shadow-[#2BB6C6]/10">
-              <img src={product.image} alt="" width={800} height={533} className="w-full h-full object-cover" />
-            </div>
+            <ProductVisual productId={product.id} size="lg" />
           </div>
         </div>
       </section>
@@ -105,14 +105,31 @@ const ProductPage: React.FC<ProductPageProps> = ({ page, onPrivacyClick }) => {
         </div>
       </section>
 
+      <section id="how-it-works" aria-labelledby="product-steps" className="py-24 bg-slate-50 dark:bg-[#0f172a] border-t border-slate-200 dark:border-white/5 transition-colors duration-500 scroll-mt-28">
+        <div className="container mx-auto px-4">
+          <div className="max-w-5xl mx-auto">
+            <h2 id="product-steps" className="text-3xl md:text-5xl font-bold mb-12 text-slate-900 dark:text-white">How it works</h2>
+            <ol className={`grid gap-6 ${page.howItWorks.length === 4 ? 'md:grid-cols-2 lg:grid-cols-4' : 'md:grid-cols-3'}`}>
+              {page.howItWorks.map((step, i) => (
+                <li key={step.title} className="p-8 rounded-[2rem] bg-white dark:bg-white/[0.02] border border-slate-200 dark:border-white/5">
+                  <span className="inline-flex w-10 h-10 rounded-xl bg-[#2BB6C6] text-[#0f172a] font-black items-center justify-center mb-5">{i + 1}</span>
+                  <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">{step.title}</h3>
+                  <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">{step.desc}</p>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </div>
+      </section>
+
       {industries.length > 0 && (
-        <section id="solutions" className="py-24 bg-slate-50 dark:bg-[#0f172a] transition-colors duration-500 scroll-mt-28">
+        <section id="solutions" className="py-24 bg-white dark:bg-[#0f172a] border-t border-slate-200 dark:border-white/5 transition-colors duration-500 scroll-mt-28">
           <div className="container mx-auto px-4">
             <div className="max-w-5xl mx-auto">
               <h2 className="text-3xl md:text-5xl font-bold mb-12 text-slate-900 dark:text-white">How businesses use it</h2>
               <div className="grid md:grid-cols-2 gap-6">
                 {industries.map((i) => (
-                  <div key={i.id} className="p-8 rounded-[2rem] bg-white dark:bg-white/[0.02] border border-slate-200 dark:border-white/5">
+                  <div key={i.id} className="p-8 rounded-[2rem] bg-slate-50 dark:bg-white/[0.02] border border-slate-200 dark:border-white/5">
                     <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">{i.title}</h3>
                     <p className="text-slate-500 dark:text-slate-400 text-sm mb-3">{i.problem}</p>
                     <p className="text-slate-700 dark:text-slate-300 font-medium">{i.solution}</p>
@@ -125,6 +142,31 @@ const ProductPage: React.FC<ProductPageProps> = ({ page, onPrivacyClick }) => {
       )}
 
       <FAQ items={page.faqs} subtitle={`Common questions about ${product.title}.`} />
+
+      {related.length > 0 && (
+        <section aria-labelledby="works-well-with" className="py-24 bg-slate-50 dark:bg-[#0f172a] border-t border-slate-200 dark:border-white/5 transition-colors duration-500">
+          <div className="container mx-auto px-4">
+            <div className="max-w-5xl mx-auto">
+              <h2 id="works-well-with" className="text-3xl md:text-5xl font-bold mb-4 text-slate-900 dark:text-white">Works well with</h2>
+              <p className="text-slate-600 dark:text-slate-400 text-lg mb-12">Many businesses combine {product.title} with these.</p>
+              <ul className="grid md:grid-cols-3 gap-6">
+                {related.map((r) => (
+                  <li key={r.id} className="rounded-[2rem] overflow-hidden bg-white dark:bg-white/[0.02] border border-slate-200 dark:border-white/5 flex flex-col">
+                    <ProductVisual productId={r.id} size="sm" />
+                    <div className="p-6 flex flex-col flex-grow">
+                      <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">{r.title}</h3>
+                      <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-5 flex-grow">{r.summary}</p>
+                      <a href={productPagePath(r.id)} className="inline-flex items-center gap-2 text-sm font-bold text-[#2BB6C6] hover:gap-3 transition-all">
+                        Learn more<span className="sr-only"> about {r.title}</span> <i className="fa-solid fa-arrow-right-long text-xs" aria-hidden="true"></i>
+                      </a>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </section>
+      )}
 
       <section aria-labelledby="more-products" className="py-20 bg-white dark:bg-[#0f172a] border-t border-slate-200 dark:border-white/5 transition-colors duration-500">
         <div className="container mx-auto px-4">
