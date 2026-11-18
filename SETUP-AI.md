@@ -50,7 +50,7 @@ Also delete the old `API_KEY` / `GEMINI_API_KEY` variables if they are still the
 
 ## 4. Redeploy
 
-Variables and bindings only apply to new deployments. Go to **Deployments**, open the latest `site-upgrade` deployment, then **⋯ → Retry deployment**. Or push any commit.
+Variables and bindings only apply to new deployments. Go to **Deployments**, open the latest Production deployment, then **⋯ → Retry deployment**. Or push any commit.
 
 ## 5. Rate limit (recommended)
 
@@ -69,11 +69,11 @@ Each chat session is already capped at **20 messages** and needs Turnstile to st
 ## 6. Check usage against the free allowance
 
 - Workers AI includes **10,000 neurons per day free**, reset at 00:00 UTC. See [Workers AI pricing](https://developers.cloudflare.com/workers-ai/platform/pricing/).
-- The current model (`@cf/meta/llama-3.1-8b-instruct-fp8`) uses about **35–45 neurons per chat message**, so roughly **200–250 messages a day** fit in the free allowance.
+- The current model (`@cf/meta/llama-4-scout-17b-16e-instruct`) uses about **70–100 neurons per chat message**, so roughly **100–140 messages a day** fit in the free allowance. (Checked against the pricing page in Nov 2026. The earlier model, `llama-3.1-8b-instruct-fp8`, was deprecated on 2026-11-20.)
 - To see usage, go to **dash.cloudflare.com → AI → Workers AI**, which shows neurons used per day.
 - If the free allowance runs out on the Free plan, the assistant shows the contact card until the next day. Nothing breaks.
 
-To change the model (for example `@cf/meta/llama-4-scout-17b-16e-instruct` for better quality in Indian languages, at about 2x the neurons), edit `MODEL_ID` in `lib/llm.ts`.
+To change the model, edit `MODEL_ID` in `lib/llm.ts`. First check the model's page on developers.cloudflare.com for a planned deprecation date and its response format (see the comment in `lib/llm.ts`). A few times a year, check that the current model has no deprecation date.
 
 ---
 

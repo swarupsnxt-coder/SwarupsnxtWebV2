@@ -1,10 +1,13 @@
 // Single place for the model call. To switch provider (Groq, Claude, OpenAI, ...), change
 // generateReply() only; the API route and UI don't need to know. Do not add Gemini (CLAUDE.md rule 12).
 
-// Current Workers AI model (checked against developers.cloudflare.com/workers-ai/models, Sept 2026).
-// Small and fast; officially supports English and Hindi. For stronger quality in other Indian
-// languages, '@cf/meta/llama-4-scout-17b-16e-instruct' costs roughly 2x the neurons per message.
-export const MODEL_ID = '@cf/meta/llama-3.1-8b-instruct-fp8';
+// Current Workers AI model (checked against developers.cloudflare.com/workers-ai/models, Nov 2026).
+// Replaces '@cf/meta/llama-3.1-8b-instruct-fp8', which Cloudflare deprecates on 2026-11-20.
+// No deprecation date listed; same messages in / `response` string out; better multilingual
+// quality. About 70-100 neurons per chat message (~2.5k-token system prompt).
+// Before switching models, check the model page: some newer ones return OpenAI-style
+// `choices[]` instead of `response`, which generateReply() would need to handle.
+export const MODEL_ID = '@cf/meta/llama-4-scout-17b-16e-instruct';
 
 export const MAX_OUTPUT_TOKENS = 220;
 export const MODEL_TIMEOUT_MS = 15000;
