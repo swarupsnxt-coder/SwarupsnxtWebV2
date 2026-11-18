@@ -6,9 +6,10 @@ const steps = [
   { id: '03', title: 'Go live & optimise', desc: 'Your agent goes live on the channels you choose. We review conversations and keep improving it.' },
 ];
 
-const HowItWorks: React.FC = () => {
+// Onboarding steps: how a business gets started with Swarups NXT.
+const GettingStarted: React.FC = () => {
   return (
-    <section id="how-it-works" className="py-24 bg-white dark:bg-[#0f172a] relative overflow-hidden transition-colors duration-500 scroll-mt-28">
+    <section id="getting-started" className="py-24 bg-slate-50 dark:bg-[#0f172a] relative overflow-hidden transition-colors duration-500 scroll-mt-28">
       {/* Background patterns */}
       <div className="absolute inset-0 opacity-5 dark:opacity-5 pointer-events-none">
         <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(#2BB6C6_1px,transparent_1px)] [background-size:40px_40px]"></div>
@@ -16,7 +17,7 @@ const HowItWorks: React.FC = () => {
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-20">
-          <h2 className="text-4xl md:text-6xl font-bold mb-4 text-slate-900 dark:text-white">How it works</h2>
+          <h2 className="text-4xl md:text-6xl font-bold mb-4 text-slate-900 dark:text-white">Getting started</h2>
           <p className="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">We handle the setup. You focus on your customers.</p>
         </div>
 
@@ -41,4 +42,4 @@ const HowItWorks: React.FC = () => {
   );
 };
 
-export default HowItWorks;
+export default GettingStarted;

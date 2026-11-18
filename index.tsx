@@ -11,7 +11,7 @@ if (!rootElement) {
 
 const app = (
   <React.StrictMode>
-    <App />
+    <App path={window.location.pathname} />
   </React.StrictMode>
 );
 

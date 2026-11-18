@@ -52,5 +52,6 @@ Right now `www.swarupsnxt.com` serves a separate copy of the site, which counts 
 
 ## 7. Keep it healthy
 
-- When products, FAQs or contact details change, edit `constants.tsx`. The page, the structured data and the chatbot all update from it. Also update `public/llms.txt` and the `<lastmod>` date in `public/sitemap.xml`.
+- When products, FAQs or contact details change, edit `constants.tsx`. The page, the structured data and the chatbot all update from it. Also update `public/llms.txt`. The sitemap is generated on every build from the list of pages, so it needs no manual edits.
+- After new pages go live (product, industry or guide pages), open Search Console → **Sitemaps** and resubmit `https://swarupsnxt.com/sitemap.xml`, then use **URL Inspection → Request indexing** for the most important new pages.
 - Check Search Console monthly for errors and for the queries people use to find the site.

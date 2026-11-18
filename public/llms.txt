@@ -6,19 +6,32 @@ Swarups NXT handles the setup, training and ongoing support; clients do not need
 
 ## Products
 
-- Bulk WhatsApp & RCS Engine: bulk messages to opted-in contacts with rich media and personalisation; AI answers replies; delivered/read/replied reporting.
-- Enterprise SMS & OTP: OTPs, transaction alerts and promotional SMS at volume, with delivery reports; help setting up the client's DLT sender IDs and templates.
-- AI Voice Agents: answer inbound calls and make follow-up calls 24x7 in Indian languages; hand over to staff when a person is needed.
-- AI Chatbots: answer questions, capture leads and book appointments on WhatsApp and websites.
-- Voice Blast: send a recorded or AI-voiced message to many phones at once, with press-a-key (IVR) responses and call reports.
-- AI Contact Center: AI handles routine calls and chats; human agents take the conversations that need a person.
-- Omnichannel Bots: one AI assistant across phone, WhatsApp, website chat and social media.
-- Social Media Bots: automatic replies to Instagram and Facebook comments and DMs; turns interested followers into leads.
-- SaaS Automation: automates repetitive work such as lead entry, reminders and status updates.
+- [Bulk WhatsApp & RCS Engine](https://swarupsnxt.com/bulk-whatsapp-rcs/): bulk messages to opted-in contacts with rich media and personalisation; AI answers replies; delivered/read/replied reporting.
+- [Enterprise SMS & OTP](https://swarupsnxt.com/sms-otp/): OTPs, transaction alerts and promotional SMS at volume, with delivery reports; help setting up the client's DLT sender IDs and templates.
+- [AI Voice Agents](https://swarupsnxt.com/ai-voice-agents/): answer inbound calls and make follow-up calls 24x7 in Indian languages; hand over to staff when a person is needed.
+- [AI Chatbots](https://swarupsnxt.com/ai-chatbots/): answer questions, capture leads and book appointments on WhatsApp and websites.
+- [Voice Blast](https://swarupsnxt.com/voice-blast/): send a recorded or AI-voiced message to many phones at once, with press-a-key (IVR) responses and call reports.
+- [Social Media Bots](https://swarupsnxt.com/social-media-bots/): automatic replies to Instagram and Facebook comments and DMs; turns interested followers into leads.
+- [Omnichannel Bots](https://swarupsnxt.com/omnichannel-bots/): one AI assistant across phone, WhatsApp, website chat and social media.
+- [AI Contact Center](https://swarupsnxt.com/ai-contact-center/): AI handles routine calls and chats; human agents take the conversations that need a person. Priced per agent seat.
+- [SaaS Automation](https://swarupsnxt.com/saas-automation/): automates repetitive work such as lead entry, reminders and status updates.
 
 ## Industries served
 
-Real estate, healthcare and clinics, education, e-commerce and D2C, finance and NBFC collections, automobile dealers, hospitality.
+- [Real estate](https://swarupsnxt.com/industries/real-estate/)
+- [Healthcare and clinics](https://swarupsnxt.com/industries/healthcare/)
+- [Education](https://swarupsnxt.com/industries/education/)
+- [E-commerce and D2C](https://swarupsnxt.com/industries/ecommerce/)
+- [Finance and NBFC collections](https://swarupsnxt.com/industries/finance/)
+- [Automobile dealers](https://swarupsnxt.com/industries/automobile/)
+- [Hospitality](https://swarupsnxt.com/industries/hospitality/)
+
+## Guides
+
+- [WhatsApp, RCS, SMS or voice blast: which channel should your business use?](https://swarupsnxt.com/guides/whatsapp-vs-rcs-vs-sms-vs-voice-blast/)
+- [What is RCS messaging?](https://swarupsnxt.com/guides/what-is-rcs-messaging/)
+- [DLT registration for business SMS in India](https://swarupsnxt.com/guides/dlt-registration-for-business-sms-india/)
+- [Bulk WhatsApp messaging basics](https://swarupsnxt.com/guides/bulk-whatsapp-messaging-basics/)
 
 ## Languages
 
@@ -36,3 +49,11 @@ English and common Indian languages, including Hinglish. Exact coverage depends 
 - Book a demo (enquiry form): https://swarupsnxt.com/#contact
 - WhatsApp / phone: +91 7550007208
 - Email: hello@swarupsnxt.com
+
+## Profiles
+
+- LinkedIn: https://www.linkedin.com/in/swarupsnxt/
+- Instagram: https://www.instagram.com/swarupsnxt/
+- Facebook: https://www.facebook.com/swarupsnxt/
+- YouTube: https://www.youtube.com/@SwarupsNXT
+- Google Maps: https://maps.app.goo.gl/fw57zneDShmFSzBNA

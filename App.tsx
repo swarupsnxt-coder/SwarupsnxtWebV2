@@ -4,7 +4,10 @@ import Hero from './components/Hero';
 import Integrations from './components/Integrations';
 import NxtLab from './components/NxtLab';
 import Products from './components/Products';
-import HowItWorks from './components/HowItWorks';
+import GettingStarted from './components/GettingStarted';
+import CampaignFlow from './components/CampaignFlow';
+import GoalChooser from './components/GoalChooser';
+import ChannelComparison from './components/ChannelComparison';
 import Infrastructure from './components/Infrastructure';
 import Pricing from './components/Pricing';
 import WhyUs from './components/WhyUs';
@@ -14,9 +17,19 @@ import Contact from './components/Contact';
 import Footer from './components/Footer';
 import WhatsAppButton from './components/WhatsAppButton';
 import { LeadFormModal, PrivacyModal, TermsModal } from './components/Modals';
+import ProductPage from './components/ProductPage';
+import IndustryPage from './components/IndustryPage';
+import GuidePage from './components/GuidePage';
+import GuidesIndex from './components/GuidesIndex';
+import { resolveRoute } from './routes';
 import { Theme } from './types';
 
-const App: React.FC = () => {
+// `path` is the URL path: window.location.pathname in the browser, the route being
+// pre-rendered at build time (entry-server.tsx). `resolveRoute` picks the page to render.
+const App: React.FC<{ path: string }> = ({ path }) => {
+  const route = resolveRoute(path);
+  const isHome = route.kind === 'home';
+
   // The inline script in index.html applies the saved/system theme before first paint;
   // read it back from the <html> class (server render defaults to light).
   const [theme, setTheme] = useState<Theme>(() =>
@@ -58,23 +71,39 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-[#0f172a] text-slate-900 dark:text-white transition-colors duration-500">
-      <Navbar theme={theme} toggleTheme={toggleTheme} />
+      <Navbar theme={theme} toggleTheme={toggleTheme} isHome={isHome} />
 
       <main>
-        <Hero />
-        <Integrations />
-        <Products />
-        <Infrastructure />
-        <Pricing />
-        <NxtLab />
-        <HowItWorks />
-        <WhyUs />
-        <Industries />
-        <FAQ />
-        <Contact onPrivacyClick={openPrivacy} />
+        {route.kind === 'product' ? (
+          <ProductPage page={route.page} onPrivacyClick={openPrivacy} />
+        ) : route.kind === 'industry' ? (
+          <IndustryPage industry={route.industry} onPrivacyClick={openPrivacy} />
+        ) : route.kind === 'guide' ? (
+          <GuidePage guide={route.guide} onPrivacyClick={openPrivacy} />
+        ) : route.kind === 'guides' ? (
+          <GuidesIndex onPrivacyClick={openPrivacy} />
+        ) : (
+          <>
+            <Hero />
+            <Integrations />
+            <CampaignFlow />
+            <GoalChooser />
+            <Products />
+            <ChannelComparison />
+            <Industries />
+            <NxtLab />
+            <GettingStarted />
+            <WhyUs />
+            <Pricing />
+            <Infrastructure />
+            <FAQ />
+            <Contact onPrivacyClick={openPrivacy} />
+          </>
+        )}
       </main>
 
       <Footer
+        isHome={isHome}
         onPrivacyClick={openPrivacy}
         onTermsClick={() => setShowTerms(true)}
       />

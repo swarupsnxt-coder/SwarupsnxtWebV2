@@ -3,69 +3,201 @@
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import App from './App';
-import { CONTACT, FAQS, PRODUCTS } from './constants';
+import { CONTACT, FAQS, INDUSTRIES, PRODUCTS, PRODUCT_PAGES, SOCIAL_PROFILES, industryPagePath, productPagePath } from './constants';
+import { resolveRoute } from './routes';
+import { GUIDES, GUIDES_PATH, guidePath, guideShortTitle } from './content/guides';
 
-const SITE = 'https://swarupsnxt.com/';
+export const SITE = 'https://swarupsnxt.com/';
 const ORG_ID = `${SITE}#organization`;
+const pageUrl = (productId: string) => `${SITE}${productPagePath(productId).slice(1)}`;
+const industryUrl = (id: string) => `${SITE}${industryPagePath(id).slice(1)}`;
+const guideUrl = (slug: string) => `${SITE}${guidePath(slug).slice(1)}`;
+const GUIDES_URL = `${SITE}${GUIDES_PATH.slice(1)}`;
 
-export function render(): string {
+// Every pre-rendered route. Home keeps the title/description written in index.html (meta: null).
+export const routes = [
+  { path: '/', meta: null },
+  ...PRODUCT_PAGES.map((p) => ({
+    path: productPagePath(p.productId),
+    meta: { title: p.seoTitle, description: p.metaDescription, url: pageUrl(p.productId) },
+  })),
+  ...INDUSTRIES.map((i) => ({
+    path: industryPagePath(i.id),
+    meta: { title: i.seoTitle, description: i.metaDescription, url: industryUrl(i.id) },
+  })),
+  {
+    path: GUIDES_PATH,
+    meta: {
+      title: 'Guides to Business Messaging in India | Swarups NXT',
+      description: 'Plain-English guides to WhatsApp, RCS, SMS and voice blast for Indian businesses: which channel to use, DLT registration, RCS and bulk WhatsApp basics.',
+      url: GUIDES_URL,
+    },
+  },
+  ...GUIDES.map((g) => ({
+    path: guidePath(g.slug),
+    meta: { title: g.seoTitle, description: g.metaDescription, url: guideUrl(g.slug) },
+  })),
+];
+
+export function render(path: string): string {
   return renderToString(
     <React.StrictMode>
-      <App />
+      <App path={path} />
     </React.StrictMode>
   );
 }
 
-// schema.org structured data, generated from the same content the page shows.
-export function jsonLd(): string {
-  const graph = [
-    {
-      '@type': 'Organization',
-      '@id': ORG_ID,
-      name: 'Swarups NXT',
-      url: SITE,
-      logo: { '@type': 'ImageObject', url: `${SITE}logo-512.png`, width: 512, height: 512 },
-      image: `${SITE}og-image-v3.png`,
-      description: 'Integration partner that sets up, customises and supports bulk WhatsApp and RCS, enterprise SMS and OTP, AI voice agents, chatbots and automation for Indian businesses.',
-      email: CONTACT.email,
-      telephone: CONTACT.phone,
-      address: { '@type': 'PostalAddress', addressLocality: 'Chennai', addressRegion: 'Tamil Nadu', addressCountry: 'IN' },
-      areaServed: { '@type': 'Country', name: 'India' },
-      contactPoint: [{
-        '@type': 'ContactPoint',
-        contactType: 'sales',
-        telephone: CONTACT.phone,
-        email: CONTACT.email,
-        areaServed: 'IN',
-      }],
-    },
-    {
-      '@type': 'WebSite',
-      '@id': `${SITE}#website`,
-      url: SITE,
-      name: 'Swarups NXT',
-      inLanguage: 'en-IN',
-      publisher: { '@id': ORG_ID },
-    },
-    ...PRODUCTS.map((p) => ({
-      '@type': 'Service',
-      name: p.title,
-      serviceType: p.title,
-      description: `${p.desc} ${p.details}`,
-      provider: { '@id': ORG_ID },
-      areaServed: { '@type': 'Country', name: 'India' },
-      url: `${SITE}#products`,
-    })),
-    {
-      '@type': 'FAQPage',
-      '@id': `${SITE}#faq`,
-      mainEntity: FAQS.map((f) => ({
-        '@type': 'Question',
-        name: f.question,
-        acceptedAnswer: { '@type': 'Answer', text: f.answer },
-      })),
-    },
-  ];
+const organization = {
+  '@type': 'Organization',
+  '@id': ORG_ID,
+  name: 'Swarups NXT',
+  url: SITE,
+  logo: { '@type': 'ImageObject', url: `${SITE}logo-512.png`, width: 512, height: 512 },
+  image: `${SITE}og-image-v3.png`,
+  description: 'Integration partner that sets up, customises and supports bulk WhatsApp and RCS, enterprise SMS and OTP, AI voice agents, chatbots and automation for Indian businesses.',
+  email: CONTACT.email,
+  telephone: CONTACT.phone,
+  address: { '@type': 'PostalAddress', addressLocality: 'Chennai', addressRegion: 'Tamil Nadu', addressCountry: 'IN' },
+  areaServed: { '@type': 'Country', name: 'India' },
+  contactPoint: [{
+    '@type': 'ContactPoint',
+    contactType: 'sales',
+    telephone: CONTACT.phone,
+    email: CONTACT.email,
+    areaServed: 'IN',
+  }],
+  sameAs: SOCIAL_PROFILES.filter((p) => p.inSameAs).map((p) => p.url),
+};
+
+const service = (p: typeof PRODUCTS[number]) => ({
+  '@type': 'Service',
+  '@id': `${pageUrl(p.id)}#service`,
+  name: p.title,
+  serviceType: p.title,
+  description: `${p.desc} ${p.details}`,
+  provider: { '@id': ORG_ID },
+  areaServed: { '@type': 'Country', name: 'India' },
+  url: pageUrl(p.id),
+});
+
+const breadcrumbs = (items: { name: string; item: string }[]) => ({
+  '@type': 'BreadcrumbList',
+  itemListElement: items.map((it, i) => ({ '@type': 'ListItem', position: i + 1, ...it })),
+});
+
+const faqPage = (id: string, faqs: { question: string; answer: string }[]) => ({
+  '@type': 'FAQPage',
+  '@id': id,
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.question,
+    acceptedAnswer: { '@type': 'Answer', text: f.answer },
+  })),
+});
+
+// schema.org structured data for a route, generated from the same content the page shows.
+export function jsonLd(path: string): string {
+  const route = resolveRoute(path);
+  let graph: object[];
+
+  if (route.kind === 'guide') {
+    const { guide } = route;
+    const url = guideUrl(guide.slug);
+    graph = [
+      organization,
+      {
+        '@type': 'Article',
+        '@id': `${url}#article`,
+        headline: guide.h1,
+        description: guide.metaDescription,
+        url,
+        mainEntityOfPage: url,
+        inLanguage: 'en-IN',
+        datePublished: guide.datePublished,
+        dateModified: guide.dateModified,
+        image: `${SITE}og-image-v3.png`,
+        author: { '@id': ORG_ID },
+        publisher: { '@id': ORG_ID },
+        about: guide.relatedProductIds.map((id) => ({ '@id': `${pageUrl(id)}#service` })),
+      },
+      breadcrumbs([
+        { name: 'Home', item: SITE },
+        { name: 'Guides', item: GUIDES_URL },
+        { name: guideShortTitle(guide), item: url },
+      ]),
+      ...(guide.faqs.length ? [faqPage(`${url}#faq`, guide.faqs)] : []),
+    ];
+  } else if (route.kind === 'guides') {
+    graph = [
+      organization,
+      {
+        '@type': 'CollectionPage',
+        '@id': GUIDES_URL,
+        url: GUIDES_URL,
+        name: 'Guides to business messaging in India',
+        inLanguage: 'en-IN',
+        publisher: { '@id': ORG_ID },
+        mainEntity: {
+          '@type': 'ItemList',
+          itemListElement: GUIDES.map((g, i) => ({ '@type': 'ListItem', position: i + 1, url: guideUrl(g.slug), name: g.h1 })),
+        },
+      },
+      breadcrumbs([
+        { name: 'Home', item: SITE },
+        { name: 'Guides', item: GUIDES_URL },
+      ]),
+    ];
+  } else if (route.kind === 'industry') {
+    const { industry } = route;
+    const url = industryUrl(industry.id);
+    graph = [
+      organization,
+      {
+        '@type': 'WebPage',
+        '@id': url,
+        url,
+        name: industry.seoTitle,
+        description: industry.metaDescription,
+        inLanguage: 'en-IN',
+        about: industry.productIds.map((id) => ({ '@id': `${pageUrl(id)}#service` })),
+        publisher: { '@id': ORG_ID },
+      },
+      breadcrumbs([
+        { name: 'Home', item: SITE },
+        { name: 'Industries', item: `${SITE}#solutions` },
+        { name: industry.title, item: url },
+      ]),
+      faqPage(`${url}#faq`, industry.faqs),
+    ];
+  } else if (route.kind === 'home') {
+    graph = [
+      organization,
+      {
+        '@type': 'WebSite',
+        '@id': `${SITE}#website`,
+        url: SITE,
+        name: 'Swarups NXT',
+        inLanguage: 'en-IN',
+        publisher: { '@id': ORG_ID },
+      },
+      ...PRODUCTS.map(service),
+      faqPage(`${SITE}#faq`, FAQS),
+    ];
+  } else {
+    const page = route.page;
+    const product = PRODUCTS.find((p) => p.id === page.productId)!;
+    const url = pageUrl(page.productId);
+    graph = [
+      organization,
+      service(product),
+      breadcrumbs([
+        { name: 'Home', item: SITE },
+        { name: 'Products', item: `${SITE}#products` },
+        { name: product.title, item: url },
+      ]),
+      faqPage(`${url}#faq`, page.faqs),
+    ];
+  }
 
   // Escape "<" so the JSON can't close the <script> tag early.
   return JSON.stringify({ '@context': 'https://schema.org', '@graph': graph }).replace(/</g, '\\u003c');

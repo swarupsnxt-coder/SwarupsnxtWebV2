@@ -18,6 +18,8 @@ file wins.
 - Privacy grievance email: grievance@swarupsnxt.com (Privacy Policy contact)
 - Support hours: 10:00 AM – 6:00 PM IST, Monday to Friday (`CONTACT.supportHours`)
 - Business phone for calls: +91 7550007208
+- Social profiles (LinkedIn, Instagram, Facebook, YouTube, Google Maps): `SOCIAL_PROFILES` in
+  `constants.tsx` (footer icons + Organization `sameAs`), also listed in `public/llms.txt`.
 - Book a demo: links to the on-page Contact section (`#contact`), which has an enquiry form
   (name, phone, optional email/company/product/message, consent) plus WhatsApp, Call and Email.
   "Book a demo" links carry `data-book-demo` and open the same form in a popup (`App.tsx`).
@@ -50,9 +52,24 @@ file wins.
   CDNs in `index.html`.
 - Pre-rendered at build time: `npm run build` = client build + SSR build of
   `entry-server.tsx` + `scripts/prerender.mjs`, which injects the page HTML and schema.org
-  JSON-LD into `dist/index.html`. Keep components safe to render without `window`/`document`
+  JSON-LD into `dist/index.html`, and writes `dist/<path>/index.html` for every other route
+  (`routes` in `entry-server.tsx`) with its own title, description, canonical URL and JSON-LD.
+  It also generates `dist/sitemap.xml` from the same routes (there is no `public/sitemap.xml`).
+  Keep components safe to render without `window`/`document`
   during render (use effects), and don't make markup depend on browser-only state (hydration).
-- SEO files in `public/`: `robots.txt`, `sitemap.xml`, `llms.txt`, `og-image-v3.png`, icons.
+- Page kinds (trailing slash = canonical); `routes.ts` `resolveRoute(path)` picks one for `App`:
+  - Home `/`.
+  - Product pages `/<productId>/`, one per product: content in `PRODUCT_PAGES` (`constants.tsx`),
+    layout `components/ProductPage.tsx`. Each product has a coded sample mockup in
+    `components/visuals/` (`ProductVisual`, keyed by product id; fictional "NXT ..." businesses,
+    marked "Sample", no figures).
+  - Industry pages `/industries/<id>/`: content in `INDUSTRIES`, layout `components/IndustryPage.tsx`.
+  - Guides `/guides/` and `/guides/<slug>/`: content in `content/guides.ts`, layouts
+    `components/GuidesIndex.tsx` / `GuidePage.tsx`. Regulatory or pricing facts in a guide must be
+    checked against official sources (rule 11); update `dateModified` when a guide changes.
+  Adding a page: add its content entry, add it to `routes` in `entry-server.tsx` if it's a new
+  kind (and a sanity check in `scripts/prerender.mjs`), then list it in `public/llms.txt`.
+- SEO files in `public/`: `robots.txt`, `llms.txt`, `og-image-v3.png`, icons.
   The link-preview image (1200x630) is named in `index.html` (og/twitter tags) and
   `entry-server.tsx`. When it changes, give it a new filename (`og-image-v4.png`, ...) and update
   those references, so WhatsApp/Facebook/LinkedIn don't keep showing the cached old image.
@@ -66,9 +83,11 @@ file wins.
 
 ## Key files
 - `App.tsx`: page composition, modal/theme state
-- `components/`: one file per section or widget (Navbar, Hero, Products, Industries, WhyUs,
-  HowItWorks, FAQ, Contact, ChatWidget, PhoneDemo, VoiceStudio, NxtLab, Modals, ...)
-- `constants.tsx`: contact details, products, industries, FAQ — used by the page AND the
+- `components/`: one file per section or widget (Navbar, Hero, CampaignFlow = "How it works",
+  GoalChooser, Products, ChannelComparison, Industries, GettingStarted, WhyUs, FAQ, Contact,
+  PhoneDemo, VoiceStudio, NxtLab, Modals, ...)
+- `constants.tsx`: contact details, products (+ groups), goals, channel comparison, industries,
+  FAQ, product pages — used by the page AND the
   chatbot's knowledge (`lib/knowledge.ts`), so edit content there; `types.ts`: shared types
 - `components/Contact.tsx`: `#contact` section (enquiry form + WhatsApp / Call / Email)
 - `components/LeadForm.tsx`: the enquiry form (used in Contact and in `LeadFormModal`)
