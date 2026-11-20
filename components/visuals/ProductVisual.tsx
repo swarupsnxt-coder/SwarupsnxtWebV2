@@ -20,6 +20,13 @@ const MOCKUPS: Record<string, { label: string; Mockup: React.FC; photo?: boolean
 
 const photoSrc = (productId: string) => `/images/products/${productId}.webp`;
 
+// For other places that show a product's sample photo (e.g. the home hero). Null when the product
+// has no photo, so callers can skip it.
+export const productPhoto = (productId: string): { src: string; alt: string } | null => {
+  const entry = MOCKUPS[productId];
+  return entry?.photo ? { src: photoSrc(productId), alt: entry.label } : null;
+};
+
 interface ProductVisualProps {
   productId: string;
   // sm: cropped preview for cards; lg: full mockup for product page heroes.
