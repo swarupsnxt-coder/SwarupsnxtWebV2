@@ -5,6 +5,7 @@ import FAQ from './FAQ';
 import Contact from './Contact';
 import ProductVisual from './visuals/ProductVisual';
 import ProductCard from './ProductCard';
+import BenefitList from './BenefitList';
 
 // Products that the NXT Lab demo on the home page lets visitors try.
 const DEMO_PRODUCTS = ['ai-voice-agents', 'ai-chatbots'];
@@ -47,9 +48,10 @@ const ProductPage: React.FC<ProductPageProps> = ({ page, onPrivacyClick }) => {
               <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-8 leading-[1.05] text-slate-900 dark:text-white tracking-tight">
                 {page.h1}
               </h1>
-              <p className="text-lg md:text-xl text-slate-600 dark:text-slate-400 mb-10 leading-relaxed font-medium">
+              <p className="text-lg md:text-xl text-slate-600 dark:text-slate-400 mb-8 leading-relaxed font-medium">
                 {product.desc}
               </p>
+              <BenefitList benefits={product.benefits} size="lg" className="mb-10" />
               <div className="flex flex-col sm:flex-row gap-4">
                 <a
                   href="#contact"

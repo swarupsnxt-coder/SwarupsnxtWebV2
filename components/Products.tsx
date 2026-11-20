@@ -1,8 +1,10 @@
 import React from 'react';
 import { PRODUCTS, PRODUCT_GROUPS, productPagePath, whatsappLink } from '../constants';
 import ProductVisual from './visuals/ProductVisual';
+import BenefitList from './BenefitList';
 
-// Compact cards in three groups; the full description lives on each product's own page.
+// Compact cards in three groups: outcome + three icon benefits; the full description lives on
+// each product's own page.
 const Products: React.FC = () => {
   return (
     <section id="products" className="py-24 bg-slate-50 dark:bg-[#0f172a] relative overflow-hidden transition-colors duration-500 scroll-mt-28">
@@ -39,14 +41,16 @@ const Products: React.FC = () => {
                   >
                     <ProductVisual productId={product.id} size="sm" />
                     <div className="p-7 flex flex-col flex-grow">
-                      <div className="flex items-center gap-4 mb-5">
+                      <div className="flex items-center gap-4 mb-4">
                         <div className="w-12 h-12 shrink-0 rounded-xl bg-white dark:bg-slate-800 flex items-center justify-center text-[#2BB6C6] text-xl shadow-lg border border-slate-100 dark:border-white/5 group-hover:bg-[#2BB6C6] group-hover:text-[#0f172a] transition-all duration-500">
                           <i className={`${product.iconType} ${product.icon}`} aria-hidden="true"></i>
                         </div>
                         <h4 className="text-xl font-bold text-slate-900 dark:text-white leading-tight">{product.title}</h4>
                       </div>
 
-                      <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed font-medium mb-5 flex-grow">{product.summary}</p>
+                      <p className="text-[#2BB6C6] font-bold leading-snug mb-5">{product.outcome}</p>
+
+                      <BenefitList benefits={product.benefits} className="mb-6 flex-grow" />
 
                       <div className="pt-5 border-t border-slate-200 dark:border-white/5">
                         <div className="text-[11px] font-black text-[#2BB6C6] uppercase tracking-widest mb-1">Best for</div>
