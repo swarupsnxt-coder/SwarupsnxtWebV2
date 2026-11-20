@@ -357,8 +357,8 @@ export const INDUSTRIES: IndustrySector[] = [
       sharedFaq("How long does setup take?"),
     ],
     ctaText: "Hi, I run a real estate business and I'd like to know how Swarups NXT can help",
-    image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&q=80&w=800',
-    imageAlt: 'Modern residential building exterior',
+    image: '/images/industries/real-estate.webp',
+    imageAlt: 'House keys beside a small model house',
   },
   {
     id: 'healthcare',
@@ -386,8 +386,8 @@ export const INDUSTRIES: IndustrySector[] = [
       sharedFaq("Which languages"),
     ],
     ctaText: "Hi, I run a clinic / hospital and I'd like to know how Swarups NXT can help",
-    image: 'https://images.unsplash.com/photo-1504813184591-01572f98c85f?auto=format&fit=crop&q=80&w=800',
-    imageAlt: 'Hospital corridor',
+    image: '/images/industries/healthcare.webp',
+    imageAlt: 'Surgeons at work in an operating theatre',
   },
   {
     id: 'education',
@@ -418,7 +418,7 @@ export const INDUSTRIES: IndustrySector[] = [
       sharedFaq("How long does setup take?"),
     ],
     ctaText: "Hi, I run an educational institution and I'd like to know how Swarups NXT can help",
-    image: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=800',
+    image: '/images/industries/education.webp',
     imageAlt: 'Students working together',
   },
   {
@@ -451,8 +451,8 @@ export const INDUSTRIES: IndustrySector[] = [
       sharedFaq("How long does setup take?"),
     ],
     ctaText: "Hi, I run an online store and I'd like to know how Swarups NXT can help",
-    image: 'https://images.unsplash.com/photo-1557821552-17105176677c?auto=format&fit=crop&q=80&w=800',
-    imageAlt: 'Online shopping on a laptop',
+    image: '/images/industries/ecommerce.webp',
+    imageAlt: 'An empty shopping trolley',
   },
   {
     id: 'finance',
@@ -483,7 +483,7 @@ export const INDUSTRIES: IndustrySector[] = [
       sharedFaq("How long does setup take?"),
     ],
     ctaText: "Hi, I work with an NBFC / lender and I'd like to know how Swarups NXT can help",
-    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800',
+    image: '/images/industries/finance.webp',
     imageAlt: 'Financial charts on a screen',
   },
   {
@@ -515,8 +515,8 @@ export const INDUSTRIES: IndustrySector[] = [
       sharedFaq("How long does setup take?"),
     ],
     ctaText: "Hi, I run a vehicle dealership and I'd like to know how Swarups NXT can help",
-    image: 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&q=80&w=800',
-    imageAlt: 'Car parked on a road',
+    image: '/images/industries/automobile.webp',
+    imageAlt: 'Cars parked in a garage',
   },
   {
     id: 'hospitality',
@@ -547,8 +547,8 @@ export const INDUSTRIES: IndustrySector[] = [
       sharedFaq("How long does setup take?"),
     ],
     ctaText: "Hi, I run a hotel / restaurant and I'd like to know how Swarups NXT can help",
-    image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80&w=800',
-    imageAlt: 'Hotel with a swimming pool',
+    image: '/images/industries/hospitality.webp',
+    imageAlt: 'Sun loungers at a resort',
   },
 ];
 

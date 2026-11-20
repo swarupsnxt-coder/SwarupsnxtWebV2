@@ -116,20 +116,44 @@ const NeuralCanvas: React.FC<{ scrollOffset: number }> = ({ scrollOffset }) => {
           }
         }
       });
-      if (!reduceMotion) frameId = requestAnimationFrame(draw);
+      if (running) frameId = requestAnimationFrame(draw);
+    };
+
+    // Animate only while the hero is on screen and the tab is visible; otherwise keep the last frame.
+    let running = false;
+    let inView = true;
+    const start = () => {
+      if (running || reduceMotion || !inView || document.hidden) return;
+      running = true;
+      frameId = requestAnimationFrame(draw);
+    };
+    const stop = () => {
+      running = false;
+      cancelAnimationFrame(frameId);
     };
 
     const onResize = () => {
       init();
-      if (reduceMotion) draw();
+      if (!running) draw();
     };
+    const onVisibility = () => (document.hidden ? stop() : start());
+    const observer = new IntersectionObserver(([entry]) => {
+      inView = entry.isIntersecting;
+      if (inView) start();
+      else stop();
+    });
 
     init();
     draw();
+    start();
+    observer.observe(canvas);
     window.addEventListener('resize', onResize);
+    document.addEventListener('visibilitychange', onVisibility);
     return () => {
-      cancelAnimationFrame(frameId);
+      stop();
+      observer.disconnect();
       window.removeEventListener('resize', onResize);
+      document.removeEventListener('visibilitychange', onVisibility);
     };
   }, []);
 
@@ -146,6 +170,8 @@ const Hero: React.FC = () => {
   const [scrollY, setScrollY] = useState(0);
 
   useEffect(() => {
+    // No scroll parallax for visitors who ask for reduced motion.
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const handleScroll = () => {
       window.requestAnimationFrame(() => {
         setScrollY(window.scrollY);
