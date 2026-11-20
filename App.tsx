@@ -4,11 +4,9 @@ import Hero from './components/Hero';
 import Integrations from './components/Integrations';
 import NxtLab from './components/NxtLab';
 import Products from './components/Products';
-import GettingStarted from './components/GettingStarted';
 import CampaignFlow from './components/CampaignFlow';
 import GoalChooser from './components/GoalChooser';
 import ChannelComparison from './components/ChannelComparison';
-import Infrastructure from './components/Infrastructure';
 import Pricing from './components/Pricing';
 import WhyUs from './components/WhyUs';
 import Industries from './components/Industries';
@@ -89,13 +87,11 @@ const App: React.FC<{ path: string }> = ({ path }) => {
             <CampaignFlow />
             <GoalChooser />
             <Products />
-            <ChannelComparison />
             <Industries />
+            <ChannelComparison />
             <NxtLab />
-            <GettingStarted />
             <WhyUs />
             <Pricing />
-            <Infrastructure />
             <FAQ />
             <Contact onPrivacyClick={openPrivacy} />
           </>

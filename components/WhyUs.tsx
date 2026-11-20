@@ -13,14 +13,24 @@ const WhyUs: React.FC = () => {
       desc: 'We configure, train, launch and support your AI agent. No technical team needed on your side.',
     },
     {
-      icon: 'fa-brands fa-whatsapp',
-      title: 'Works on WhatsApp and phone',
-      desc: 'Reach customers on the channels they already use every day — phone calls, WhatsApp, your website and social media.',
-    },
-    {
       icon: 'fa-solid fa-people-arrows',
       title: 'Human handover',
       desc: 'When a conversation needs a person, the AI follows the handover workflow we set up with you, so no customer is left without an answer.',
+    },
+    {
+      icon: 'fa-solid fa-code',
+      title: 'APIs & webhooks for your CRM',
+      desc: 'Send messages from your own systems and receive delivery and reply updates back. We confirm what each platform supports for your tools.',
+    },
+    {
+      icon: 'fa-solid fa-database',
+      title: 'Data handling agreed upfront',
+      desc: 'Before go-live, we agree with you what customer data is used, where it is stored and who can access it.',
+    },
+    {
+      icon: 'fa-solid fa-seedling',
+      title: 'Start small',
+      desc: 'Begin with one channel and add more later, as your needs grow.',
     },
   ];
 
@@ -37,7 +47,7 @@ const WhyUs: React.FC = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
           {benefits.map((benefit) => (
             <div
               key={benefit.title}

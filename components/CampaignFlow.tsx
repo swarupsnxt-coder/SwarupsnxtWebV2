@@ -1,7 +1,15 @@
 import React from 'react';
 import { FLOW_STEPS } from '../constants';
 
-// "How it works": the core idea in four steps, from sending a campaign to your team taking over.
+// Onboarding steps, shown under the flow as "Getting started".
+const START_STEPS = [
+  { id: '01', title: 'Discovery call', desc: 'We learn how your business handles calls and messages today, and where leads slip through.' },
+  { id: '02', title: 'Custom setup & training', desc: 'We build your AI agent and train it on your products, FAQs and processes, in the languages your customers speak.' },
+  { id: '03', title: 'Go live & optimise', desc: 'Your agent goes live on the channels you choose. We review conversations and keep improving it.' },
+];
+
+// "How it works": the core idea in four steps, from sending a campaign to your team taking over,
+// then the three steps to get started.
 const CampaignFlow: React.FC = () => {
   return (
     <section id="how-it-works" className="py-24 bg-slate-50 dark:bg-[#0f172a] relative overflow-hidden transition-colors duration-500 scroll-mt-28">
@@ -42,6 +50,40 @@ const CampaignFlow: React.FC = () => {
             </li>
           ))}
         </ol>
+
+        {/* Getting started: how a business starts with Swarups NXT (Navbar link #getting-started). */}
+        <div
+          id="getting-started"
+          className="scroll-mt-28 mt-16 max-w-6xl mx-auto rounded-[2rem] p-8 md:p-10 bg-white dark:bg-[#1e266e]/10 border border-slate-200 dark:border-white/5"
+        >
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-2 mb-8">
+            <h3 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white">Getting started</h3>
+            <p className="text-slate-600 dark:text-slate-400">We handle the setup. You focus on your customers.</p>
+          </div>
+          <ol className="grid md:grid-cols-3 gap-8">
+            {START_STEPS.map((step) => (
+              <li key={step.id} className="flex gap-4">
+                <span className="w-12 h-12 shrink-0 rounded-2xl bg-[#2BB6C6]/10 dark:bg-[#1e266e] border border-[#2BB6C6]/20 flex items-center justify-center text-lg font-bold text-slate-900 dark:text-white">
+                  {step.id}
+                </span>
+                <div>
+                  <div className="font-bold text-slate-900 dark:text-white mb-1">{step.title}</div>
+                  <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">{step.desc}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+          <div className="mt-8 text-center md:text-left">
+            <a
+              href="#contact"
+              data-book-demo
+              className="inline-flex items-center gap-3 text-[#2BB6C6] font-bold uppercase tracking-widest text-xs hover:gap-5 transition-all"
+            >
+              <span>Book a demo</span>
+              <i className="fa-solid fa-chevron-right" aria-hidden="true"></i>
+            </a>
+          </div>
+        </div>
       </div>
     </section>
   );
