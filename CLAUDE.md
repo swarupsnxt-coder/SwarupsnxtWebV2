@@ -83,9 +83,9 @@ file wins.
 
 ## Key files
 - `App.tsx`: page composition, modal/theme state
-- `components/`: one file per section or widget (Navbar, Hero, CampaignFlow = "How it works",
-  GoalChooser, Products, ChannelComparison, Industries, GettingStarted, WhyUs, FAQ, Contact,
-  PhoneDemo, VoiceStudio, NxtLab, Modals, ...)
+- `components/`: one file per section or widget (Navbar, Hero, Integrations = channel grid,
+  CampaignFlow = "How it works" + "Getting started", GoalChooser, Products, ChannelComparison,
+  Industries, WhyUs, FAQ, Contact, PhoneDemo, VoiceStudio, NxtLab, Modals, ...)
 - `constants.tsx`: contact details, products (+ groups), goals, channel comparison, industries,
   FAQ, product pages — used by the page AND the
   chatbot's knowledge (`lib/knowledge.ts`), so edit content there; `types.ts`: shared types

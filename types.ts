@@ -13,7 +13,9 @@ export interface Product {
   title: string;
   tag: string;
   group: ProductGroup;    // PRODUCT_GROUPS on the home page
-  summary: string;        // one line, used on home page cards
+  summary: string;        // one line, used on small product cards (ProductCard.tsx)
+  outcome: string;        // short benefit headline on home page cards
+  benefits: { icon: string; text: string }[]; // 3 icon benefits: home cards and product page hero
   desc: string;
   bestFor: string;
   details: string;

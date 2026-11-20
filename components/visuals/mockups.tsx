@@ -1,7 +1,8 @@
 import React from 'react';
 
-// Illustrative product mockups (ProductVisual.tsx). Fictional "NXT ..." businesses, as in the
-// voice demo; no figures, rates or results (CLAUDE.md hard rule 1).
+// Illustrative product mockups (ProductVisual.tsx), used when a product has no sample photo.
+// Fictional "NXT ..." businesses, as in the voice demo; no figures, rates or results (CLAUDE.md
+// hard rule 1).
 
 const Bubble: React.FC<{ from: 'them' | 'me'; children: React.ReactNode; tag?: string }> = ({ from, children, tag }) => (
   <div className={`flex ${from === 'me' ? 'justify-end' : 'justify-start'}`}>
