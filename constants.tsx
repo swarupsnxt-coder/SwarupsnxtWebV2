@@ -234,7 +234,7 @@ export const FAQS = [
   },
   {
     question: 'Which channels do you support?',
-    answer: 'WhatsApp, SMS, phone calls, website chat, and social media such as Instagram and Facebook. You can start with one channel and add more later.',
+    answer: 'WhatsApp, RCS, SMS, phone calls (AI voice agents and voice blast), website chat, and social media such as Instagram and Facebook. You can start with one channel and add more later.',
   },
   {
     question: 'How long does setup take?',
@@ -499,13 +499,16 @@ export const INDUSTRIES: IndustrySector[] = [
 ];
 
 // Channels we work on. No third-party tool integrations are claimed (confirmed Sept 2026).
-export const CHANNELS = [
-  { name: 'Phone Calls', icon: 'fa-solid fa-phone' },
-  { name: 'WhatsApp', icon: 'fa-brands fa-whatsapp' },
-  { name: 'SMS', icon: 'fa-solid fa-comment-sms' },
-  { name: 'Website Chat', icon: 'fa-solid fa-comments' },
-  { name: 'Instagram', icon: 'fa-brands fa-instagram' },
-  { name: 'Facebook', icon: 'fa-brands fa-facebook-messenger' },
+// "Works where your customers already are" (Integrations.tsx): each channel links to its product page.
+export const CHANNELS: { name: string; icon: string; desc: string; productId: string }[] = [
+  { name: 'Phone calls', icon: 'fa-solid fa-phone', desc: 'AI voice agents answer and call back', productId: 'ai-voice-agents' },
+  { name: 'WhatsApp', icon: 'fa-brands fa-whatsapp', desc: 'Bulk campaigns and AI replies', productId: 'bulk-whatsapp-rcs' },
+  { name: 'SMS', icon: 'fa-solid fa-comment-sms', desc: 'OTPs, alerts and promotions', productId: 'sms-otp' },
+  { name: 'RCS', icon: 'fa-solid fa-message', desc: 'Rich, branded messages on Android', productId: 'bulk-whatsapp-rcs' },
+  { name: 'Voice blast', icon: 'fa-solid fa-bullhorn', desc: 'One recorded message to many phones', productId: 'voice-blast' },
+  { name: 'Website chat', icon: 'fa-solid fa-comments', desc: 'An AI chatbot on your website', productId: 'ai-chatbots' },
+  { name: 'Instagram', icon: 'fa-brands fa-instagram', desc: 'Auto-replies to comments and DMs', productId: 'social-media-bots' },
+  { name: 'Facebook', icon: 'fa-brands fa-facebook-messenger', desc: 'Auto-replies on posts and Messenger', productId: 'social-media-bots' },
 ];
 
 // How pricing works, per channel. No figures anywhere (CLAUDE.md hard rule 2).
